@@ -2,7 +2,7 @@
 
 ### 소개
 
--  개발내용 & 구현일정 : [feature list](https://oss.navercorp.com/2018-nbp-internship-team1/seonghyo/wiki/%EC%A7%80%ED%95%98%EC%B2%A0%EC%97%AD-%EB%82%B4%EB%B6%80-%EC%A0%95%EB%B3%B4-%EC%95%88%EB%82%B4-%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EB%B0%9C)
+-  개발내용 & 구현일정 : [feature list](https://oss.navercorp.com/2018-nbp-internship-team1/seonghyo/wiki/%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EB%B0%9C)
 
 ### 주제
  
