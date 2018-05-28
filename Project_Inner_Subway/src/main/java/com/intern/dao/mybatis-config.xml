@@ -3,8 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!-- <typeAliases>
-		<typeAlias type="#package.#modelname" alias="#modelname"></typeAlias>
-	</typeAliases> -->
+	<typeAliases>
+		<typeAlias type="com.intern.login.MemberInfoVO" alias="MemberInfoVo"></typeAlias>
+		<typeAlias type="com.intern.main.StationInfoVO" alias="StationInfoVO"></typeAlias>
+	</typeAliases>
+	
 	
 </configuration>

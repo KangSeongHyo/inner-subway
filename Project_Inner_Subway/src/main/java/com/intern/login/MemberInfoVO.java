@@ -1,25 +1,23 @@
 package com.intern.login;
 
-import java.util.Date;
-
 public class MemberInfoVO {
 
 	String id;
 	String pw;
 	String name;
 	String gender;
-	Date birth;
 	String address;
 	
-	
-	public MemberInfoVO(String id, String pw, String name, String gender, Date birth, String address) {
+	public MemberInfoVO(String id, String pw, String name, String gender, String address) {
 		super();
 		this.id = id;
 		this.pw = pw;
 		this.name = name;
 		this.gender = gender;
-		this.birth = birth;
 		this.address = address;
+	}
+	public MemberInfoVO() {
+		super();
 	}
 	public String getGender() {
 		return gender;
@@ -45,20 +43,11 @@ public class MemberInfoVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getBirth() {
-		return birth;
-	}
-	public void setBirth(Date birth) {
-		this.birth = birth;
-	}
+	
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	
-	
-	
 }
