@@ -16,8 +16,7 @@ import com.intern.login.MemberInfo_Service;
 
 @Controller
 public class LoginController {
-//로그인 컨트롤러 
-	
+//로그인 컨트롤dd
 	@Autowired
 	MemberInfo_Service mservice;
 	@Autowired
