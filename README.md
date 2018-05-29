@@ -19,9 +19,9 @@
  
 ### 사용도구
 
-- 개발언어 : JAVA, 서버 : CentOS 7.4
+- 개발언어 : JAVA, 서버 : CentOS 7.4, JDK 8, Tomcat 8
 
-- S/W : MySQL , Mybatis, Spring MVC, Eclipse
+- S/W : MySQL , Mybatis, Spring MVC, Eclipse,
 
 ### 목적
 
