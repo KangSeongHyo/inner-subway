@@ -15,10 +15,12 @@
 </thead>
 <tbody>
 <c:forEach var="i" begin="0" end="${fn:length(list)}">
-<tr><td>${list[i].entry_num}</td><td>${list[i].head}</td><td>${list[i].title}</td><td>${list[i].writer}</td><td>${list[i].registration_date}</td><td>${list[i].viewcount}</td></tr>
+<tr><td>${list[i].entry_num}</td><td>${list[i].head}</td><td><a href="">${list[i].title}</a></td><td>${list[i].writer}</td><td>${list[i].registration_date}</td><td>${list[i].viewcount}</td></tr>
 </c:forEach>
 </tbody>
 </table>
-<input type="button" value="글쓰기">
+<form action="<%=request.getContextPath()%>/board/write">
+<input type="submit" value="글쓰기">
+</form>
 </body>
 </html>

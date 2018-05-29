@@ -26,7 +26,6 @@ public class StationController {
 	public List<StationInfoVO> getStationInfo(int line_number){
 	   System.out.println("들어옴"+line_number);
 		List<StationInfoVO> list=service.getStationInfo(line_number);
-		System.out.println(list.get(0).getSname());
 		return list;
 	
 	}

@@ -11,14 +11,12 @@ import com.intern.dao.BoardDAO;
 public class Board_Service implements Board_If {
 
 	@Autowired
-	 BoardDAO dao;
+	BoardDAO dao;
 
 	@Override
 	public List<BoardVO> getBoardList(String scode) {
 		// TODO Auto-generated method stub
 		return dao.getBoardList(scode);
 	}
-	
-	
-	
+
 }

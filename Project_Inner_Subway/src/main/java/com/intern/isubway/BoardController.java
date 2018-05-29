@@ -26,4 +26,7 @@ public class BoardController {
 		return mv;
 	}
 	
+	@RequestMapping("/board/write")
+	public void write(){}
+	
 }

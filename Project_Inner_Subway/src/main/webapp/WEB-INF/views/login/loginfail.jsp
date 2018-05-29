@@ -12,9 +12,9 @@ $(document).ready(function() {
 	var result=confirm("아이디 또는 비밀번호를 확인해주세요");
 	
 	if(result){
-		location.replace(location.pathname);
+		location.replace(location.pathname+"/");
 	}else{
-		location.replace(location.pathname);
+		location.replace(location.pathname+"/");
 	}
 	
 });

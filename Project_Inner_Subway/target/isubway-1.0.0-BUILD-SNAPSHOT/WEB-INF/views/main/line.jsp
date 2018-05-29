@@ -17,8 +17,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("button").on("click",function(){
-	
-		alert($(this).val());
 		
 	$.ajax({
 		type:'post',
@@ -31,7 +29,7 @@ $(document).ready(function() {
 		      str+="<a href='<%=request.getContextPath()%>/board/external?scode="+server_result[i].scode+"'>"+server_result[i].sname+"</a>";      
 			}
 			$("div").html(str);
-			alert(str);
+
 		}
 	});
 	});
