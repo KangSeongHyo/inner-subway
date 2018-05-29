@@ -6,6 +6,7 @@
 	<typeAliases>
 		<typeAlias type="com.intern.login.MemberInfoVO" alias="MemberInfoVo"></typeAlias>
 		<typeAlias type="com.intern.main.StationInfoVO" alias="StationInfoVO"></typeAlias>
+		<typeAlias type="com.intern.board.BoardVO" alias="BoardVO"></typeAlias>
 	</typeAliases>
 	
 	

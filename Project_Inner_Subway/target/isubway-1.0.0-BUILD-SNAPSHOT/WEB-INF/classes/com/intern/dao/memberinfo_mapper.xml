@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="temp">
+<mapper namespace="member">
 
-	<!-- <select id="getSomething" parameterType="int" resultType="#package.#modelname">
-		SELECT
-		columnname1,
-		columnname2,
-		columnname3
-		FROM tablename1
-		WHERE columnname1 = #{value}
+	 <select id="getMemberList" resultType="MemberInfoVO">
+		SELECT * FROM member_info
 	</select>
-
+	
+	<insert id="insertMember" parameterType="MemberInfoVO">
+		INSERT INTO member_info
+		VALUES(#{id},#{pw},#{name},#{gender},#{address})
+	</insert>
+<!--
 	<resultMap type="#modelname" id="YourResultSet">
 		<id property="param1" column="columnname1" />
 		<result property="param2" column="columnname2" />
@@ -23,10 +23,6 @@
 		SELECT * FROM tablename1
 	</select>
 
-	<insert id="insertSomething" parameterType="#modelname">
-		INSERT INTO tablename1 (columnname1, columnname2, columnname3)
-		VALUES(#{value1},#{value2},#{value3})
-	</insert>
 
 	<update id="updateSomething" parameterType="#modelname">
 		UPDATE tablename1

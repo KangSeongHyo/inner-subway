@@ -15,7 +15,6 @@
  }
 </style>
 <script type="text/javascript">
-
 $(document).ready(function() {
 	$("button").on("click",function(){
 	
@@ -29,7 +28,7 @@ $(document).ready(function() {
 			$("div").css("display","block");
 			var str="";
 			for(var i=0;i<server_result.length;i++){
-		      str+="<a href=''>"+server_result[i].sname+"</a>";      
+		      str+="<a href='<%=request.getContextPath()%>/board/external?scode="+server_result[i].scode+"'>"+server_result[i].sname+"</a>";      
 			}
 			$("div").html(str);
 			alert(str);

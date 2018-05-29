@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>로그인</h1>
-<form action="/logincheck">
+<form action=<%=request.getContextPath()%>/login/loginck method="POST">
 <input type="text" name="id" placeholder="아이디"><br>
 <input type="password" name="pw" placeholder="비밀번호"><br>
 <input type="submit" value="로그인"><br>
