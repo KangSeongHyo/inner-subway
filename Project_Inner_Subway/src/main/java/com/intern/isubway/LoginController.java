@@ -18,7 +18,7 @@ import com.intern.login.MemberInfo_Service;
 public class LoginController {
 //로그인 컨트롤ddcdd
 	@Autowired
-	MemberInfo_Service mservice;
+	MemberInfo_Service service;
 	@Autowired
 	BCryptPasswordEncoder encoder;
 
@@ -31,15 +31,13 @@ public class LoginController {
 	public void join() {}
 
 	@RequestMapping("login/addrpopup")
-	public void addrpopup() {
-
-	}
+	public void addrpopup() {}
 
 	@RequestMapping("login/test")
 	public ModelAndView test() {
 
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("list", mservice.getMemberList());
+		mv.addObject("list", service.getMemberList());
 		return mv;
 	}
 	
@@ -49,13 +47,13 @@ public class LoginController {
 		String name=encoder.encode(vo.getName());
 		String address=encoder.encode(vo.getName());
 		
-		mservice.insertMember(new MemberInfoVO(vo.getId(), pw, name,vo.getGender(), address));		
-		return "redirect:/";
+		service.insertMember(new MemberInfoVO(vo.getId(), pw, name,vo.getGender(), address));		
+		return "redirect: /";
 	}
 	
 	@RequestMapping(value="login/loginck", method=RequestMethod.POST)
 	public String loginCheck(String id,String pw,HttpSession session) {
-		List<MemberInfoVO> list=mservice.getMemberList();
+		List<MemberInfoVO> list=service.getMemberList();
 		for(MemberInfoVO vo:list){
 		 if(vo.getId().equals(id)&&encoder.matches(pw, vo.getPw())){
 			 session.setAttribute("id", vo.getId());

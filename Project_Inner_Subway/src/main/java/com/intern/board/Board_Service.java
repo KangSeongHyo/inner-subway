@@ -15,8 +15,22 @@ public class Board_Service implements Board_If {
 
 	@Override
 	public List<BoardVO> getBoardList(String scode) {
-		// TODO Auto-generated method stub
 		return dao.getBoardList(scode);
+	}
+
+	@Override
+	public int getEntryCount() {
+		return dao.getEntryCount();
+	}
+
+	@Override
+	public void insertBoard(BoardVO vo) {
+		dao.insertBoard(vo);
+	}
+
+	@Override
+	public BoardVO getBoardOne(int entry_num) {
+		return dao.getBoardOne(entry_num);
 	}
 
 }

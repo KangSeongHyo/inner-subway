@@ -5,7 +5,7 @@ import java.sql.Date;
 public class BoardVO {
 
 	String scode;
-	String entry_num;
+	int entry_num;
 	String head;
 	String title;
 	String writer;
@@ -23,7 +23,7 @@ public class BoardVO {
 			+ ", writer=" + writer + ", registration_date=" + registration_date + ", viewcount=" + viewcount
 			+ ", content=" + content + ", img_path=" + img_path + "]";
 	}
-	public BoardVO(String scode, String entry_num, String head, String title, String writer, Date registration_date,
+	public BoardVO(String scode, int entry_num, String head, String title, String writer, Date registration_date,
 		int viewcount, String content, String img_path) {
 		super();
 		this.scode = scode;
@@ -42,10 +42,10 @@ public class BoardVO {
 	public void setScode(String scode) {
 		this.scode = scode;
 	}
-	public String getEntry_num() {
+	public int getEntry_num() {
 		return entry_num;
 	}
-	public void setEntry_num(String entry_num) {
+	public void setEntry_num(int entry_num) {
 		this.entry_num = entry_num;
 	}
 	public String getHead() {

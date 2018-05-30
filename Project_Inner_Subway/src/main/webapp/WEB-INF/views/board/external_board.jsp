@@ -15,7 +15,7 @@
 </thead>
 <tbody>
 <c:forEach var="i" begin="0" end="${fn:length(list)}">
-<tr><td>${list[i].entry_num}</td><td>${list[i].head}</td><td><a href="">${list[i].title}</a></td><td>${list[i].writer}</td><td>${list[i].registration_date}</td><td>${list[i].viewcount}</td></tr>
+<tr><td>${list[i].entry_num}</td><td>${list[i].head}</td><td><a href="<%=request.getContextPath()%>/board/inner_board?entry_num=${list[i].entry_num}">${list[i].title}</a></td><td>${list[i].writer}</td><td>${list[i].registration_date}</td><td>${list[i].viewcount}</td></tr>
 </c:forEach>
 </tbody>
 </table>

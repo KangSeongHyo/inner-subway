@@ -17,7 +17,16 @@ public class BoardDAO {
 	public List<BoardVO> getBoardList(String scode){
 	  return session.selectList("board.getBoardList",scode);
 	}
-
 	
+	public int getEntryCount(){
+		return session.selectOne("board.getEntryCount");
+	}
 	
+	public void insertBoard(BoardVO vo){
+		session.insert("insertBoard",vo);
+	}
+	
+	public BoardVO getBoardOne(int entry_num){
+		return session.selectOne("getBoardOne",entry_num);
+	}
 }

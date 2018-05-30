@@ -7,7 +7,23 @@
 	<select id="getBoardList" parameterType="String" resultType="BoardVO">
 		SELECT * FROM station_board
 		where scode=#{scode}
+		order by entry_num desc
 	</select>
+	
+	<select id="getBoardOne" parameterType="int" resultType="BoardVO">
+		SELECT * FROM station_board
+		where entry_num=#{entry_num}
+	</select>
+	
+	<select id="getEntryCount" resultType="int">
+		SELECT count(*) FROM station_board
+	</select>
+	
+<insert id="insertBoard" parameterType="BoardVO">
+ INSERT INTO station_board VALUES(#{scode},#{entry_num},#{head},
+ #{title},#{writer},sysdate(),#{viewcount},#{content},#{img_path})
+</insert>
+	
 <!-- 
 	<resultMap type="#modelname" id="YourResultSet">
 		<id property="param1" column="columnname1" />
