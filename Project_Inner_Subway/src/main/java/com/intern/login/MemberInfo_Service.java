@@ -23,4 +23,9 @@ public class MemberInfo_Service implements MemberInfo_If {
 	public void insertMember(MemberInfoVO vo){
 		dao.insertMember(vo);
 	}
+
+	@Override
+	public List<String> getIdList() {
+		return dao.getIdList();
+	}
 }

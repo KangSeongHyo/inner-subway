@@ -20,5 +20,9 @@ public class MemberDAO {
 	public void insertMember(MemberInfoVO vo){
 	    session.insert("member.insertMember",vo);
 	}
+	
+	public List<String> getIdList(){
+	    return session.selectList("member.getIdList");
+	}
 
 }

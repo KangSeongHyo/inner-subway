@@ -4,16 +4,34 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=3">
 <title>Insert title here</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+<style type="text/css">
+.container { position:absolute; 
+           top:50%; left:50%; 
+           width:300px; 
+           height:200px; 
+           margin-top:-150px; 
+           margin-left:-150px;
+           }
+</style>
+
+
 </head>
 <body>
+
+<div class="container">
 <h1>로그인</h1>
-<form action=<%=request.getContextPath()%>/login/loginck method="POST">
-<input type="text" name="id" placeholder="아이디"><br>
-<input type="password" name="pw" placeholder="비밀번호"><br>
-<input type="submit" value="로그인"><br>
+<form class="form-signin" action=<%=request.getContextPath()%>/login/loginck method="POST">
+<input class="form-control" type="text" name="id" placeholder="아이디"><br>
+<input class="form-control" type="password" name="pw" placeholder="비밀번호"><br>
+<input class="btn btn-lg btn-success btn-block" type="submit" value="로그인"><br>
 혹시 회원이 아니신가요? <a href="login/join" >회원가입</a>
 </form>
+</div>
 
 </body>
 </html>

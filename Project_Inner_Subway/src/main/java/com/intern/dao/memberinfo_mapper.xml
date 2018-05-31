@@ -7,6 +7,11 @@
 	 <select id="getMemberList" resultType="MemberInfoVO">
 		SELECT * FROM member_info
 	</select>
+	 
+	<select id="getIdList" resultType="string">
+		SELECT id FROM member_info
+	</select>
+	
 	
 	<insert id="insertMember" parameterType="MemberInfoVO">
 		INSERT INTO member_info

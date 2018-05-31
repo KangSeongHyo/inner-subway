@@ -18,20 +18,28 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.intern.board.BoardVO;
 import com.intern.board.Board_Service;
+import com.intern.main.StationInfoVO;
+import com.intern.main.StationInfo_Service;
 
 @Controller
 public class BoardController {
 
 	@Autowired
 	Board_Service service;
+	@Autowired
+	StationInfo_Service station_service;
 
 	@RequestMapping("/board/external")
 	public ModelAndView externalBoard(String scode, HttpSession session) {
 
 		List<BoardVO> list = service.getBoardList(scode);
+		
+		List<StationInfoVO> slist=station_service.getStationInfo(Integer.parseInt(scode.substring(2,3)));
+		System.out.println(Integer.parseInt(scode.substring(2,3)));
 		session.setAttribute("scode", scode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("list", list);
+		mv.addObject("slist",slist);
 		mv.setViewName("board/external_board");
 		return mv;
 	}
@@ -67,6 +75,7 @@ public class BoardController {
 	@RequestMapping("/board/inner_board")
 	public ModelAndView inner_board(int entry_num){
          BoardVO vo=service.getBoardOne(entry_num);
+         
          
 		ModelAndView mv=new ModelAndView();
 		mv.addObject("vo",vo);

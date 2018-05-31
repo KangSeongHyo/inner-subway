@@ -27,7 +27,6 @@ public class StationController {
 	   System.out.println("들어옴"+line_number);
 		List<StationInfoVO> list=service.getStationInfo(line_number);
 		return list;
-	
 	}
 	
 }
