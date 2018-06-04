@@ -2,9 +2,11 @@ package com.intern.isubway;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,11 +15,15 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.intern.board.BoardVO;
 import com.intern.board.Board_Service;
+import com.intern.comment.CommentVO;
+import com.intern.comment.Comment_Service;
 import com.intern.main.StationInfoVO;
 import com.intern.main.StationInfo_Service;
 
@@ -28,6 +34,9 @@ public class BoardController {
 	Board_Service service;
 	@Autowired
 	StationInfo_Service station_service;
+	@Autowired
+	Comment_Service comment_service;
+	
 
 	@RequestMapping("/board/external")
 	public ModelAndView externalBoard(String scode, HttpSession session) {
@@ -35,7 +44,7 @@ public class BoardController {
 		List<BoardVO> list = service.getBoardList(scode);
 		
 		List<StationInfoVO> slist=station_service.getStationInfo(Integer.parseInt(scode.substring(2,3)));
-		System.out.println(Integer.parseInt(scode.substring(2,3)));
+		
 		session.setAttribute("scode", scode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("list", list);
@@ -72,15 +81,35 @@ public class BoardController {
 		return "redirect:/board/external?scode="+scode;
 	}
 	
+	//상세보기
 	@RequestMapping("/board/inner_board")
-	public ModelAndView inner_board(int entry_num){
-         BoardVO vo=service.getBoardOne(entry_num);
-         
-         
-		ModelAndView mv=new ModelAndView();
-		mv.addObject("vo",vo);
-		return mv;
+	@ResponseBody
+	public List inner_board(String scode, int entry_num){
+        List modalList=new LinkedList();
+        
+        HashMap map1=new HashMap();
+        map1.put("scode",scode);
+        map1.put("entry_num",entry_num);
+        
+        service.updateViewcount(map1);
+        BoardVO vo=service.getBoardOne(map1);
+        
+        Map map2=new HashMap();
+        map2.put("scode", vo.getScode());
+        map2.put("entry_num",vo.getEntry_num());
+        
+        List<CommentVO> cvo=comment_service.getCommentList(map2);
+        
+        modalList.add(vo);
+        
+        for(CommentVO key:cvo){
+        modalList.add(key);
+        }
+        
+		return modalList;
 	}
+	
+	
 	
 	
 }

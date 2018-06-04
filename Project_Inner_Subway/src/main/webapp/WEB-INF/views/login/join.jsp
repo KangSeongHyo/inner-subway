@@ -119,17 +119,13 @@ function jusoCallBack(roadFullAddr){
 			<br> <br> <input class="form-control" type="text" id="id"
 				name="id" placeholder="아이디"><br>
 			<div id="id_check"></div>
-			<input class="form-control" type="password" id="pw" name="pw"
-				placeholder="비밀번호"><br> <input class="form-control"
+			<input class="form-control" type="password" id="pw" name="pw" placeholder="비밀번호"><br> <input class="form-control"
 				type="password" id="pwcheck" title="ss" placeholder="비밀번호 확인">
 			<div id="equal_ck"></div>
-			<br> <input class="form-control" type="text"
-				contenteditable="false" id="address" name="address"
-				placeholder="도로명 주소"> <input type="button"
+			<br> <input class="form-control" type="text" contenteditable="false" id="address" name="address" placeholder="도로명 주소"> <input type="button"
 				class="btn btn-lg btn-default btn-block" value="주소검색"
-				onclick="goPopup()"><br> <input
-				class="btn btn-lg btn-success btn-block" id="btn" type="button"
-				value="회원가입">
+				onclick="goPopup()"><br> 
+	     <input class="btn btn-lg btn-success btn-block" id="btn" type="button" value="회원가입">
 		</form>
 		<br>
 		<h7>가입 시 이용약관 및 쿠키 사용을 포함한 개인정보 처리방침에 동의하게 됩니다.</h7>

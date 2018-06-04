@@ -1,6 +1,8 @@
 package com.intern.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,13 @@ public class BoardDAO {
 	}
 	
 	public void insertBoard(BoardVO vo){
-		session.insert("insertBoard",vo);
+		session.insert("board.insertBoard",vo);
 	}
 	
-	public BoardVO getBoardOne(int entry_num){
-		return session.selectOne("getBoardOne",entry_num);
+	public BoardVO getBoardOne(HashMap map){
+		return session.selectOne("board.getBoardOne",map);
+	}
+	public void updateViewcount(Map map){
+		session.update("board.updateViewcount",map);
 	}
 }

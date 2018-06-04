@@ -1,6 +1,8 @@
 package com.intern.board;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +31,14 @@ public class Board_Service implements Board_If {
 	}
 
 	@Override
-	public BoardVO getBoardOne(int entry_num) {
-		return dao.getBoardOne(entry_num);
+	public BoardVO getBoardOne(HashMap map) {
+		return dao.getBoardOne(map);
+	}
+
+	@Override
+	public void updateViewcount(Map map) {
+		// TODO Auto-generated method stub
+		dao.updateViewcount(map);
 	}
 
 }

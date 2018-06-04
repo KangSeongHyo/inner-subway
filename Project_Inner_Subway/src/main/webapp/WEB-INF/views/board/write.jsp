@@ -42,7 +42,24 @@
 </form>
 
 
-
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+    <table class='table table-bordered table-hover' id='tbl'>
+    <h1>정보 공유 게시판</h1>
+    <thead class='thead-dark'>
+    <tr><th>#</th>
+       <th>말머리</th>
+       <th>제목</th>
+       <th>작성자</th>
+       <th>작성일</th>
+       <th>조회수</th>
+       </tr>
+    </thead>
+       <tbody>
+      
+      </tbody>
+   </table>      
+ </div>
 
 
 </body>

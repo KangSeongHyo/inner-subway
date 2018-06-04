@@ -10,9 +10,9 @@
 		order by entry_num desc
 	</select>
 	
-	<select id="getBoardOne" parameterType="int" resultType="BoardVO">
+	<select id="getBoardOne" parameterType="hashMap" resultType="BoardVO">
 		SELECT * FROM station_board
-		where entry_num=#{entry_num}
+		where  scode='${scode}' and entry_num=${entry_num}
 	</select>
 	
 	<select id="getEntryCount" resultType="int">
@@ -23,6 +23,15 @@
  INSERT INTO station_board VALUES(#{scode},#{entry_num},#{head},
  #{title},#{writer},sysdate(),#{viewcount},#{content},#{img_path})
 </insert>
+
+
+<update id="updateViewcount" parameterType="java.util.Map">
+		UPDATE station_board
+		SET
+		viewcount=viewcount+1
+		WHERE
+		scode = #{scode} and entry_num=#{entry_num}
+	</update>
 	
 <!-- 
 	<resultMap type="#modelname" id="YourResultSet">

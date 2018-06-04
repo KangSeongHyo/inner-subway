@@ -11,7 +11,6 @@
 	%>
 </head>
 <script language="javascript">
-
 function init(){
 	var url = location.href;
 	var confmKey ="U01TX0FVVEgyMDE4MDUyNDIxMzYzMDEwNzg5OTk=";//승인키
