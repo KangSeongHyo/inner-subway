@@ -59,6 +59,8 @@ public class BoardController {
 	@RequestMapping("/board/write_result")
 	public String write_result(MultipartFile file, HttpServletRequest request,HttpSession session) throws IllegalStateException, IOException {
 		 // file 업로드
+		System.out.println(file);
+		
 		 String real_name=file.getOriginalFilename();
 	     String ext=real_name.substring(real_name.lastIndexOf("."));// 확장자 추출
 	     String uuid=UUID.randomUUID().toString().replaceAll("-", "");//-제거  

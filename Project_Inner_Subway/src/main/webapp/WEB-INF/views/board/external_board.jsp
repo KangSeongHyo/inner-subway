@@ -11,6 +11,10 @@
 crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js" integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<!-- include summernote css/js-->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+
 <script type="text/javascript">
 function formatDate(date) { 
 	var d = new Date(date),
@@ -21,12 +25,12 @@ function formatDate(date) {
 	if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); }
 	
-
 $(document).ready(function() {
 
-	var scode="";
+	var scode='<%=request.getParameter("scode")%>';
 	var entry_num=0;
-	
+	var contextpath='<%=request.getContextPath()%>';
+	var sname='<%=request.getParameter("sname")%>';
 	
 	$(".card-footer > button").on("click",function(){
 	
@@ -88,7 +92,7 @@ $(document).ready(function() {
 		
 		var check=confirm("댓글을 삭제하시겠습니까?");
 		
-		if(check==true){
+	if(check==true){
 			
 		var data=$(this).data();
 		
@@ -120,21 +124,105 @@ $(document).ready(function() {
 
 		}); 
 		
-		}
+	} //if문끝
 		
 	});
+
+
+	$("#board_reg").on("click",function(){
+		
+		$(".container").empty();
+		$(".container").append("<div id='reflash' class='row'><form method='post' enctype='multipart/form-data' ><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='reg' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
+		
+/* 	<label class='btn btn-primary btn-file'>사진 첨부 <input type='file' id='file'></label>
+ */
+		/* <div id='reflash' class='row'>
+		<form>
+		<div class='form-group'>
+		<label for='title'>제목</label>
+		<input type='text' class='form-control' id='titleInput'>
+		<small id='title_req' class='form-text text-muted'>장소명을 적어주세요</small>
+		</div>
+		
+		<div class='form-group'><
+		textarea name='content' id='summernote'></textarea>
+		<small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form>
+		<button class='btn btn-outline-secondary float-right'>등록</button>
+		<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
+		 */
+		$('#summernote').summernote({
+		      placeholder: '종류, 위치 등 자세하게 적어주세요',
+		      minHeight: 300, 
+		      Width: 700,
+		      lang: 'ko-KR',
+		      toolbar: [
+		    	    // [groupName, [list of button]]
+		    	    ['style', ['bold', 'italic', 'underline', 'clear']],
+		    	    ['font', ['strikethrough', 'superscript', 'subscript']],
+		    	    ['fontsize', ['fontsize']],
+		    	    ['color', ['color']],
+		    	    ['para', ['ul', 'ol', 'paragraph']],
+		    	    ['height', ['height']]
+		    	  ],
+		        popover: {image: []}
+		});
+	});
+	
+		
+	$(document).on("click","#backpage",function(){
+		location.assign(contextpath+"/board/external?scode="+scode+"&sname="+sname);
+	}); 
+	
+	$(document).on("click","#reg",function(){
+		if($("#titleInput").val()==null){
+			alert("내용을 확인해주세요");
+			
+		}else{
+		 $("form").prop("action","<%=request.getContextPath()%>/board/write_result").submit();
+			
+		}
+		
+		
+		
+	});
+	
 });
 
 
 </script>
 
 <style>
+
+    .btn-file{
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+                right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+  #page-wrappe {
+    padding-left: 250px;
+  }
+
   #page-wrapper {
     padding-left: 250px;
   }
   
   #sidebar-wrapper {
-    position: fixed;
+   position: fixed;
     width: 250px;
     height: 100%;
     margin-left: -250px;
@@ -189,31 +277,43 @@ $(document).ready(function() {
 </style>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
+<!--상단바-->
+<nav>
+<div id="topbar" class="navbar navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" href="#">Inner Subway</a>
-</nav>
+</div>
+<!--/상단바-->
+
 <!-- 사이드바 -->
 <div id="page-wrapper">
-  <!-- 사이드바 -->
   <div id="sidebar-wrapper">
     <ul class="sidebar-nav">
       <li class="sidebar-brand">
         ${slist[0].line}호선
       </li>
+      <li class="sidebar-brand">
+        ${slist[0].line}호선
+      </li>
       <c:forEach var="i" begin="0" end="${fn:length(slist)-1}" >
-      <li><a href="<%=request.getContextPath()%>/board/external?scode=${slist[i].scode}">${slist[i].sname}</a></li>
+      <li><a href="<%=request.getContextPath()%>/board/external?scode=${slist[i].scode}&sname=${slist[i].sname}">${slist[i].sname}</a></li>
       </c:forEach>
     </ul>
    </div>  
 </div>
-  
- <form action="<%=request.getContextPath()%>/board/write">
+
+</nav>
+<!-- /사이드바 -->
+
+<!--카드게시판-->
+<%--  <form action="<%=request.getContextPath()%>/board/write">
  <input type="submit" class="btn btn-light" value="글쓰기">
- </form>
-   <div class="container">
-      <!-- Page Features -->
-      <h1>정보공유 게시판</h1>
-      <div class="row text-center">
+ </form> --%>
+ 
+ <div id="page-wrapper" style="padding-top: 150px">
+      <h1 style="margin-left: 150px"><%=request.getParameter("sname")%> 게시판 <hr/></h1>
+      
+  <div class="container">
+    <div id="reflash" class="row text-center"> 
       <c:forEach var="i" begin="0" end="3" >
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
@@ -229,7 +329,17 @@ $(document).ready(function() {
         </div>
       </c:forEach>
     </div>
+     <button id="board_reg" class="btn btn-outline-secondary float-right">글작성</button>
 </div>
+</div>
+<!--카드게시판-->
+
+<!-- 게시판 등록 -->
+
+
+<!--/ 게시판 등록 -->
+
+
 
 <!-- 게시판 상세보기 -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -240,7 +350,6 @@ $(document).ready(function() {
  <div class="card bg-light mb-3" style="max-width: auto;">
   <div class="card-header">상세보기</div>
   <div class="card-body">
-      <!--  <h5 class="card-title">금천구 도서 대여관</h5> -->
      <p class="card-text"><img alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"></p>
      </div>
   </div>
@@ -287,6 +396,7 @@ $(document).ready(function() {
  </div>
   </div>
 </div>
+<!-- /게시판 상세보기 -->
 
 </body>
 </html>

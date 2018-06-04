@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=3">
 <title>Insert title here</title>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
+<!-- 스타일 -->
 <style type="text/css">
 .container { position:absolute; 
            top:50%; left:50%; 
@@ -18,7 +18,6 @@
            margin-left:-150px;
            }
 </style>
-
 
 </head>
 <body>
