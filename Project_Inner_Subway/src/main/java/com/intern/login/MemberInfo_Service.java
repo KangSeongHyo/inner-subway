@@ -1,6 +1,7 @@
 package com.intern.login;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,4 +29,5 @@ public class MemberInfo_Service implements MemberInfo_If {
 	public List<String> getIdList() {
 		return dao.getIdList();
 	}
+
 }

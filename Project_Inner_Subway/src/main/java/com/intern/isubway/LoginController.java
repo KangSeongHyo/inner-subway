@@ -29,7 +29,7 @@ public class LoginController {
 	}
 
 	@RequestMapping("login/join")
-	public void join() {}
+	public void join(){}
 
 	@RequestMapping("login/addrpopup")
 	public void addrpopup() {}

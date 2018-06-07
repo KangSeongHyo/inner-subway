@@ -22,7 +22,7 @@ public class CommentDAO {
 	public void insertComment(CommentVO vo){
 		session.insert("comment.insertComment",vo);
 	}
-	public void deleteComment(Map map){
+	public void deleteComment(Map<String, Object> map){
 		session.delete("comment.deleteComment", map);
 	}
 	

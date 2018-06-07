@@ -4,10 +4,15 @@
 
 <mapper namespace="station">
 
-	<select id="getStationInfo"  resultType="StationInfoVO">
+	<select id="getStationInfo" parameterType="int" resultType="StationInfoVO">
 		SELECT * FROM station_main
 		WHERE line=#{number}
 	</select>
+	<select id="getStationName"  parameterType="String" resultType="String">
+		SELECT sname FROM station_main
+		WHERE scode=#{scode}
+	</select>
+	
 <!-- 
 	<resultMap type="#modelname" id="YourResultSet">
 		<id property="param1" column="columnname1" />

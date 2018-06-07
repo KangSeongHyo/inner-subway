@@ -16,8 +16,8 @@ public class BoardDAO {
 	@Autowired
 	SqlSession session;
 	
-	public List<BoardVO> getBoardList(String scode){
-	  return session.selectList("board.getBoardList",scode);
+	public List<BoardVO> getBoardList(Map<String, Object> map){
+	  return session.selectList("board.getBoardList",map);
 	}
 	
 	public int getEntryCount(){
@@ -33,5 +33,17 @@ public class BoardDAO {
 	}
 	public void updateViewcount(Map map){
 		session.update("board.updateViewcount",map);
+	}
+	
+	public void deleteBoard(Map<String, Object> map){
+		session.delete("board.deleteBoard",map);
+	}
+	
+	public void updateBoard(BoardVO vo){
+		session.update("board.updateBoard",vo);
+	}
+	
+	public List<BoardVO> getSearchBoard(Map<String,Object> map){
+		return session.selectList("board.getSearchBoard", map);
 	}
 }

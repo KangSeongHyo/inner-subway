@@ -49,20 +49,20 @@ $(document).ready(function() {
 			$("#reg_date").html(formatDate(server_result[0].registration_date)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+server_result[0].viewcount+"</i>");
 			
 			$("#commentList").empty();
+			
 			for(var i=1;i<server_result.length;i++){
 	         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
 	         			+"&nbsp;</dt><span>"+formatDate(server_result[i].registration_date)
 	         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
 	         			+server_result[i].content+"</dd></dl><hr>");
-	         	
-			    }
-		      
+			   }
 			}
 		});
 		
 		
 	});
 	
+	//////////////////////comment
  $("#inner_board_comment").on("click",function(){
 		
 		$.ajax({
@@ -112,15 +112,13 @@ $(document).ready(function() {
 				for(var i=0;i<server_result.length;i++){
 		         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
 		         			+"&nbsp;</dt><span>"+formatDate(server_result[i].registration_date)
-		         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
+		         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
 		         			+server_result[i].content+"</dd></dl><hr>");
 				    }
 				$("#comment_content").val("");
 					
 				}
-				
-				
-			}
+			 }
 
 		}); 
 		
@@ -132,8 +130,8 @@ $(document).ready(function() {
 	$("#board_reg").on("click",function(){
 		
 		$(".container").empty();
-		$(".container").append("<div id='reflash' class='row'><form method='post' enctype='multipart/form-data' ><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='reg' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
-		
+		$(".container").append("<div id='reflash' class='row'><form method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="+scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='reg' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
+		/* <input type='hidden' name='scode' value='"+scode+"'> */
 /* 	<label class='btn btn-primary btn-file'>사진 첨부 <input type='file' id='file'></label>
  */
 		/* <div id='reflash' class='row'>
@@ -150,16 +148,17 @@ $(document).ready(function() {
 		<button class='btn btn-outline-secondary float-right'>등록</button>
 		<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
 		 */
+		 
+		 
+///////////////에디터
 		$('#summernote').summernote({
 		      placeholder: '종류, 위치 등 자세하게 적어주세요',
 		      minHeight: 300, 
 		      Width: 700,
 		      lang: 'ko-KR',
 		      toolbar: [
-		    	    // [groupName, [list of button]]
 		    	    ['style', ['bold', 'italic', 'underline', 'clear']],
 		    	    ['font', ['strikethrough', 'superscript', 'subscript']],
-		    	    ['fontsize', ['fontsize']],
 		    	    ['color', ['color']],
 		    	    ['para', ['ul', 'ol', 'paragraph']],
 		    	    ['height', ['height']]
@@ -172,7 +171,8 @@ $(document).ready(function() {
 	$(document).on("click","#backpage",function(){
 		location.assign(contextpath+"/board/external?scode="+scode+"&sname="+sname);
 	}); 
-	
+
+//////////////////글작성
 	$(document).on("click","#reg",function(){
 		if($("#titleInput").val()==null){
 			alert("내용을 확인해주세요");
@@ -181,10 +181,83 @@ $(document).ready(function() {
 		 $("form").prop("action","<%=request.getContextPath()%>/board/write_result").submit();
 			
 		}
-		
-		
-		
 	});
+	
+///////////////글삭제
+   $("#external_card > i").on("click",function(){
+	   
+	   var data=$(this).data();
+	   
+	   var check=confirm("삭제 하시겠습니까?");
+	   
+	   if(check==true){
+	   
+	   $.ajax({
+		   type:'post',
+			url:'<%=request.getContextPath()%>/board/del',
+			data:{'scode': scode, 'entry_num':data.entry_num ,'writer':data.writer},
+			success: function(server_result) {
+			      	if(server_result==false){
+			      		alert("권한이 없습니다.");
+			      	}else{
+			      		
+			     location.assign(contextpath+"/board/external?scode="+scode+"&sname="+sname);
+			      		
+			      	}
+			 }
+		   
+	      });
+	   
+	  }
+   });
+    
+/////////////////글수정_불러오기
+   $(".card-footer > #board_mod").on("click",function(){
+	   
+	   var data=$(this).data();
+	   
+	   $.ajax({
+		   type:'post',
+			url:'<%=request.getContextPath()%>/board/modify_call',
+			data:{'scode': scode, 'entry_num':data.entry_num},
+			success: function(server_result) {
+				$(".container").empty();
+				$(".container").append("<div id='reflash' class='row'><form method='post' enctype='multipart/form-data' ><input type='hidden' name='entry_num' value="+data.entry_num+"><input type='hidden' name='scode' value="+scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"+server_result.title+"'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'>"+server_result.content+"</textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='reg_mod' class='btn btn-outline-secondary float-right'>수정</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");
+		    
+		    $('#summernote').summernote({
+		      placeholder: '종류, 위치 등 자세하게 적어주세요',
+		      minHeight: 300, 
+		      Width: 700,
+		      lang: 'ko-KR',
+		      toolbar: [
+		    	    ['style', ['bold', 'italic', 'underline', 'clear']],
+		    	    ['font', ['strikethrough', 'superscript', 'subscript']],
+		    	    ['color', ['color']],
+		    	    ['para', ['ul', 'ol', 'paragraph']],
+		    	    ['height', ['height']]
+		    	  ],
+		        popover: {image: []}
+		    });
+				
+				
+				
+			 }
+			
+	      });
+	  });
+//////////////////////글 수정 업데이트
+   
+$(document).on("click","#reg_mod",function(){
+	   if($("#titleInput").val()==null){
+		alert("제목을 확인해주세요"); }
+	   else if($("#summernote").val()==null){
+		   alert("내용을 확인해주세요");
+	   }
+    else {
+	    $("form").prop("action","<%=request.getContextPath()%>/board/modify").submit();
+	}
+	   
+   });
 	
 });
 
@@ -193,6 +266,19 @@ $(document).ready(function() {
 
 <style>
 
+  #board_del{
+    position: relative;
+    top:10px;
+    left:110px;
+  }
+
+  #external_content{
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap; 
+  width: 150px;
+  display: inline-block;
+  }
     .btn-file{
             position: relative;
             overflow: hidden;
@@ -200,7 +286,7 @@ $(document).ready(function() {
         .btn-file input[type=file] {
             position: absolute;
             top: 0;
-                right: 0;
+            right: 0;
             min-width: 100%;
             min-height: 100%;
             font-size: 100px;
@@ -280,7 +366,7 @@ $(document).ready(function() {
 <!--상단바-->
 <nav>
 <div id="topbar" class="navbar navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">Inner Subway</a>
+  <a class="navbar-brand" href="#" onclick="history.go(0)">Inner Subway</a>
 </div>
 <!--/상단바-->
 
@@ -310,26 +396,39 @@ $(document).ready(function() {
  </form> --%>
  
  <div id="page-wrapper" style="padding-top: 150px">
-      <h1 style="margin-left: 150px"><%=request.getParameter("sname")%> 게시판 <hr/></h1>
-      
+      <h1 style="margin-left: 150px"><%=session.getAttribute("sname")%> 게시판 <hr/></h1>
   <div class="container">
+      <form action="<%=request.getContextPath()%>/board/external" method="post" class="text-right">
+      <input type="hidden" name="scode" value="<%=session.getAttribute("scode")%>"> 
+      <select name="select" ><option value="title">제목</option><option value="writer">작성자</option></select>
+      <input type="search" name="search" size="30">
+      <input type="submit" value="검색"> 
+      </form> 
+      <br>
     <div id="reflash" class="row text-center"> 
-      <c:forEach var="i" begin="0" end="3" >
+      <c:forEach var="i" begin="0" end="${fn:length(list)-1}" >
         <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
-            <div class="card-body">
+          <div id="external_card" class="card">
+            <img class="card-img-top" src="http://placehold.it/500x325" alt=""><i id="board_del" data-writer='${list[i].writer}' data-entry_num="${list[i].entry_num}" class="far fa-times-circle"></i>
+            <div class="card-body" id="external_box">
               <h4 class="card-title">${list[i].title}</h4>
-              <p class="card-text">${list[i].content}</p>
+              <p class="card-text" id="external_content" >${list[i].content}</p>
+              <footer class="blockquote-footer">From ${list[i].writer}</footer> 
             </div>
             <div class="card-footer">
-              <button id="modal_req" type="button" data-entry_num='${list[i].entry_num}' data-scode='${list[i].scode}' class="btn btn-outline-secondary" data-toggle="modal" data-target=".bd-example-modal-lg">상세보기</button>
+              <button style="margin-left: 10px" id="modal_req" type="button" data-entry_num='${list[i].entry_num}' data-scode='${list[i].scode}' class="btn btn-outline-secondary" data-toggle="modal" data-target=".bd-example-modal-lg">상세보기</button>
+              <button style="margin-left: 10px" id="board_mod" type="button" data-entry_num='${list[i].entry_num}' data-scode='${list[i].scode}' class="btn btn-outline-danger">수정하기</button>
             </div>
           </div>
         </div>
       </c:forEach>
     </div>
      <button id="board_reg" class="btn btn-outline-secondary float-right">글작성</button>
+     <ul style="text-align: center" class="pagination mx-auto">
+        <c:forEach begin="${startPage}" end="${endPage}" step="1" var="i">
+       <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/board/external?scode=${list[0].scode}&sname=${slist[0].sname}&page=${i}">${i}</a></li>
+       </c:forEach>
+     </ul>
 </div>
 </div>
 <!--카드게시판-->
@@ -344,7 +443,8 @@ $(document).ready(function() {
 <!-- 게시판 상세보기 -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+
+<div class="modal-content">
   <!--        모달창 내부                      -->
 
  <div class="card bg-light mb-3" style="max-width: auto;">

@@ -10,7 +10,7 @@
 	String roadFullAddr = request.getParameter("roadFullAddr"); 
 	%>
 </head>
-<script language="javascript">
+<script>
 function init(){
 	var url = location.href;
 	var confmKey ="U01TX0FVVEgyMDE4MDUyNDIxMzYzMDEwNzg5OTk=";//승인키

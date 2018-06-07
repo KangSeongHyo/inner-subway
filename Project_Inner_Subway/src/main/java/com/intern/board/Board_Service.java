@@ -16,8 +16,8 @@ public class Board_Service implements Board_If {
 	BoardDAO dao;
 
 	@Override
-	public List<BoardVO> getBoardList(String scode) {
-		return dao.getBoardList(scode);
+	public List<BoardVO> getBoardList(Map<String, Object> map) {
+		return dao.getBoardList(map);
 	}
 
 	@Override
@@ -39,6 +39,24 @@ public class Board_Service implements Board_If {
 	public void updateViewcount(Map map) {
 		// TODO Auto-generated method stub
 		dao.updateViewcount(map);
+	}
+
+	@Override
+	public void deleteBoard(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		dao.deleteBoard(map);
+	}
+
+	@Override
+	public void updateBoard(BoardVO vo) {
+		// TODO Auto-generated method stub
+	     dao.updateBoard(vo);
+	}
+
+	@Override
+	public List<BoardVO> getSearchBoard(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return dao.getSearchBoard(map);
 	}
 
 }

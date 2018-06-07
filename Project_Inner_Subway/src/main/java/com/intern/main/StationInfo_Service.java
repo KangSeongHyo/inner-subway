@@ -19,4 +19,10 @@ public class StationInfo_Service implements StationInfo_If{
 		return dao.getStationInfo(line_number);
 	}
 
+	@Override
+	public String getStationName(String scode) {
+		// TODO Auto-generated method stub
+		return dao.getStationName(scode);
+	}
+
 }

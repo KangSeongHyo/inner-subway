@@ -95,7 +95,8 @@ function goPopup(){
    var pop = window.open("addrpopup","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
 }
 function jusoCallBack(roadFullAddr){
-	document.form.address.value = roadFullAddr;
+	/* document.form.address.value = roadFullAddr; */
+	$("#address").val(roadFullAddr);
 }
 
 </script>
@@ -104,8 +105,7 @@ function jusoCallBack(roadFullAddr){
 
 	<div class="container">
 
-		<form class="form-signin" id="form"
-			<%-- action="<%=request.getContextPath()%>/login/bcrypt" --%> method="post">
+		<form class="form-signin" id="form" method="post">
 
 			<h1>회원가입</h1>
 			<input class="form-control" type="text" name="name" placeholder="이름"><br>
@@ -119,12 +119,11 @@ function jusoCallBack(roadFullAddr){
 			<br> <br> <input class="form-control" type="text" id="id"
 				name="id" placeholder="아이디"><br>
 			<div id="id_check"></div>
-			<input class="form-control" type="password" id="pw" name="pw" placeholder="비밀번호"><br> <input class="form-control"
-				type="password" id="pwcheck" title="ss" placeholder="비밀번호 확인">
+			<input class="form-control" type="password" id="pw" name="pw" placeholder="비밀번호"><br> 
+			<input class="form-control" type="password" id="pwcheck" placeholder="비밀번호 확인">
 			<div id="equal_ck"></div>
-			<br> <input class="form-control" type="text" contenteditable="false" id="address" name="address" placeholder="도로명 주소"> <input type="button"
-				class="btn btn-lg btn-default btn-block" value="주소검색"
-				onclick="goPopup()"><br> 
+			<br> <input class="form-control" type="text"  id="address" name="address" placeholder="도로명 주소"> 
+			<input type="button" class="btn btn-lg btn-default btn-block" value="주소검색" onclick="goPopup()"><br> 
 	     <input class="btn btn-lg btn-success btn-block" id="btn" type="button" value="회원가입">
 		</form>
 		<br>

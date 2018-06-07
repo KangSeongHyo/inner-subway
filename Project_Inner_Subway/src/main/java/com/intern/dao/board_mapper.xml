@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="board">
 
-	<select id="getBoardList" parameterType="String" resultType="BoardVO">
+	<select id="getBoardList" parameterType="java.util.Map" resultType="BoardVO">
 		SELECT * FROM station_board
 		where scode=#{scode}
-		order by entry_num desc
+		order by entry_num desc limit #{startEntry},#{endEntry}
 	</select>
 	
 	<select id="getBoardOne" parameterType="hashMap" resultType="BoardVO">
@@ -15,17 +15,16 @@
 		where  scode='${scode}' and entry_num=${entry_num}
 	</select>
 	
-	<select id="getEntryCount" resultType="int">
+<select id="getEntryCount" resultType="int">
 		SELECT count(*) FROM station_board
 	</select>
 	
-<insert id="insertBoard" parameterType="BoardVO">
- INSERT INTO station_board VALUES(#{scode},#{entry_num},#{head},
- #{title},#{writer},sysdate(),#{viewcount},#{content},#{img_path})
-</insert>
+ <insert id="insertBoard" parameterType="BoardVO">
+   INSERT INTO station_board(scode,title,writer,registration_date,viewcount,content,img_path) VALUES(#{scode},
+   #{title},#{writer},sysdate(),#{viewcount},#{content},#{img_path})
+ </insert>
 
-
-<update id="updateViewcount" parameterType="java.util.Map">
+ <update id="updateViewcount" parameterType="java.util.Map">
 		UPDATE station_board
 		SET
 		viewcount=viewcount+1
@@ -33,6 +32,32 @@
 		scode = #{scode} and entry_num=#{entry_num}
 	</update>
 	
+    <delete id="deleteBoard" parameterType="java.util.Map">
+		DELETE FROM station_board WHERE
+		scode = #{scode} and entry_num=#{entry_num}
+	</delete>
+
+    <update id="updateBoard" parameterType="BoardVO">
+		UPDATE station_board
+		SET
+		title=#{title},content=#{content}
+		<if test="img_path!=null">
+		,img_path=#{img_path}  
+		</if>
+		WHERE
+		scode = #{scode} and entry_num=#{entry_num}
+	</update>
+	
+    <select id="getSearchBoard" parameterType="java.util.Map" resultType="BoardVO">
+		SELECT * FROM station_board
+		where scode=#{scode}
+		<if test='select=="writer"'>
+		and writer like #{search}
+		</if>
+		<if test='select=="title"'>
+		and title like #{search}
+		</if>
+	</select>
 <!-- 
 	<resultMap type="#modelname" id="YourResultSet">
 		<id property="param1" column="columnname1" />
@@ -48,18 +73,5 @@
 		INSERT INTO tablename1 (columnname1, columnname2, columnname3)
 		VALUES(#{value1},#{value2},#{value3})
 	</insert>
-
-	<update id="updateSomething" parameterType="#modelname">
-		UPDATE tablename1
-		SET
-		columnname1=#{param1}
-		WHERE
-		columnname2 = #{param2}
-	</update>
-
-	<delete id="deleteSomething" parameterType="int">
-		DELETE FROM tablename1 WHERE
-		columnname1 = #{param1}
-	</delete>
  -->
 </mapper>

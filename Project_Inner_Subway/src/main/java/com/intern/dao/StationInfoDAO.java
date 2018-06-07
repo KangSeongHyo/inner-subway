@@ -18,6 +18,10 @@ public class StationInfoDAO {
 	return session.selectList("station.getStationInfo",line_number);
 	}
 	
+	public String getStationName(String sname){
+		return session.selectOne("station.getStationName",sname);
+	};
+	
 	
 	
 }
