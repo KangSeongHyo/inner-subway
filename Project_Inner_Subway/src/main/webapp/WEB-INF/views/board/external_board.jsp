@@ -38,11 +38,13 @@ $(document).ready(function() {
 		scode=data.scode;
 		entry_num=data.entry_num;
 		
+	/////////////////외부게시판 view, 검색
 	 $.ajax({
 			type:'post',
 			url:'<%=request.getContextPath()%>/board/inner_board',
 			data:{'scode': scode, 'entry_num':entry_num},
 			success:function(server_result){
+			//$("#inner_img").prop("src",server_result[0].img_path);
 			$("#inner_board_title").html(server_result[0].title);
 			$("#inner_board_content").html(server_result[0].content);
 			$(".blockquote-footer").html("From "+server_result[0].writer);
@@ -62,7 +64,7 @@ $(document).ready(function() {
 		
 	});
 	
-	//////////////////////comment
+	//////////////////////댓글 불러오기
  $("#inner_board_comment").on("click",function(){
 		
 		$.ajax({
@@ -88,6 +90,7 @@ $(document).ready(function() {
 		
 	});
 	
+	////////////////댓글삭제
 	$(document).on("click","#comment_del",function(){
 		
 		var check=confirm("댓글을 삭제하시겠습니까?");
@@ -122,7 +125,7 @@ $(document).ready(function() {
 
 		}); 
 		
-	} //if문끝
+	} //////////if문끝
 		
 	});
 
@@ -351,11 +354,16 @@ $(document).on("click","#reg_mod",function(){
     line-height: 3em;
     color: gray;  }
   
-  p > img{
+ #inner_img{
      width: auto;
      height: 200px;
-  
   }
+  
+  #external_img{
+     height:225px;
+     width:253px;
+   }
+  
   dt {
     display:inline;
   }
@@ -409,7 +417,8 @@ $(document).on("click","#reg_mod",function(){
       <c:forEach var="i" begin="0" end="${fn:length(list)-1}" >
         <div class="col-lg-3 col-md-6 mb-4">
           <div id="external_card" class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt=""><i id="board_del" data-writer='${list[i].writer}' data-entry_num="${list[i].entry_num}" class="far fa-times-circle"></i>
+            <img id="external_img" class="card-img-top" src="http://placehold.it/500x325" alt=""><i id="board_del" data-writer='${list[i].writer}' data-entry_num="${list[i].entry_num}" class="far fa-times-circle"></i>
+             <%-- <img class="card-img-top" src="${list[i].img_path}" alt=""><i id="board_del" data-writer='${list[i].writer}' data-entry_num="${list[i].entry_num}" class="far fa-times-circle"></i> --%>
             <div class="card-body" id="external_box">
               <h4 class="card-title">${list[i].title}</h4>
               <p class="card-text" id="external_content" >${list[i].content}</p>
@@ -426,7 +435,7 @@ $(document).on("click","#reg_mod",function(){
      <button id="board_reg" class="btn btn-outline-secondary float-right">글작성</button>
      <ul style="text-align: center" class="pagination mx-auto">
         <c:forEach begin="${startPage}" end="${endPage}" step="1" var="i">
-       <li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/board/external?scode=${list[0].scode}&sname=${slist[0].sname}&page=${i}">${i}</a></li>
+       <li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${list[0].scode}&sname=${slist[0].sname}&page=${i}">${i}</a></li>
        </c:forEach>
      </ul>
 </div>
@@ -450,10 +459,9 @@ $(document).on("click","#reg_mod",function(){
  <div class="card bg-light mb-3" style="max-width: auto;">
   <div class="card-header">상세보기</div>
   <div class="card-body">
-     <p class="card-text"><img alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"></p>
+     <p class="card-text"><img id="inner_img" alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"><!-- <img alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"> --></p>
      </div>
   </div>
-  
  <div class="card text">
    <div class="card-header">내용</div>
       <div class="card-body">

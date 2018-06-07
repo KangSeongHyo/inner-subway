@@ -44,7 +44,7 @@ public class BoardController {
 	@Autowired
 	Comment_Service comment_service;
 	
-
+//////////////외부게시판 뷰
 	@RequestMapping("/board/external")
 	public ModelAndView externalBoard(@RequestParam(value="page",defaultValue="1")int page,String scode,String search,String select, HttpSession session) {
 		List<BoardVO> list;
@@ -80,12 +80,12 @@ public class BoardController {
          }
        
         // 게시물 목록
-        int startEntry=(page-1)*boardCount_page+1;
+        int startEntry=(page-1)*boardCount_page;
         int limit=4;
         
         Map<String, Object> map=new HashMap<String,Object>();
         map.put("startEntry", startEntry);
-        map.put("endEntry", limit);
+        map.put("limit", limit);
         map.put("scode", scode);        
         mv.addObject("startPage", startPage);
         mv.addObject("endPage", endPage);
@@ -114,7 +114,8 @@ public class BoardController {
 
 	@RequestMapping("/board/write")
 	public void write() {}
-///////////글작성
+	
+//////////////////글작성
 	@RequestMapping("/board/write_result")
 	public String write_result(MultipartFile file, HttpServletRequest request,HttpSession session) throws IllegalStateException, IOException {
 		 ////////////// file 업로드
@@ -123,8 +124,9 @@ public class BoardController {
 	     String ext=real_name.substring(real_name.lastIndexOf("."));// 확장자 추출
 	     String uuid=UUID.randomUUID().toString().replaceAll("-", "");//-제거  
 	     String unique_name=uuid+ext; //유니크한 이름 생성 
-	     String img_path="C:/new/"+unique_name;
-         File newfile=new File(img_path);
+	     String upload_path="/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/"+unique_name;
+         String load_path="/storage/"+unique_name;
+	     File newfile=new File(upload_path);
 		 file.transferTo(newfile);
 		 
 		String writer=(String)session.getAttribute("id");
@@ -133,7 +135,7 @@ public class BoardController {
 		String title=request.getParameter("title");
 		String content=request.getParameter("content");
 		 
-		BoardVO vo=new BoardVO(scode,0,title, writer, new Date(0), 0, content, img_path);
+		BoardVO vo=new BoardVO(scode,0,title, writer, new Date(0), 0, content, load_path);
 		service.insertBoard(vo);
 		String sname=station_service.getStationName(scode);
 		
@@ -226,7 +228,7 @@ public class BoardController {
 	    String sname=station_service.getStationName(vo.getScode());
 	   return "redirect:/board/external?scode="+vo.getScode()+"&sname="+URLEncoder.encode(sname,"utf-8");
 	}
-	
+	////////////html코드삭제
 	private String getText(String content) {
 		Pattern SCRIPTS = Pattern.compile("<(no)?script[^>]*>.*?</(no)?script>",Pattern.DOTALL);
 		Pattern STYLE = Pattern.compile("<style[^>]*>.*</style>",Pattern.DOTALL);

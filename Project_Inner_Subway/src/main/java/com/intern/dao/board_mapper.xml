@@ -7,7 +7,7 @@
 	<select id="getBoardList" parameterType="java.util.Map" resultType="BoardVO">
 		SELECT * FROM station_board
 		where scode=#{scode}
-		order by entry_num desc limit #{startEntry},#{endEntry}
+		order by entry_num desc limit #{startEntry},#{limit}
 	</select>
 	
 	<select id="getBoardOne" parameterType="hashMap" resultType="BoardVO">

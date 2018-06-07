@@ -21,10 +21,10 @@ public class StationController {
 	@RequestMapping("main/line")
 	public void line_page(){}
 	
+	////메인 역이름 뷰
 	@RequestMapping("main/getstationinfo")
 	@ResponseBody
 	public List<StationInfoVO> getStationInfo(int line_number){
-	   System.out.println("들어옴"+line_number);
 		List<StationInfoVO> list=service.getStationInfo(line_number);
 		return list;
 	}

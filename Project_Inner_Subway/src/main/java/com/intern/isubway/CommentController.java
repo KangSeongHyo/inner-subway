@@ -21,6 +21,8 @@ public class CommentController {
 	@Autowired
 	Comment_Service service;
 	
+	
+	//////댓글 등록
 	@RequestMapping("/comment/insert")
 	@ResponseBody
 	public List<CommentVO> insertComment(String scode,int entry_num,String content,HttpSession session){
@@ -37,6 +39,7 @@ public class CommentController {
 		
 	}
 	
+	////////////댓글삭제
 	@RequestMapping("/comment/del")
 	@ResponseBody
 	public List<CommentVO> deleteComment(String scode,int entry_num, int comment_seq,String writer,HttpSession session){

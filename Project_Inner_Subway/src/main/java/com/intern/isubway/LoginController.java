@@ -17,7 +17,7 @@ import com.intern.login.MemberInfo_Service;
 
 @Controller
 public class LoginController {
-	//로그인 컨트롤ddcdd
+
 	@Autowired
 	MemberInfo_Service service;
 	@Autowired
@@ -42,6 +42,7 @@ public class LoginController {
 		return mv;
 	}
 
+	//////// 단방향 암호화처리
 	@RequestMapping(value = "login/bcrypt", method = RequestMethod.POST)
 	public String bcrypt(MemberInfoVO vo) {
 		String pw = encoder.encode(vo.getPw());
@@ -52,6 +53,7 @@ public class LoginController {
 		return "redirect:/";
 	}
 
+	//////////// 로그인체크
 	@RequestMapping(value = "login/loginck", method = RequestMethod.POST)
 	public String loginCheck(String id, String pw, HttpSession session) {
 		List<MemberInfoVO> list = service.getMemberList();
@@ -64,13 +66,11 @@ public class LoginController {
 		return "login/loginfail";
 	}
 
+	/////중복아이디체크
 	@RequestMapping("/login/id_check")
 	@ResponseBody
 	public List<String> idCheck() {	
-		System.out.println("들어는오니?");
 		List<String> list = service.getIdList();
-		System.out.println(list.size());
-		
 		return list;
 	}
 
