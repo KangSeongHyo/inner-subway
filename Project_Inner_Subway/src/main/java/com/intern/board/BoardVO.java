@@ -5,93 +5,132 @@ import java.sql.Date;
 public class BoardVO {
 
 	String scode;
-	int entry_num;
+	int entryNum;
 	String title;
 	String writer;
-	Date registration_date;
-	int viewcount;
+	Date registrationDate;
+	int viewCount;
 	String content;
-	String img_path;
+	String imgPath;
+	
+	
 	
 	public BoardVO() {
 		super();
 	}
-	public BoardVO(String scode, int entry_num, String title, String writer, Date registration_date, int viewcount,
-		String content, String img_path) {
+
+
+
+	public BoardVO(String scode, int entryNum, String title, String writer, Date registrationDate, int viewCount,
+		String content, String imgPath) {
 		super();
 		this.scode = scode;
-		this.entry_num = entry_num;
+		this.entryNum = entryNum;
 		this.title = title;
 		this.writer = writer;
-		this.registration_date = registration_date;
-		this.viewcount = viewcount;
+		this.registrationDate = registrationDate;
+		this.viewCount = viewCount;
 		this.content = content;
-		this.img_path = img_path;
+		this.imgPath = imgPath;
 	}
+
+
 
 	public String getScode() {
 		return scode;
 	}
 
+
+
 	public void setScode(String scode) {
 		this.scode = scode;
 	}
 
-	public int getEntry_num() {
-		return entry_num;
+
+
+	public int getEntryNum() {
+		return entryNum;
 	}
 
-	public void setEntry_num(int entry_num) {
-		this.entry_num = entry_num;
+
+
+	public void setEntryNum(int entryNum) {
+		this.entryNum = entryNum;
 	}
+
+
 
 	public String getTitle() {
 		return title;
 	}
 
+
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+
 
 	public String getWriter() {
 		return writer;
 	}
 
+
+
 	public void setWriter(String writer) {
 		this.writer = writer;
 	}
 
-	public Date getRegistration_date() {
-		return registration_date;
+
+
+	public Date getRegistrationDate() {
+		return registrationDate;
 	}
 
-	public void setRegistration_date(Date registration_date) {
-		this.registration_date = registration_date;
+
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
-	public int getViewcount() {
-		return viewcount;
+
+
+	public int getViewCount() {
+		return viewCount;
 	}
 
-	public void setViewcount(int viewcount) {
-		this.viewcount = viewcount;
+
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}
+
+
 
 	public String getContent() {
 		return content;
 	}
 
+
+
 	public void setContent(String content) {
 		this.content = content;
 	}
 
-	public String getImg_path() {
-		return img_path;
+
+
+	public String getImgPath() {
+		return imgPath;
 	}
 
-	public void setImg_path(String img_path) {
-		this.img_path = img_path;
+
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
 	}
+	
+	
 
 	
 }

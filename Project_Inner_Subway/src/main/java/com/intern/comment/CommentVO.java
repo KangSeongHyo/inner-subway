@@ -10,7 +10,7 @@ public class CommentVO {
 	String content;
 	String writer;
 	Date registration_date;
-	
+
 	public CommentVO() {
 		super();
 	}
@@ -73,6 +73,5 @@ public class CommentVO {
 	public void setRegistration_date(Date registration_date) {
 		this.registration_date = registration_date;
 	}
-	
-	
+
 }

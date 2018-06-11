@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<select id="getBoardList" parameterType="com.intern.station.StationVO" resultType="com.intern.board.BoardVO">
+		SELECT scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath FROM station_board
+		where scode=#{scode}
+		order by
+		entryNum desc limit 0,4
+	</select>
+	
+    <select id="getEntryCount" resultType="int">
+		SELECT count(*) FROM
+		station_board
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.intern.board.BoardVO">
+		INSERT INTO
+		station_board(scode,title,writer,registrationDate,viewCount,content,imgPath)
+		VALUES(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
+	</insert>
+	
+	<delete id="deleteBoard" parameterType="com.intern.board.BoardVO">
+		DELETE FROM station_board
+		WHERE
+		scode = #{scode} and entryNum=#{entryNum}
+	</delete>
+<!-- 
+	<select id="getBoardOne" parameterType="hashMap" resultType="BoardVO">
+		SELECT * FROM station_board
+		where scode='${scode}' and
+		entry_num=${entry_num}
+	</select>
+
+
+
+
+	<update id="updateViewcount" parameterType="java.util.Map">
+		UPDATE station_board
+		SET
+		viewcount=viewcount+1
+		WHERE
+		scode = #{scode} and
+		entry_num=#{entry_num}
+	</update>
+
+	
+
+	<update id="updateBoard" parameterType="BoardVO">
+		UPDATE station_board
+		SET
+		title=#{title},content=#{content}
+		<if test="img_path!=null">
+			,img_path=#{img_path}
+		</if>
+		WHERE
+		scode = #{scode} and entry_num=#{entry_num}
+	</update>
+
+	<select id="getSearchBoard" parameterType="java.util.Map"
+		resultType="BoardVO">
+		SELECT * FROM station_board
+		where scode=#{scode}
+		<if test='select=="writer"'>
+			and writer like #{search}
+		</if>
+		<if test='select=="title"'>
+			and title like #{search}
+		</if>
+	</select> -->
+	<!-- <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 
+		column="columnname1" /> <result property="param2" column="columnname2" /> 
+		<result property="param3" column="columnname3" /> </resultMap> <select id="getAll" 
+		resultMap="YourResultSet"> SELECT * FROM tablename1 </select> <insert id="insertSomething" 
+		parameterType="#modelname"> INSERT INTO tablename1 (columnname1, columnname2, 
+		columnname3) VALUES(#{value1},#{value2},#{value3}) </insert> -->
+</mapper>
