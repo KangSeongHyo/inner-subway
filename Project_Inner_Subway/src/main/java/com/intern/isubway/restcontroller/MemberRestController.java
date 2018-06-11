@@ -35,14 +35,12 @@ public class MemberRestController {
 
 	/**
 	 * id 중복체크를 위한 id List 반환 
-	 * 
 	 * @return DB의 id List
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> getIdList() {
 
 		ResponseEntity<List<String>> responseEntity = null;
-		log.debug("로그테스트");
 
 		try {
 			List<String> list = memberService.getIdList();

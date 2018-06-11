@@ -27,7 +27,8 @@
 	rel="stylesheet">
 <script
 	src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
-<script type='text/javascript' src='http://malsup.github.com/jquery.form.js'></script>
+<script type='text/javascript'
+	src='http://malsup.github.com/jquery.form.js'></script>
 <script type="text/javascript">
 function formatDate(date) { 
 	var d = new Date(date),
@@ -45,14 +46,35 @@ $(document).ready(function() {
 	var contextPath='<%=request.getContextPath()%>';
 	var sname='${sname}';
 	
-	$(".card-footer > button").on("click",function(){
+///// 상세보기
+	$(".card-footer > #modalreq").on("click",function(){
 	
 		var data=$(this).data();
 		scode=data.scode;
 		entryNum=data.entryNum;
+		alert("이거 맞니");
 		
 	/////////////////외부게시판 view, 검색
-	 $.ajax({
+         $.ajax({
+		    type:'get',
+			url:'<%=request.getContextPath()%>/board/'+scode+'/'+data.entrynum,
+			contentType: 'application/json; charset=UTF-8',
+			success: function(serverResult){
+				
+					$("#inner_img").prop("src",serverResult.imgPath);
+					$("#inner_board_title").html(serverResult.title);
+					$("#inner_board_content").html(serverResult.content);
+					$(".blockquote-footer").html("From "+serverResult.writer);
+					$("#reg_date").html(formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+serverResult.viewCount+"</i>");
+		      },
+			error: function() {
+				
+			}
+        });
+	});
+
+
+<%--   $.ajax({
 			type:'post',
 			url:'<%=request.getContextPath()%>/board/inner_board',
 			data:{'scode': scode, 'entryNum':entryNum},
@@ -72,13 +94,13 @@ $(document).ready(function() {
 	         			+server_result[i].content+"</dd></dl><hr>");
 			   }
 			}
-		});
+		}); 
 		
 		
 	});
 	
 	//////////////////////댓글 불러오기
- $("#inner_board_comment").on("click",function(){
+  $("#inner_board_comment").on("click",function(){
 		
 		$.ajax({
 			type:'post',
@@ -101,7 +123,7 @@ $(document).ready(function() {
 		}); 
 		
 		
-	});
+	}); 
 	
 	////////////////댓글삭제
 	$(document).on("click","#comment_del",function(){
@@ -138,11 +160,12 @@ $(document).ready(function() {
 
 		}); 
 		
-	} //////////if문끝
+	}  //////////if문끝
 		
-	});
+	});--%>
 
-////////////글작성 폼
+///////////////// 글작성 폼
+
 	$("#boardWrite").on("click",function(){
 		if('${id}'==''){
 			alert("로그인 뒤에 이용해주세요");
@@ -151,7 +174,7 @@ $(document).ready(function() {
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="+scode+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
 		}
 	 
-       ///////////에디터
+       /////////// 에디터
 		$('#summernote').summernote({
 		      placeholder: '종류, 위치 등 자세하게 적어주세요',
 		      minHeight: 300, 
@@ -168,54 +191,15 @@ $(document).ready(function() {
 		});
 	});
 	
-/////////////////// 뒤로가기 버튼		
+/////////////////// 뒤로가기 버튼
+
 	$(document).on("click","#backpage",function(){
 		location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
 	}); 
 
-//////////////////글작성
-	$(document).on("click","#boardRegister",function(){
-		if($("#titleInput").val()==null){
-			alert("내용을 확인해주세요");
-			
-		}else{
-			$("#writeForm").ajaxSubmit({
-			    type:'post',
-				url:'<%=request.getContextPath()%>/board',
-				contentType: 'application/json; charset=UTF-8',
-				data:$("#writeForm").serialize(),
-				success: function(serverResult){
-					var result=JSON.parse(serverResult);
-					
-					if(result==0){
-						alert("서버에 오류가 발생하였습니다.")
-					}else{
-						location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
-					}
-					
-				},
-				error: function(x,e){
-					 if(x.status==0){
-					      alert('네트워크를 체크해주세요.');
-					      }else if(x.status==404){
-					      alert('페이지를 찾을수없습니다.');
-					      }else if(x.status==500){
-					      alert('서버에러 발생하였습니다.');
-					      }else if(e=='parsererror'){
-					      alert('Error.\nParsing JSON Request failed.');
-					      }else if(e=='timeout'){
-					      alert('시간을 초과하였습니다.');
-					      }else {
-					      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
-					      }
-				}
-			});
-
-			
-		}
-	});
 	
 ///////////////글삭제
+
    $("#externalCard > i").on("click",function(){
 	   
 	   var data=$(this).data();
@@ -266,18 +250,24 @@ $(document).ready(function() {
    });
     
 /////////////////글수정 불러오기
-   $(".card-footer > #board_mod").on("click",function(){
+   $(".card-footer > #boardMod").on("click",function(){
 	   
 	   var data=$(this).data();
-	   
 	   $.ajax({
-		   type:'post',
-			url:'<%=request.getContextPath()%>/board/modify_call',
-			data:{'scode': scode, 'entryNum':data.entryNum},
-			success: function(server_result) {
+		   type:'get',
+			url:'<%=request.getContextPath()%>/board/'+scode+'/'+data.entrynum+'/'+data.writer,
+			contentType: 'application/json; charset=UTF-8',
+			success: function(serverResult) {
+				
+				if(serverResult==""){
+					alert("권한이 없습니다.")
+				}else{
+					
 				$(".container").empty();
-				$(".container").append("<div id='reflash' class='row'><form method='post' enctype='multipart/form-data' ><input type='hidden' name='entryNum' value="+data.entryNum+"><input type='hidden' name='scode' value="+scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' value='"+server_result.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea id='summernote'>"+server_result.content+"</textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' id='file'></label><small class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='modifyBtn' class='btn btn-outline-secondary float-right'>수정</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");
-		    
+				$(".container").append("<div id='reflash' class='row'><form id='modifyform' method='post' enctype='multipart/form-data' ><input type='hidden' name='entryNum' value="+data.entrynum+"><input type='hidden' name='scode' value="+scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"+serverResult.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'>"+serverResult.content+"</textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' id='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div><button id='modifyBtn' class='btn btn-outline-secondary float-right'>수정</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");		    
+					
+				}
+				
 		    $('#summernote').summernote({
 		      placeholder: '종류, 위치 등 자세하게 적어주세요',
 		      minHeight: 300, 
@@ -291,30 +281,117 @@ $(document).ready(function() {
 		    	    ['height', ['height']]
 		    	  ],
 		        popover: {image: []}
-		    });
+		        });
 				
-				
-				
-			 }
-			
+			 },
+			 error: function(x,e){
+				 if(x.status==0){
+				      alert('네트워크를 체크해주세요.');
+				      }else if(x.status==404){
+				      alert('페이지를 찾을수없습니다.');
+				      }else if(x.status==500){
+				      alert('서버에러 발생하였습니다.');
+				      }else if(e=='parsererror'){
+				      alert('Error.\nParsing JSON Request failed.');
+				      }else if(e=='timeout'){
+				      alert('시간을 초과하였습니다.');
+				      }else {
+				      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
+				      }
+		   }
+		
 	      });
 	  });
+///////////////////글 작성
+	$(document).on("click","#boardRegister",function(){
+		if($("#titleInput").val()==null){
+			alert("내용을 확인해주세요");
+			
+		}else{
+			$("#writeForm").ajaxSubmit({
+			    type:'post',
+				url:'<%=request.getContextPath()%>/board',
+				contentType: 'application/json; charset=UTF-8',
+				data: $("#writeForm").serialize(),
+				success: function(serverResult){
+					var result=JSON.parse(serverResult);
+					
+					if(result==0){
+						alert("서버에 오류가 발생하였습니다.")
+					}else{
+						location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
+					}
+					
+				},
+				error: function(x,e){
+					 if(x.status==0){
+					      alert('네트워크를 체크해주세요.');
+					      }else if(x.status==404){
+					      alert('페이지를 찾을수없습니다.');
+					      }else if(x.status==500){
+					      alert('서버에러 발생하였습니다.');
+					      }else if(e=='parsererror'){
+					      alert('Error.\nParsing JSON Request failed.');
+					      }else if(e=='timeout'){
+					      alert('시간을 초과하였습니다.');
+					      }else {
+					      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
+					      }
+				}
+			});
+
+			
+		}
+	});
+	  
 //////////////////////글 수정 업데이트
    
 $(document).on("click","#modifyBtn",function(){
 	   if($("#titleInput").val()==null){
-		alert("제목을 확인해주세요"); }
+		alert("제목을 확인해주세요"); 
+		}
 	   else if($("#summernote").val()==null){
 		   alert("내용을 확인해주세요");
 	   }
-    else {
-	    $("form").prop("action","<%=request.getContextPath()%>/board/modify").submit();
-	}
-	   
-   });
-	
+       else {
+    	   alert("수정");
+    	   alert($("#modifyform").serialize());
+    	   
+    	   $("#modifyform").ajaxSubmit({
+			    type:'post',
+				url:'<%=request.getContextPath()%>/board/modify',
+				contentType: 'application/json; charset=UTF-8',
+				data:$("#modifyform").serialize(),
+				success: function(serverResult){
+					var result=JSON.parse(serverResult);
+					
+					if(result==0){
+						alert("서버에 오류가 발생하였습니다.")
+					}else{
+						location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
+					}
+					
+				},
+				error: function(x,e){
+					 if(x.status==0){
+					      alert('네트워크를 체크해주세요.');
+					      }else if(x.status==404){
+					      alert('페이지를 찾을수없습니다.');
+					      }else if(x.status==500){
+					      alert('서버에러 발생하였습니다.');
+					      }else if(e=='parsererror'){
+					      alert('Error.\nParsing JSON Request failed.');
+					      }else if(e=='timeout'){
+					      alert('시간을 초과하였습니다.');
+					      }else {
+					      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
+					      }
+				}
+			});
+    	 
+		}
+	});
 });
-
 
 </script>
 
@@ -437,8 +514,9 @@ dt {
 				<ul class="sidebar-nav">
 					<li class="sidebar-brand"></li>
 					<li class="sidebar-brand">${stationList[0].line}호선</li>
-					<c:forEach var="key" items="${stationList}" >
-						<li><a href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}">${key.sname}</a></li>
+					<c:forEach var="key" items="${stationList}">
+						<li><a
+							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}">${key.sname}</a></li>
 					</c:forEach>
 				</ul>
 			</div>
@@ -453,8 +531,9 @@ dt {
  </form> --%>
 
 	<div id="page-wrapper" style="padding-top: 150px">
-		<h1 style="margin-left: 150px">${sname}역 게시판
-			<hr/>
+		<h1 style="margin-left: 150px">${sname}역
+			게시판
+			<hr />
 		</h1>
 		<div class="container">
 			<form action="<%=request.getContextPath()%>/board/external"
@@ -467,28 +546,27 @@ dt {
 			</form>
 			<br>
 			<div id="reflash" class="row text-center">
-				 <c:forEach var="board" items="${boardList}">
+				<c:forEach var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
 						<div id="externalCard" class="card">
 							<img id="outImg" class="card-img-top"
-								src="http://placehold.it/500x325" alt="">
-								<i id="boardDel"
-								data-entry='${board.entryNum}'  data-writer='${board.writer}'  class="far fa-times-circle"></i>
+								src="http://placehold.it/500x325" alt=""> <i id="boardDel"
+								data-entry='${board.entryNum}' data-writer='${board.writer}'
+								class="far fa-times-circle"></i>
 							<%-- <img class="card-img-top" src="${list[i].img_path}" alt=""><i id="boardDel" data-writer='${list[i].writer}' data-entryNum="${list[i].entryNum}" class="far fa-times-circle"></i> --%>
 							<div class="card-body" id="external_box">
-								<h4 class="card-title"></h4>
+								<h4 class="card-title">${board.title}</h4>
 								<p class="card-text" id="external_content">${board.content}</p>
-								<footer class="blockquote-footer">From
-									${board.writer}</footer>
+								<footer class="blockquote-footer">From ${board.writer}</footer>
 							</div>
 							<div class="card-footer">
-								<button style="margin-left: 10px" id="modal_req" type="button"
-									data-entryNum='${board.entryNum}'
-									data-scode='${board.scode}' class="btn btn-outline-secondary"
-									data-toggle="modal" data-target=".bd-example-modal-lg">상세보기</button>
-								<button style="margin-left: 10px" id="board_mod" type="button"
-									data-entryNum='${board.entryNum}'
-									data-scode='${board.scode}' class="btn btn-outline-danger">수정하기</button>
+								<button style="margin-left: 10px" id="modalreq" type="button"
+									data-entrynum='${board.entryNum}' data-scode='${board.scode}'
+									class="btn btn-outline-secondary" data-toggle="modal"
+									data-target=".bd-example-modal-lg">상세보기</button>
+								<button style="margin-left: 10px" id="boardMod" type="button"
+									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
+									data-writer='${board.writer}' class="btn btn-outline-danger">수정하기</button>
 							</div>
 						</div>
 					</div>
@@ -496,7 +574,8 @@ dt {
 			</div>
 			<button id="boardWrite" class="btn btn-outline-secondary float-right">글작성</button>
 			<ul style="text-align: center" class="pagination mx-auto">
-				<c:forEach begin="${pageMap.startPage}" end="${pageMap.endPage}" var="i">
+				<c:forEach begin="${pageMap.startPage}" end="${pageMap.endPage}"
+					var="i">
 					<li class="page-item"><a class="page-link"
 						href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${i}">${i}</a></li>
 				</c:forEach>

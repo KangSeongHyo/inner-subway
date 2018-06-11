@@ -62,6 +62,23 @@ public class BoardService implements Board {
 	@Autowired
 	BoardDAO dao;
 
+	public BoardVO getBoardOne(BoardVO requstBoard, String id) {
+
+		if (id != null) {
+			if (requstBoard.getWriter().equals(id)) {
+				return dao.getBoardOne(requstBoard);
+
+			} else {
+
+				return null;
+			}
+		} else {
+
+			return dao.getBoardOne(requstBoard);
+		}
+
+	}
+
 	@Override
 	public List<BoardVO> getBoardList(StationVO requestStation) {
 
@@ -71,6 +88,58 @@ public class BoardService implements Board {
 	@Override
 	public int getEntryCount() {
 		return dao.getEntryCount();
+	}
+
+	@Override
+	public int romoveBoard(BoardVO requestBoard, String id) {
+
+		int check = 0;
+
+		if (requestBoard.getWriter().equals(id)) {
+			check = dao.removeBoard(requestBoard);
+
+		} else {
+			check = -1;
+
+		}
+
+		return check;
+	}
+
+	@Override
+	public int modifyBoard(BoardVO requestBoard, MultipartFile file) {
+		//////////////file 업로드
+		int check = 0;
+
+		try {
+
+			if (file != null) {
+				String realName = file.getOriginalFilename();
+
+				String ext = realName.substring(realName.lastIndexOf("."));// 확장자 추출
+
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");//-제거  
+
+				String uniqueName = uuid + ext; //유니크한 이름 생성 
+
+				//String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
+				String uploadPath = "C:/new/" + uniqueName;
+
+				String imgPath = "/storage/" + uniqueName;
+
+				File newfile = new File(uploadPath);
+
+				file.transferTo(newfile);
+
+				requestBoard.setImgPath(imgPath);
+			}
+			check = dao.modifyBoard(requestBoard);
+
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+
+		return check;
 	}
 
 	@Override
@@ -104,33 +173,14 @@ public class BoardService implements Board {
 		return dao.boardRegister(requestBoard);
 	}
 
-	@Override
-	public int romoveBoard(BoardVO requestBoard, String id) {
-
-		int check = 0;
-
-		if (requestBoard.getWriter().equals(id)) {
-			check = dao.removeBoard(requestBoard);
-
-		} else {
-			check = -1;
-
-		}
-
-		return check;
-	}
-
 	/*@Override
-	public BoardVO getBoardOne(HashMap map) {
-		return dao.getBoardOne(map);
-	}
+	
 	
 	@Override
 	public void updateViewcount(Map map) {
 		// TODO Auto-generated method stub
 		dao.updateViewcount(map);
 	}
-	
 	
 	
 	@Override

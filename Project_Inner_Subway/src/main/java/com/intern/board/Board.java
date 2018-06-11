@@ -1,6 +1,5 @@
 package com.intern.board;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,24 +21,44 @@ public interface Board {
 	 */
 	int boardRegister(BoardVO requestBoard, MultipartFile file);
 
-	
 	/**
 	 * 게시물 삭제
 	 * @param requestBoard 삭제할 게시물 정보
+	 * @param id 로그인 된 아이디
 	 * @return 1(성공),0(오류),-1(작성자아님)
 	 */
 	int romoveBoard(BoardVO requestBoard, String id);
 
-	/*BoardVO getBoardOne(HashMap map);
+	/**
+	 * 게시물 수정
+	 * @param requestBoard 수정 게시물 정보
+	 * @param file 변경파일
+	 * @param id 로그인 된 아이디
+	 * @return 1(성공),0(오류),-1(작성자아님)
+	 */
 
-	void updateViewcount(Map map);
+	int modifyBoard(BoardVO requestBoard, MultipartFile file);
 
-
-	void updateBoard(BoardVO vo);
-
-	List<BoardVO> getSearchBoard(Map<String, Object> map);
-*/
+	/**
+	 * 해당 게시물 정보 불러오기 
+	 * @param requestBoard 요청 board
+	 * @param 로그인 된 아이디
+	 * @return 요청 게시물 정보
+	 */
+	BoardVO getBoardOne(BoardVO requestBoard, String id);
+	
 	List<BoardVO> removeHtml(List<BoardVO> boardList);
 
 	Map<String, Integer> getPage(int page);
+
+	/*
+	
+	void updateViewcount(Map map);
+	
+	
+	void updateBoard(BoardVO vo);
+	
+	List<BoardVO> getSearchBoard(Map<String, Object> map);
+	 */
+
 }

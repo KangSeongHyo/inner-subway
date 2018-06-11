@@ -28,25 +28,28 @@ public class BoardDAO {
 	public int boardRegister(BoardVO vo) {
 		return session.insert("board.insertBoard", vo);
 	}
-	
+
 	public int removeBoard(BoardVO vo) {
 		return session.delete("board.deleteBoard", vo);
 	}
 
-
-	/*public BoardVO getBoardOne(HashMap map) {
-		return session.selectOne("board.getBoardOne", map);
+	public int modifyBoard(BoardVO vo) {
+		return session.update("board.updateBoard", vo);
 	}
 
+	public BoardVO getBoardOne(BoardVO vo) {
+		return session.selectOne("board.getBoardOne", vo);
+	}
+
+	/*
+	
 	public void updateViewcount(Map map) {
 		session.update("board.updateViewcount", map);
 	}
-
 	
-	public void updateBoard(BoardVO vo) {
-		session.update("board.updateBoard", vo);
-	}
-
+	
+	
+	
 	public List<BoardVO> getSearchBoard(Map<String, Object> map) {
 		return session.selectList("board.getSearchBoard", map);
 	}*/

@@ -61,8 +61,6 @@ public class BoardViewController {
 		List<StationVO> stationList = stationService
 			.getStations(Integer.parseInt(requestStation.getScode().substring(2, 4)));
 
-		
-
 		mv.addObject("boardList", boardList);
 		mv.addObject("stationList", stationList);
 		mv.addObject("pageMap", boardService.getPage(page));
