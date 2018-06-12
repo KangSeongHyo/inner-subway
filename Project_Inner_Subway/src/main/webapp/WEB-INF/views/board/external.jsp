@@ -30,6 +30,7 @@
 <script type='text/javascript'
 	src='http://malsup.github.com/jquery.form.js'></script>
 <script type="text/javascript">
+
 function formatDate(date) { 
 	var d = new Date(date),
 	month = '' + (d.getMonth() + 1), 
@@ -42,7 +43,7 @@ function formatDate(date) {
 $(document).ready(function() {
 
 	var scode='${scode}';
-	/* var entryNum=0; */
+	var entryNum=0;
 	var contextPath='<%=request.getContextPath()%>';
 	var sname='${sname}';
 	
@@ -50,13 +51,11 @@ $(document).ready(function() {
 	$(".card-footer > #modalreq").on("click",function(){
 	
 		var data=$(this).data();
-		scode=data.scode;
-		entryNum=data.entryNum;
 		
 	/////////////////외부게시판 view, 검색
          $.ajax({
 		    type:'get',
-			url:'<%=request.getContextPath()%>/board/'+scode+'/'+data.entrynum,
+			url:'<%=request.getContextPath()%>/board/'+data.scode+'/'+data.entrynum,
 			contentType: 'application/json; charset=UTF-8',
 			success: function(serverResult){
 				
@@ -66,132 +65,262 @@ $(document).ready(function() {
 					$(".blockquote-footer").html("From "+serverResult.writer);
 					$("#regDate").html(formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+serverResult.viewCount+"</i>");
 		      },
-			error: function() {
-				
-			}
+		      error: function(xhr,status){
+					 if(xhr.status==0){
+					      alert('네트워크를 체크해주세요.');
+					 }else if(xhr.status==404){
+					      alert('페이지를 찾을수없습니다.');
+					 }else if(xhr.status==500){
+					      alert('서버에러 발생하였습니다.');
+					 }else if(status=='parsererror'){
+					      alert('Error.\nParsing JSON Request failed.');
+					 }else if(status=='timeout'){
+					      alert('시간을 초과하였습니다.');
+					 }else {
+					      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+					 }
+				 }
         });
+	
          $("#commentList").empty();
          
          $.ajax({
         	 
         	 type:'get',
-        	 url:'<%=request.getContextPath()%>/comment/'+scode+'/'+data.entrynum,
+        	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
  			 contentType: 'application/json; charset=UTF-8',
 			 success: function(serverResult){
 				
 				 for(var i=0;i<serverResult.length;i++){
-			         	$("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
-			         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registration_date)
-			         			+"&nbsp;<i id='comment_del' data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-trash-alt'></i></span><dd>"
+			         	
+					    $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
+			         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
+			         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+			         			+"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+			         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+			         			+"'class='far fa-edit'></i></span><dd>"
 			         			+serverResult[i].content+"</dd></dl><hr>");
-				}
-
-				 
-			 },
-			  error: function() {
-					
-			  }
-        	 
-        	 
+				      }
+			         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
+			         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
+		
+			   },
+			   error: function(xhr,status){
+					 if(xhr.status==0){
+					      alert('네트워크를 체크해주세요.');
+					 }else if(xhr.status==404){
+					      alert('페이지를 찾을수없습니다.');
+					 }else if(xhr.status==500){
+					      alert('서버에러 발생하였습니다.');
+					 }else if(status=='parsererror'){
+					      alert('Error.\nParsing JSON Request failed.');
+					 }else if(status=='timeout'){
+					      alert('시간을 초과하였습니다.');
+					 }else {
+					      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+					 }
+				 }
+        	         	 
         	 
          });
 	
 	});
-
-
-<%--   $.ajax({
-			type:'post',
-			url:'<%=request.getContextPath()%>/board/inner_board',
-			data:{'scode': scode, 'entryNum':entryNum},
-			success:function(server_result){
-			//$("#innerImg").prop("src",server_result[0].img_path);
-			$("#innerBoardTitle").html(server_result[0].title);
-			$("#innerBoardContent").html(server_result[0].content);
-			$(".blockquote-footer").html("From "+server_result[0].writer);
-			$("#regDate").html(formatDate(server_result[0].registration_date)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+server_result[0].viewcount+"</i>");
-			
-			
-			
-			for(var i=1;i<server_result.length;i++){
-	         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
-	         			+"&nbsp;</dt><span>"+formatDate(server_result[i].registration_date)
-	         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
-	         			+server_result[i].content+"</dd></dl><hr>");
-			   }
-			}
-		}); 
-		
-		
-	});--%>
 	
 	//////////////////////댓글 등록
-  $("#innerBoardComment").on("click",function(){
-		
+  $(document).on("click","#innerBoardCommentBtn",function(){
+		var data=$(this).data();
+	  
 		$.ajax({
-			type:'put',
+			type:'POST',
 			url: '<%=request.getContextPath()%>/comment',
 			contentType: 'application/json; charset=UTF-8',
-			data:JSON.stringify({ 'scode':scode,
-				   'entryNum' : entryNum,
+			data:JSON.stringify({ 
+				   'scode':data.scode,
+				   'entryNum' : data.entrynum,
 				   'content' : $("#commentContent").val()
 			}),
 			success : function(serverResult){
-				alert(serverResult);
-				$("#commentList").empty();
-				
-				
-				/* for(var i=0;i<server_result.length;i++){
-		         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
-		         			+"&nbsp;</dt><span>"+formatDate(server_result[i].registration_date)
-		         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
-		         			+server_result[i].content+"</dd></dl><hr>");
-				    }
-				$("#commentContent").val(""); */
-			}
+				/////댓글 불러오기(reflash)
+				if(serverResult==1){
+					
+					 $.ajax({
+			        	 type:'get',
+			        	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
+			 			 contentType: 'application/json; charset=UTF-8',
+						 success: function(serverResult){
+							 
+							 $("#commentList").empty();
+							 
+							 for(var i=0;i<serverResult.length;i++){
+								 $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
+						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
+						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+						         			+"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+						         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+						         			+"'class='far fa-edit'></i></span><dd>"
+						         			+serverResult[i].content+"</dd></dl><hr>");
+					         
+							       }
+							 $("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
+					         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
+
+							 $("#commentContent").val("");
+						 },
+						 
+						 error: function(xhr,status){
+							 if(xhr.status==0){
+							      alert('네트워크를 체크해주세요.');
+							 }else if(xhr.status==404){
+							      alert('페이지를 찾을수없습니다.');
+							 }else if(xhr.status==500){
+							      alert('서버에러 발생하였습니다.');
+							 }else if(status=='parsererror'){
+							      alert('Error.\nParsing JSON Request failed.');
+							 }else if(status=='timeout'){
+							      alert('시간을 초과하였습니다.');
+							 }else {
+							      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+							 }
+						 }
+			        	         	 
+			        	 
+			         });
+					
+					
+				}else{
+					alert('서버에 오류가 발생하였습니다');
+					
+				}
+			},
+			 error: function(xhr,status){
+				 if(xhr.status==0){
+				      alert('네트워크를 체크해주세요.');
+				 }else if(xhr.status==404){
+				      alert('페이지를 찾을수없습니다.');
+				 }else if(xhr.status==500){
+				      alert('서버에러 발생하였습니다.');
+				 }else if(status=='parsererror'){
+				      alert('Error.\nParsing JSON Request failed.');
+				 }else if(status=='timeout'){
+				      alert('시간을 초과하였습니다.');
+				 }else {
+				      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+				 }
+			 }
 
 		}); 
 		
 		
 	}); 
-	
-	////////////////댓글삭제
-	$(document).on("click","#comment_del",function(){
+
+
+////////////////댓글삭제
+   $(document).on("click","#commentDel",function(){
 		
-		var check=confirm("댓글을 삭제하시겠습니까?");
+	var check=confirm("댓글을 삭제하시겠습니까?");	
 		
-	if(check==true){
+	  if(check==true){
 			
 		var data=$(this).data();
 		
 		$.ajax({
-			type:'post',
-			url: '<%=request.getContextPath()%>/comment/del',
-			data:{ 'scode':scode,
-				   'entryNum' : entryNum,
-				   'comment_seq' : data.seq,
+			type:'DELETE',
+			url: '<%=request.getContextPath()%>/comment',
+			contentType: 'application/json; charset=UTF-8',
+			data:JSON.stringify({ 
+				   'scode':data.scode,
+				   'entryNum' : data.entrynum,
+				   'commentSeq' : data.seq,
 				   'writer':data.wr
-			  },
-			success : function(server_result){
-				if(server_result==""){
+			  }),
+			success : function(serverResult){
+				if(serverResult==-1){
 					alert("댓글 작성자가 아닙니다.");
+				}else if(serverResult==0){
+					alert("서버에 오류가 발생하였습니다.");				 	
 				}else{
-				$("#commentList").empty();
-				for(var i=0;i<server_result.length;i++){
-		         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
-		         			+"&nbsp;</dt><span>"+formatDate(server_result[i].registration_date)
-		         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
-		         			+server_result[i].content+"</dd></dl><hr>");
-				    }
-				$("#commentContent").val("");
+				
+					$.ajax({
+			        	 type:'get',
+			        	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
+			 			 contentType: 'application/json; charset=UTF-8',
+						 success: function(serverResult){
+							 
+							 $("#commentList").empty();
+							 
+							 for(var i=0;i<serverResult.length;i++){
+						         	$("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
+						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
+						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"
+						         			+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-trash-alt'></i><i id='commentModify' class='far fa-edit'></i></span><dd>"
+						         			+serverResult[i].content+"</dd></dl><hr>");
+							       }
+
+					         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
+					         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
+					         
+
+							 $("#commentContent").val("");
+						 },
+						 
+						 error: function(xhr,status){
+							 if(xhr.status==0){
+							      alert('네트워크를 체크해주세요.');
+							 }else if(xhr.status==404){
+							      alert('페이지를 찾을수없습니다.');
+							 }else if(xhr.status==500){
+							      alert('서버에러 발생하였습니다.');
+							 }else if(status=='parsererror'){
+							      alert('Error.\nParsing JSON Request failed.');
+							 }else if(status=='timeout'){
+							      alert('시간을 초과하였습니다.');
+							 }else {
+							      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+							 }
+						 }
+			        	         	 
+			        	 
+			         });
+					
 					
 				}
+			 },
+			 error: function(xhr,status){
+				 if(xhr.status==0){
+				      alert('네트워크를 체크해주세요.');
+				 }else if(xhr.status==404){
+				      alert('페이지를 찾을수없습니다.');
+				 }else if(xhr.status==500){
+				      alert('서버에러 발생하였습니다.');
+				 }else if(status=='parsererror'){
+				      alert('Error.\nParsing JSON Request failed.');
+				 }else if(status=='timeout'){
+				      alert('시간을 초과하였습니다.');
+				 }else {
+				      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+				 }
 			 }
 
 		}); 
 		
-	    }  //////////if문끝
+	  }////confirm 
 		
 	});
+
+	
+    ////////////////////댓글수정
+   $(document).on("click","#commentModify",function(){
+	   alert("실행");
+	   
+	$(this).append("<div class='form-group'><label><abbr class='initialism'>댓글수정</abbr>:</label><textarea class='form-control' rows='5' id='modifyContent'></textarea></div>")
+		
+
+	
+   });
+
+
+	
+	
 
 ///////////////// 글작성 폼
 
@@ -200,7 +329,8 @@ $(document).ready(function() {
 			alert("로그인 뒤에 이용해주세요");
 		}else{
 		$(".container").empty();
-		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="+scode+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
+		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
+				+scode+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
 		}
 	 
        /////////// 에디터
@@ -256,21 +386,21 @@ $(document).ready(function() {
 			      	}
 			      		
 			 },
-			 error: function(x,e){
-				 if(x.status==0){
+			 error: function(xhr,status){
+				 if(xhr.status==0){
 				      alert('네트워크를 체크해주세요.');
-				      }else if(x.status==404){
+				      }else if(xhr.status==404){
 				      alert('페이지를 찾을수없습니다.');
-				      }else if(x.status==500){
+				      }else if(xhr.status==500){
 				      alert('서버에러 발생하였습니다.');
-				      }else if(e=='parsererror'){
+				      }else if(status=='parsererror'){
 				      alert('Error.\nParsing JSON Request failed.');
-				      }else if(e=='timeout'){
+				      }else if(status=='timeout'){
 				      alert('시간을 초과하였습니다.');
 				      }else {
-				      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
+				      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
 				      }
-			 }
+			      }
 			
 		   
 	      });
@@ -331,6 +461,7 @@ $(document).ready(function() {
 		
 	      });
 	  });
+	  
 ///////////////////글 작성
 	$(document).on("click","#boardRegister",function(){
 		if($("#titleInput").val()==null){
@@ -425,6 +556,10 @@ $(document).on("click","#modifyBtn",function(){
 </script>
 
 <style>
+#commentDel {
+	float: right;
+}
+
 #boardDel {
 	position: relative;
 	top: 10px;
@@ -541,7 +676,7 @@ dt {
 		<div id="page-wrapper">
 			<div id="sidebar-wrapper">
 				<ul class="sidebar-nav">
-					<li class="sidebar-brand"></li>
+					<li class="sidebar-brand">${stationList[0].line}호선</li>
 					<li class="sidebar-brand">${stationList[0].line}호선</li>
 					<c:forEach var="key" items="${stationList}">
 						<li><a
@@ -555,15 +690,11 @@ dt {
 	<!-- /사이드바 -->
 
 	<!--카드게시판-->
-	<%--  <form action="<%=request.getContextPath()%>/board/write">
- <input type="submit" class="btn btn-light" value="글쓰기">
- </form> --%>
 
 	<div id="page-wrapper" style="padding-top: 150px">
-		<h1 style="margin-left: 150px">${sname}역
-			게시판
-			<hr />
+		<h1 style="margin-left: 150px">${sname}역 게시판 <hr />
 		</h1>
+		
 		<div class="container">
 			<form action="<%=request.getContextPath()%>/board/external"
 				method="post" class="text-right">
@@ -578,16 +709,18 @@ dt {
 				<c:forEach var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
 						<div id="externalCard" class="card">
+						
 							<img id="outImg" class="card-img-top"
 								src="http://placehold.it/500x325" alt=""> <i id="boardDel"
 								data-entry='${board.entryNum}' data-writer='${board.writer}'
 								class="far fa-times-circle"></i>
-							<%-- <img class="card-img-top" src="${list[i].img_path}" alt=""><i id="boardDel" data-writer='${list[i].writer}' data-entryNum="${list[i].entryNum}" class="far fa-times-circle"></i> --%>
+								
 							<div class="card-body" id="external_box">
 								<h4 class="card-title">${board.title}</h4>
 								<p class="card-text" id="external_content">${board.content}</p>
 								<footer class="blockquote-footer">From ${board.writer}</footer>
 							</div>
+							
 							<div class="card-footer">
 								<button style="margin-left: 10px" id="modalreq" type="button"
 									data-entrynum='${board.entryNum}' data-scode='${board.scode}'
@@ -597,10 +730,14 @@ dt {
 									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
 									data-writer='${board.writer}' class="btn btn-outline-danger">수정하기</button>
 							</div>
+							
 						</div>
 					</div>
 				</c:forEach>
+			
 			</div>
+			
+			
 			<button id="boardWrite" class="btn btn-outline-secondary float-right">글작성</button>
 			<ul style="text-align: center" class="pagination mx-auto">
 				<c:forEach begin="${pageMap.startPage}" end="${pageMap.endPage}"
@@ -613,18 +750,11 @@ dt {
 	</div>
 	<!--카드게시판-->
 
-	<!-- 게시판 등록 -->
-
-
-	<!--/ 게시판 등록 -->
-
 
 
 	<!-- 게시판 상세보기 -->
-	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
-		aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
-
 			<div class="modal-content">
 				<!--        모달창 내부                      -->
 
@@ -638,7 +768,7 @@ dt {
 						</p>
 					</div>
 				</div>
-				
+
 				<div class="card text">
 					<div class="card-header">내용</div>
 					<div class="card-body">
@@ -646,6 +776,7 @@ dt {
 						<p class="card-text" id="innerBoardContent">error</p>
 						<footer class="blockquote-footer">From 작성자</footer>
 					</div>
+					
 					<div id="regDate" class="card-footer text-right text-muted">
 						2018-10-04&nbsp;&nbsp; <i class="far fa-eye">&nbsp;3</i>
 					</div>
@@ -656,12 +787,8 @@ dt {
 				<div class="alert alert-secondary">
 					<strong>댓글목록 </strong>
 					<hr>
+					
 					<div id="commentList">
-						<!-- <dl id="comment">
-    <dt>작성자</dt>
-    <span>2018-10-04 10:10&nbsp;<i id="comment_del" data-seq='1' class="far fa-trash-alt"></i></span>
-    <dd>여기 햄토스트 2000원</dd>
-    </dl><hr> -->
 					</div>
 
 					<div class="form-group">
@@ -669,9 +796,9 @@ dt {
 						<textarea class="form-control" rows="5" id="commentContent"></textarea>
 					</div>
 
-					<div class="text-right" style="margin-right: 23px">
-						<button id="innerBoardComment" class="btn btn-outline-secondary">등록</button>
+					<div id="innerBoardComment" class="text-right" style="margin-right: 23px">
 					</div>
+					
 					<br>
 
 				</div>

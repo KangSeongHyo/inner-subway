@@ -5,8 +5,10 @@
 <mapper namespace="comment">
 	<select id="getCommentList" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
-		SELECT scode,entryNum,commentSeq,content,writer,registrationDate
-		FROM station_comments
+		SELECT
+		scode,entryNum,commentSeq,content,writer,registrationDate
+		FROM
+		station_comments
 		WHERE scode = #{scode} and
 		entryNum=#{entryNum}
 	</select>
@@ -16,13 +18,14 @@
 		station_comments(scode,entryNum,content,writer,registrationDate)
 		VALUES(#{scode},#{entryNum},#{content},#{writer},sysdate())
 	</insert>
-	
-<!-- 	<delete id="deleteComment" parameterType="java.util.Map">
+
+	<delete id="deleteComment" parameterType="com.intern.comment.CommentVO">
 		DELETE
-		FROM station_comments
-		WHERE scode = #{scode} and entry_num=#{entry_num} and
-		comment_seq=#{comment_seq}
-	</delete> -->
+		FROM
+		station_comments
+		WHERE scode = #{scode} and entryNum=#{entryNum} and
+		commentSeq=#{commentSeq}
+	</delete>
 	<!-- <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 
 		column="columnname1" /> <result property="param2" column="columnname2" /> 
 		<result property="param3" column="columnname3" /> </resultMap> <select id="getAll" 

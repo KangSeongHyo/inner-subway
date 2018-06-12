@@ -24,8 +24,8 @@ public class CommentDAO {
 		return session.insert("comment.insertComment", vo);
 	}
 
-	public void deleteComment(Map<String, Object> map) {
-		session.delete("comment.deleteComment", map);
+	public int removeComment(CommentVO vo) {
+		return session.delete("comment.deleteComment", vo);
 	}
 
 }

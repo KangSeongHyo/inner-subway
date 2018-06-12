@@ -79,7 +79,7 @@ public class BoardRestController {
 		ResponseEntity<BoardVO> responseEntity = null;
 		try {
 			responseEntity = new ResponseEntity<BoardVO>(
-				boardService.getBoardOne(requestBoard, null), HttpStatus.OK);
+				boardService.getBoardOne(requestBoard, "load"), HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,11 +104,10 @@ public class BoardRestController {
 		return responseEntity;
 	}
 
-	///////////게시물 수정
+	///////////게시물 수정W
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public ResponseEntity<Integer> modifyBoard(@ModelAttribute BoardVO requestBoard,
 		MultipartFile file) {
-		System.out.println(file);
 
 		ResponseEntity<Integer> responseEntity = null;
 		try {

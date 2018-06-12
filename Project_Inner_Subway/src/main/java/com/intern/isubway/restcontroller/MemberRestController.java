@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.intern.check.Check;
 import com.intern.dao.MemberDAO;
 import com.intern.login.MemberService;
 import com.intern.login.MemberVO;
@@ -54,39 +55,13 @@ public class MemberRestController {
 		return responseEntity;
 	}
 
-	/**
-	 * 회원 체크
-	 * id가 있는지 없는지
-	 * id와 비밀번호가 일치하는지 확인
-	 * 
-	 * @param vo 회원가입정보
-	 * @return 1(로그인 OK),0(비밀번호가 일치하지 않음),-1(아이디가 존재하지 않음)
-	 */
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<Integer> loginCheck(@RequestBody MemberVO requestMember, HttpSession session) {
-
-		ResponseEntity<Integer> responseEntity = null;
-		try {
-			int check = memberService.loginCheck(requestMember);
-			responseEntity = new ResponseEntity<Integer>(check, HttpStatus.OK);
-			if (check == 1) {
-				session.setAttribute("id", requestMember.getId());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
-		}
-
-		return responseEntity;
-	}
 
 	/**
 	 * 회원가입
-	 * 
 	 * @param mvo 회원가입 정보 
 	 * @return insert 성공실패(1,0)
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.PUT)
+	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Integer> registerMember(@RequestBody MemberVO requestMember) {
 
 		ResponseEntity<Integer> responseEntity = null;
@@ -103,4 +78,28 @@ public class MemberRestController {
 		return responseEntity;
 	}
 
+	/**
+	 * 회원 체크
+	 * id가 있는지 없는지
+	 * id와 비밀번호가 일치하는지 확인
+	 * @param vo 회원가입정보
+	 * @return 1(로그인 OK),0(비밀번호가 일치하지 않음),-1(아이디가 존재하지 않음)
+	 */
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<Integer> loginCheck(@RequestBody MemberVO requestMember, HttpSession session) {
+		
+		ResponseEntity<Integer> responseEntity = null;
+		try {
+			int check = memberService.loginCheck(requestMember);
+			responseEntity = new ResponseEntity<Integer>(check, HttpStatus.OK);
+			if (check == Check.SUCCESS) {
+				session.setAttribute("id", requestMember.getId());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return responseEntity;
+	}
 }

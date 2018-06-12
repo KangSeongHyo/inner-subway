@@ -21,33 +21,30 @@ public class StationRestController {
 
 	@Autowired
 	StationService stationService;
-	
+
 	/**
 	 * 호선별 역정보
 	 * 
 	 * @param requestStation 요청 호선정보
 	 * @return 요청 호선의 역들 정보
 	 */
-	
-	@RequestMapping(value="/{line}",method=RequestMethod.GET)
-	public ResponseEntity<List<StationVO>> getStations(@ModelAttribute StationVO requestStation){
 
-		ResponseEntity<List<StationVO>> responseEntity=null;
-		try{
-			
-			responseEntity=new ResponseEntity<List<StationVO>>(stationService.getStations(requestStation.getLine()),HttpStatus.OK);
-			
-			
-		}catch(Exception e){
+	@RequestMapping(value = "/{line}", method = RequestMethod.GET)
+	public ResponseEntity<List<StationVO>> getStations(@ModelAttribute StationVO requestStation) {
+
+		ResponseEntity<List<StationVO>> responseEntity = null;
+		try {
+
+			responseEntity = new ResponseEntity<List<StationVO>>(stationService.getStations(requestStation.getLine()),
+				HttpStatus.OK);
+		} catch (Exception e) {
 			e.printStackTrace();
-			responseEntity=new ResponseEntity<List<StationVO>>(HttpStatus.BAD_REQUEST);
-			
+			responseEntity = new ResponseEntity<List<StationVO>>(HttpStatus.BAD_REQUEST);
+
 		}
-		
+
 		return responseEntity;
-	    
+
 	}
-	
-	
-	
+
 }

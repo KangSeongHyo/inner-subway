@@ -57,8 +57,7 @@ $(document).ready(function(){
 	 $.ajax({
 		type:'get',
 		url:'<%=request.getContextPath()%>/member',
-	// headers:{ "Content-Type" : "application/json","X-HTTP-Method-Override" : "POST" }, */
-  	    dataType : 'text',
+  	    dataType :'text',
 		success:function(serverResult){		
 			var str="";
 			var idCheck=true;
@@ -84,7 +83,7 @@ $(document).ready(function(){
 		   alert("비밀번호가 일치하지 않습니다")
 	      }else{
 	    	  $.ajax({
-	    			type:'put',
+	    			type:'POST',
 	    			url:'<%=request.getContextPath()%>/member/',
 	    			contentType : "application/json; charset=UTF-8",
 	    		    data:JSON.stringify({ 

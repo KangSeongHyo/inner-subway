@@ -39,7 +39,7 @@ public class CommentRestController {
 
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.PUT)
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<Integer> registerComment(@RequestBody CommentVO requestComment, HttpSession session) {
 
 		ResponseEntity<Integer> responseEntity = null;
@@ -52,7 +52,38 @@ public class CommentRestController {
 			responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
 		}
 		return responseEntity;
+	}
 
+	@RequestMapping(value = "", method = RequestMethod.DELETE)
+	public ResponseEntity<Integer> removeComment(@RequestBody CommentVO requestComment, HttpSession session) {
+
+		ResponseEntity<Integer> responseEntity = null;
+
+		try {
+			responseEntity = new ResponseEntity<Integer>(
+				commentService.removeComment(requestComment, (String)session.getAttribute("id")), HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+		return responseEntity;
+	}
+	
+	@RequestMapping(value = "", method = RequestMethod.PUT)
+	public ResponseEntity<Integer> modifyComment(@RequestBody CommentVO requestComment, HttpSession session) {
+
+		ResponseEntity<Integer> responseEntity = null;
+
+		try {
+			responseEntity = new ResponseEntity<Integer>(
+				commentService.removeComment(requestComment, (String)session.getAttribute("id")), HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+		return responseEntity;
 	}
 
 }

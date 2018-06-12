@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.intern.check.Check;
 import com.intern.dao.CommentDAO;
 
 @Service
@@ -26,9 +28,17 @@ public class CommentService implements Comment {
 	}
 
 	@Override
-	public void deleteComment(Map map) {
-		// TODO Auto-generated method stub
-		dao.deleteComment(map);
+	public int removeComment(CommentVO requestComment, String id) {
+		
+		int check;
+
+		if (requestComment.getWriter().equals(id)) {
+			check = dao.removeComment(requestComment);
+		} else {
+			check = Check.NOAUTH;
+		}
+		
+		return check;
 	}
 
 }

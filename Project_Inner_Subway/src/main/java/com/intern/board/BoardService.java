@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.intern.board.BoardVO;
+import com.intern.check.Check;
 import com.intern.board.BoardService;
 import com.intern.comment.CommentVO;
 import com.intern.comment.CommentService;
@@ -64,7 +65,7 @@ public class BoardService implements Board {
 
 	public BoardVO getBoardOne(BoardVO requstBoard, String id) {
 
-		if (id != null) {
+		if (!id.equals("load")) {
 			if (requstBoard.getWriter().equals(id)) {
 				return dao.getBoardOne(requstBoard);
 
@@ -109,8 +110,8 @@ public class BoardService implements Board {
 	@Override
 	public int modifyBoard(BoardVO requestBoard, MultipartFile file) {
 		//////////////file 업로드
-		int check = 0;
-
+		int check = Check.FAIL;
+		
 		try {
 
 			if (file != null) {
