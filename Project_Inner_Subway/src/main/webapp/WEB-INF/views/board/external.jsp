@@ -52,7 +52,6 @@ $(document).ready(function() {
 		var data=$(this).data();
 		scode=data.scode;
 		entryNum=data.entryNum;
-		alert("이거 맞니");
 		
 	/////////////////외부게시판 view, 검색
          $.ajax({
@@ -61,16 +60,42 @@ $(document).ready(function() {
 			contentType: 'application/json; charset=UTF-8',
 			success: function(serverResult){
 				
-					$("#inner_img").prop("src",serverResult.imgPath);
-					$("#inner_board_title").html(serverResult.title);
-					$("#inner_board_content").html(serverResult.content);
+					$("#innerImg").prop("src",serverResult.imgPath);
+					$("#innerBoardTitle").html(serverResult.title);
+					$("#innerBoardContent").html(serverResult.content);
 					$(".blockquote-footer").html("From "+serverResult.writer);
-					$("#reg_date").html(formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+serverResult.viewCount+"</i>");
+					$("#regDate").html(formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+serverResult.viewCount+"</i>");
 		      },
 			error: function() {
 				
 			}
         });
+         $("#commentList").empty();
+         
+         $.ajax({
+        	 
+        	 type:'get',
+        	 url:'<%=request.getContextPath()%>/comment/'+scode+'/'+data.entrynum,
+ 			 contentType: 'application/json; charset=UTF-8',
+			 success: function(serverResult){
+				
+				 for(var i=0;i<serverResult.length;i++){
+			         	$("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
+			         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registration_date)
+			         			+"&nbsp;<i id='comment_del' data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-trash-alt'></i></span><dd>"
+			         			+serverResult[i].content+"</dd></dl><hr>");
+				}
+
+				 
+			 },
+			  error: function() {
+					
+			  }
+        	 
+        	 
+        	 
+         });
+	
 	});
 
 
@@ -79,13 +104,13 @@ $(document).ready(function() {
 			url:'<%=request.getContextPath()%>/board/inner_board',
 			data:{'scode': scode, 'entryNum':entryNum},
 			success:function(server_result){
-			//$("#inner_img").prop("src",server_result[0].img_path);
-			$("#inner_board_title").html(server_result[0].title);
-			$("#inner_board_content").html(server_result[0].content);
+			//$("#innerImg").prop("src",server_result[0].img_path);
+			$("#innerBoardTitle").html(server_result[0].title);
+			$("#innerBoardContent").html(server_result[0].content);
 			$(".blockquote-footer").html("From "+server_result[0].writer);
-			$("#reg_date").html(formatDate(server_result[0].registration_date)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+server_result[0].viewcount+"</i>");
+			$("#regDate").html(formatDate(server_result[0].registration_date)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+server_result[0].viewcount+"</i>");
 			
-			$("#commentList").empty();
+			
 			
 			for(var i=1;i<server_result.length;i++){
 	         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
@@ -97,27 +122,31 @@ $(document).ready(function() {
 		}); 
 		
 		
-	});
+	});--%>
 	
-	//////////////////////댓글 불러오기
-  $("#inner_board_comment").on("click",function(){
+	//////////////////////댓글 등록
+  $("#innerBoardComment").on("click",function(){
 		
 		$.ajax({
-			type:'post',
-			url: '<%=request.getContextPath()%>/comment/insert',
-			data:{ 'scode':scode,
+			type:'put',
+			url: '<%=request.getContextPath()%>/comment',
+			contentType: 'application/json; charset=UTF-8',
+			data:JSON.stringify({ 'scode':scode,
 				   'entryNum' : entryNum,
-				   'content' : $("#comment_content").val()
-			},
-			success : function(server_result){
+				   'content' : $("#commentContent").val()
+			}),
+			success : function(serverResult){
+				alert(serverResult);
 				$("#commentList").empty();
-				for(var i=0;i<server_result.length;i++){
+				
+				
+				/* for(var i=0;i<server_result.length;i++){
 		         	$("#commentList").append("<dl id='comment'><dt>"+server_result[i].writer
 		         			+"&nbsp;</dt><span>"+formatDate(server_result[i].registration_date)
 		         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
 		         			+server_result[i].content+"</dd></dl><hr>");
 				    }
-				$("#comment_content").val("");
+				$("#commentContent").val(""); */
 			}
 
 		}); 
@@ -153,16 +182,16 @@ $(document).ready(function() {
 		         			+"&nbsp;<i id='comment_del' data-wr='"+server_result[i].writer+"' data-seq='"+server_result[i].comment_seq+"' class='far fa-trash-alt'></i></span><dd>"
 		         			+server_result[i].content+"</dd></dl><hr>");
 				    }
-				$("#comment_content").val("");
+				$("#commentContent").val("");
 					
 				}
 			 }
 
 		}); 
 		
-	}  //////////if문끝
+	    }  //////////if문끝
 		
-	});--%>
+	});
 
 ///////////////// 글작성 폼
 
@@ -483,7 +512,7 @@ $(document).on("click","#modifyBtn",function(){
 	color: gray;
 }
 
-#inner_img {
+#innerImg {
 	width: auto;
 	height: 200px;
 }
@@ -603,20 +632,21 @@ dt {
 					<div class="card-header">상세보기</div>
 					<div class="card-body">
 						<p class="card-text">
-							<img id="inner_img" alt="이미지"
+							<img id="innerImg" alt="이미지"
 								src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
 							<!-- <img alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"> -->
 						</p>
 					</div>
 				</div>
+				
 				<div class="card text">
 					<div class="card-header">내용</div>
 					<div class="card-body">
-						<h5 id="inner_board_title" class="card-title">title</h5>
-						<p class="card-text" id="inner_board_content">error</p>
+						<h5 id="innerBoardTitle" class="card-title">title</h5>
+						<p class="card-text" id="innerBoardContent">error</p>
 						<footer class="blockquote-footer">From 작성자</footer>
 					</div>
-					<div id="reg_date" class="card-footer text-right text-muted">
+					<div id="regDate" class="card-footer text-right text-muted">
 						2018-10-04&nbsp;&nbsp; <i class="far fa-eye">&nbsp;3</i>
 					</div>
 				</div>
@@ -636,11 +666,11 @@ dt {
 
 					<div class="form-group">
 						<label><abbr class="initialism">댓글작성</abbr>:</label>
-						<textarea class="form-control" rows="5" id="comment_content"></textarea>
+						<textarea class="form-control" rows="5" id="commentContent"></textarea>
 					</div>
 
 					<div class="text-right" style="margin-right: 23px">
-						<button id="inner_board_comment" class="btn btn-outline-secondary">등록</button>
+						<button id="innerBoardComment" class="btn btn-outline-secondary">등록</button>
 					</div>
 					<br>
 

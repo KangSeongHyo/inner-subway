@@ -104,7 +104,7 @@ public class BoardRestController {
 		return responseEntity;
 	}
 
-	////////게시물 수정
+	///////////게시물 수정
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public ResponseEntity<Integer> modifyBoard(@ModelAttribute BoardVO requestBoard,
 		MultipartFile file) {

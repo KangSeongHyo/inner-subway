@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.intern.comment.CommentVO;
-import com.intern.comment.Comment_Service;
+import com.intern.comment.CommentService;
 
 @Controller
 public class CommentViewController {
 	
 	@Autowired
-	Comment_Service service;
+	CommentService service;
 	
 	
-	//////댓글 등록
+	/*//////댓글 등록
 	@RequestMapping("/comment/insert")
 	@ResponseBody
 	public List<CommentVO> insertComment(String scode,int entry_num,String content,HttpSession session){
@@ -56,5 +56,5 @@ public class CommentViewController {
 		
 		service.deleteComment(map);
 		return service.getCommentList(map);
-	}
+	}*/
 }

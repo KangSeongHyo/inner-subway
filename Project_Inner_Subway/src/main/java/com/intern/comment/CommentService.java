@@ -7,24 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.intern.dao.CommentDAO;
 
-
 @Service
-public class Comment_Service implements Comment_If{
+public class CommentService implements Comment {
 
 	@Autowired
-	 CommentDAO dao;
-	
-	
+	CommentDAO dao;
+
 	@Override
-	public List<CommentVO> getCommentList(Map map) {
-		// TODO Auto-generated method stub
-		return dao.getCommentList(map);
+	public List<CommentVO> getCommentList(CommentVO requestComment) {
+
+		return dao.getCommentList(requestComment);
 	}
 
 	@Override
-	public void insertComment(CommentVO vo) {
-		// TODO Auto-generated method stub
-	     dao.insertComment(vo);
+	public int registerComment(CommentVO requestComment) {
+
+		return dao.registerComment(requestComment);
 	}
 
 	@Override
@@ -33,6 +31,4 @@ public class Comment_Service implements Comment_If{
 		dao.deleteComment(map);
 	}
 
-	
-	
 }

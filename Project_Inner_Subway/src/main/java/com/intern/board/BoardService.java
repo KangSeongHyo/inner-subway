@@ -50,7 +50,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.intern.board.BoardVO;
 import com.intern.board.BoardService;
 import com.intern.comment.CommentVO;
-import com.intern.comment.Comment_Service;
+import com.intern.comment.CommentService;
 import com.intern.station.StationService;
 import com.intern.station.StationVO;
 

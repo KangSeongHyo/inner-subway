@@ -5,25 +5,24 @@ import java.sql.Date;
 public class CommentVO {
 
 	String scode;
-	int entry_num;
-	int comment_seq;
+	int entryNum;
+	int commentSeq;
 	String content;
 	String writer;
-	Date registration_date;
+	Date registrationDate;
 
 	public CommentVO() {
 		super();
 	}
 
-	public CommentVO(String scode, int entry_num, int comment_seq, String content, String writer,
-		Date registration_date) {
+	public CommentVO(String scode, int entryNum, int commentSeq, String content, String writer, Date registrationDate) {
 		super();
 		this.scode = scode;
-		this.entry_num = entry_num;
-		this.comment_seq = comment_seq;
+		this.entryNum = entryNum;
+		this.commentSeq = commentSeq;
 		this.content = content;
 		this.writer = writer;
-		this.registration_date = registration_date;
+		this.registrationDate = registrationDate;
 	}
 
 	public String getScode() {
@@ -34,20 +33,20 @@ public class CommentVO {
 		this.scode = scode;
 	}
 
-	public int getEntry_num() {
-		return entry_num;
+	public int getEntryNum() {
+		return entryNum;
 	}
 
-	public void setEntry_num(int entry_num) {
-		this.entry_num = entry_num;
+	public void setEntryNum(int entryNum) {
+		this.entryNum = entryNum;
 	}
 
-	public int getComment_seq() {
-		return comment_seq;
+	public int getCommentSeq() {
+		return commentSeq;
 	}
 
-	public void setComment_seq(int comment_seq) {
-		this.comment_seq = comment_seq;
+	public void setCommentSeq(int commentSeq) {
+		this.commentSeq = commentSeq;
 	}
 
 	public String getContent() {
@@ -66,12 +65,14 @@ public class CommentVO {
 		this.writer = writer;
 	}
 
-	public Date getRegistration_date() {
-		return registration_date;
+	public Date getRegistrationDate() {
+		return registrationDate;
 	}
 
-	public void setRegistration_date(Date registration_date) {
-		this.registration_date = registration_date;
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
+	
+
 
 }

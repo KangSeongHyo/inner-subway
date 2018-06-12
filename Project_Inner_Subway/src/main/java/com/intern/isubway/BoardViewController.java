@@ -34,7 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.intern.board.BoardVO;
 import com.intern.board.BoardService;
 import com.intern.comment.CommentVO;
-import com.intern.comment.Comment_Service;
+import com.intern.comment.CommentService;
 import com.intern.station.StationService;
 import com.intern.station.StationVO;
 
@@ -47,7 +47,7 @@ public class BoardViewController {
 	@Autowired
 	StationService stationService;
 	@Autowired
-	Comment_Service commentService;
+	CommentService commentService;
 
 	//////////////외부게시판 뷰
 	@RequestMapping("/board/external")

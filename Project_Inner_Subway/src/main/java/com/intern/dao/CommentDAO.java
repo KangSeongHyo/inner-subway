@@ -16,12 +16,12 @@ public class CommentDAO {
 	@Autowired
 	SqlSession session;
 
-	public List<CommentVO> getCommentList(Map map) {
-		return session.selectList("comment.getCommentList", map);
+	public List<CommentVO> getCommentList(CommentVO vo) {
+		return session.selectList("comment.getCommentList", vo);
 	}
 
-	public void insertComment(CommentVO vo) {
-		session.insert("comment.insertComment", vo);
+	public int registerComment(CommentVO vo) {
+		return session.insert("comment.insertComment", vo);
 	}
 
 	public void deleteComment(Map<String, Object> map) {
