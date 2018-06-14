@@ -29,9 +29,8 @@ $(document).ready(function() {
 			var str="";
 			var result=JSON.parse(JSON.stringify(serverResult));
 			for(var i=0;i<result.length;i++){
-		      str+="<a href=<%=request.getContextPath()%>/board/external?scode="+result[i].scode+"&sname="+result[i].sname+">"+result[i].sname+"</a>";      
+		      str+="<a href=<%=request.getContextPath()%>/board/external?scode="+result[i].scode+"&sname="+result[i].sname+"&page=1>"+result[i].sname+"</a>";      
 			}
-			alert(str);
 			$("#showStation").html(str);
 		},
 	  error :function(request,status, error){

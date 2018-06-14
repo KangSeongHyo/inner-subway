@@ -81,26 +81,29 @@ public class BoardService implements Board {
 	}
 
 	@Override
-	public List<BoardVO> getBoardList(StationVO requestStation) {
+	public List<BoardVO> getBoardList(StationVO requestStation, int page) {
 
-		return dao.getBoardList(requestStation);
+		int boardCountPage = 4;
+		int startBoard = (page - 1) * boardCountPage;
+
+		return dao.getBoardList(requestStation, startBoard);
 	}
 
 	@Override
-	public int getEntryCount() {
-		return dao.getEntryCount();
+	public int getEntryCount(StationVO requestStation) {
+		return dao.getEntryCount(requestStation);
 	}
 
 	@Override
 	public int romoveBoard(BoardVO requestBoard, String id) {
 
-		int check = 0;
+		int check;
 
 		if (requestBoard.getWriter().equals(id)) {
 			check = dao.removeBoard(requestBoard);
 
 		} else {
-			check = -1;
+			check = Check.NOAUTH;
 
 		}
 
@@ -111,7 +114,7 @@ public class BoardService implements Board {
 	public int modifyBoard(BoardVO requestBoard, MultipartFile file) {
 		//////////////file 업로드
 		int check = Check.FAIL;
-		
+
 		try {
 
 			if (file != null) {
@@ -207,14 +210,16 @@ public class BoardService implements Board {
 	}
 
 	@Override
-	public Map<String, Integer> getPage(int page) {
+	public Map<String, Integer> getPage(int page, StationVO requestStation) {
 		/////////페이징 처리
-		int totalBoard = dao.getEntryCount();// 전체 게시물개수
+		int totalBoard = dao.getEntryCount(requestStation);// 전체 게시물개수
 
+		System.out.println(totalBoard);
 		int boardCountPage = 4;//한 페이지에 보여줄 게시물개수
 
-		int totalPage = (totalBoard / boardCountPage == 0) ? totalBoard / boardCountPage
-			: totalBoard / boardCountPage + 1; //전체페이지수 
+		int totalPage = (totalBoard % boardCountPage == 0) ? (totalBoard / boardCountPage) : (totalBoard / boardCountPage + 1); //전체페이지수 
+
+		System.out.println(totalPage);
 
 		int pageCountList = 3; //한번에 보여줄 페이지목록의 수
 
@@ -228,13 +233,10 @@ public class BoardService implements Board {
 			endPage = totalPage;
 		}
 
-		// 게시물 목록
-		/*		int startBoard = (page - 1) * boardCountPage;
-				int limit = 4;
-		*/
 		Map<String, Integer> pageMap = new HashMap<String, Integer>();
 		pageMap.put("startPage", startPage);
 		pageMap.put("endPage", endPage);
+		pageMap.put("totalPage", totalPage);
 		/////페이징처리 게시물
 		return pageMap;
 	}

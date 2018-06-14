@@ -11,4 +11,7 @@
 		<typeAlias type="com.intern.comment.CommentVO" alias="CommentVO"></typeAlias>
 	</typeAliases>
  -->
+ <settings>
+ <setting name="safeRowBoundsEnabled" value="false"/>
+ </settings>
 </configuration>

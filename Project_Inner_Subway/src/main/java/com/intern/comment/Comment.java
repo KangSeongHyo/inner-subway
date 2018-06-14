@@ -26,4 +26,20 @@ public interface Comment {
 	 * @return 1(success),0(error),-1(권한없음)
 	 */
 	public int removeComment(CommentVO requestComment, String id);
+
+	/**
+	 * 수정(해당 댓글 불러오기)
+	 * @param requestComment 요청댓글정보
+	 * @param id 로그인 된 아이디
+	 * @return 해당댓글정보
+	 */
+	public CommentVO getCommentOne(CommentVO requestComment, String id);
+
+	/**
+	 * 수정
+	 * @param requestComment 요청댓글정보
+	 * @return 1(success),0(error)
+	 */
+	public int modifyComment(CommentVO requestComment);
+
 }

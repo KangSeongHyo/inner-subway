@@ -10,16 +10,16 @@
 		where scode=#{scode} and entryNum=#{entryNum}
 	</select>
      
-	<select id="getBoardList" parameterType="com.intern.station.StationVO" resultType="com.intern.board.BoardVO">
+	<select id="getBoardList" parameterType="com.intern.station.StationVO"  resultType="com.intern.board.BoardVO" >
 		SELECT scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath FROM station_board
 		where scode=#{scode}
-		order by
-		entryNum desc limit 0,4
+		order by entryNum desc
 	</select>
 	
-    <select id="getEntryCount" resultType="int">
-		SELECT count(*) FROM
-		station_board
+    <select id="getEntryCount" parameterType="com.intern.station.StationVO" resultType="int">
+		SELECT count(*) 
+		FROM station_board
+		where scode=#{scode}
 	</select>
 	
 	<insert id="insertBoard" parameterType="com.intern.board.BoardVO">

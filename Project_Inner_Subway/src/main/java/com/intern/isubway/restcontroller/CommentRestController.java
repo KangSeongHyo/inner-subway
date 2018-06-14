@@ -36,7 +36,34 @@ public class CommentRestController {
 			responseEntity = new ResponseEntity<List<CommentVO>>(HttpStatus.BAD_REQUEST);
 		}
 		return responseEntity;
+	}
 
+	@RequestMapping(value = "/{scode}/{entryNum}/{commentSeq}/{writer}", method = RequestMethod.GET)
+	public ResponseEntity<CommentVO> getCommentOne(@ModelAttribute CommentVO requestComment, HttpSession session) {
+
+		ResponseEntity<CommentVO> responseEntity = null;
+		CommentVO result = commentService.getCommentOne(requestComment, (String)session.getAttribute("id"));
+
+		try {
+			if (result != null) {
+				if (result.getWriter() == "NOAUTH") {
+
+					responseEntity = new ResponseEntity<CommentVO>(HttpStatus.UNAUTHORIZED);
+				} else {
+					responseEntity = new ResponseEntity<CommentVO>(result, HttpStatus.OK);
+				}
+
+			} else {
+
+				responseEntity = new ResponseEntity<CommentVO>(result, HttpStatus.OK);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<CommentVO>(HttpStatus.BAD_REQUEST);
+		}
+		return responseEntity;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -69,15 +96,15 @@ public class CommentRestController {
 		}
 		return responseEntity;
 	}
-	
+
 	@RequestMapping(value = "", method = RequestMethod.PUT)
-	public ResponseEntity<Integer> modifyComment(@RequestBody CommentVO requestComment, HttpSession session) {
+	public ResponseEntity<Integer> modifyComment(@RequestBody CommentVO requestComment) {
 
 		ResponseEntity<Integer> responseEntity = null;
 
 		try {
 			responseEntity = new ResponseEntity<Integer>(
-				commentService.removeComment(requestComment, (String)session.getAttribute("id")), HttpStatus.OK);
+				commentService.modifyComment(requestComment), HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();

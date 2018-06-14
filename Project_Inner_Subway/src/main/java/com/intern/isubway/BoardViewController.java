@@ -52,21 +52,26 @@ public class BoardViewController {
 	//////////////외부게시판 뷰
 	@RequestMapping("/board/external")
 	public ModelAndView externalBoard(@RequestParam(value = "page", defaultValue = "1") int page,
-		@ModelAttribute StationVO requestStation, Model model) {
+		@ModelAttribute StationVO requestStation, Model model, HttpSession session) {
 
 		ModelAndView mv = new ModelAndView();
 
-		List<BoardVO> boardList = boardService.getBoardList(requestStation);
+		List<BoardVO> boardList = boardService.getBoardList(requestStation, page);
+
 		boardList = boardService.removeHtml(boardList);
+
 		List<StationVO> stationList = stationService
 			.getStations(Integer.parseInt(requestStation.getScode().substring(2, 4)));
 
 		mv.addObject("boardList", boardList);
 		mv.addObject("stationList", stationList);
-		mv.addObject("pageMap", boardService.getPage(page));
+
+		mv.addObject("pageMap", boardService.getPage(page, requestStation));
+
 		model.addAttribute("sname", requestStation.getSname());
 		model.addAttribute("scode", requestStation.getScode());
-		mv.setViewName("/board/external");
+
+		mv.setViewName("board/external");
 
 		return mv;
 

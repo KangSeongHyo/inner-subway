@@ -2,6 +2,8 @@ package com.intern.isubway;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +21,16 @@ public class MainViewController {
 	StationService stationservice;
 
 	@RequestMapping("/main")
-	public void main_page() {}
+	public ModelAndView main_page(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		System.out.println(session.getAttribute("id"));
+		if (session.getAttribute("id") == null) {
+			mv.setViewName("redirect:/");
+		} else {
+			mv.setViewName("main");
+		}
+		return mv;
+	}
 
 	/*////메인 역이름 뷰
 	@RequestMapping("main/getstationinfo")

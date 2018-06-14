@@ -29,7 +29,7 @@ public class CommentService implements Comment {
 
 	@Override
 	public int removeComment(CommentVO requestComment, String id) {
-		
+
 		int check;
 
 		if (requestComment.getWriter().equals(id)) {
@@ -37,8 +37,28 @@ public class CommentService implements Comment {
 		} else {
 			check = Check.NOAUTH;
 		}
-		
+
 		return check;
+	}
+
+	@Override
+	public CommentVO getCommentOne(CommentVO requestComment, String id) {
+
+		CommentVO cvo = new CommentVO();
+
+		if (requestComment.getWriter().equals(id)) {
+			cvo = dao.getCommentOne(requestComment);
+		} else {
+			cvo.setWriter("NOAUTH");
+		}
+
+		return cvo;
+	}
+
+	@Override
+	public int modifyComment(CommentVO requestComment) {
+
+		return dao.modifyComment(requestComment);
 	}
 
 }

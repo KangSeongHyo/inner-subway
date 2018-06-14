@@ -28,4 +28,12 @@ public class CommentDAO {
 		return session.delete("comment.deleteComment", vo);
 	}
 
+	public CommentVO getCommentOne(CommentVO vo) {
+		return session.selectOne("comment.getCommentOne", vo);
+	}
+
+	public int modifyComment(CommentVO vo) {
+		return session.update("comment.updateComment", vo);
+	}
+
 }

@@ -9,9 +9,11 @@ import com.intern.station.StationVO;
 
 public interface Board {
 
-	List<BoardVO> getBoardList(StationVO requestStation);
+	List<BoardVO> getBoardList(StationVO requestStation,int page);
 
-	int getEntryCount();
+	Map<String, Integer> getPage(int page, StationVO requestStation);
+
+	int getEntryCount(StationVO requestStation);
 
 	/**
 	 * 게시물 등록
@@ -46,10 +48,8 @@ public interface Board {
 	 * @return 요청 게시물 정보
 	 */
 	BoardVO getBoardOne(BoardVO requestBoard, String id);
-	
-	List<BoardVO> removeHtml(List<BoardVO> boardList);
 
-	Map<String, Integer> getPage(int page);
+	List<BoardVO> removeHtml(List<BoardVO> boardList);
 
 	/*
 	

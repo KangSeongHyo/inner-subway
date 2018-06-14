@@ -34,26 +34,27 @@
 function formatDate(date) { 
 	var d = new Date(date),
 	month = '' + (d.getMonth() + 1), 
-	day = '' + d.getDate(), 
+	day = '' + d.getDate(),
 	year = d.getFullYear(); 
 	if (month.length < 2) month = '0' + month; 
 	if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); }
 	
-$(document).ready(function() {
+$(document).ready(function(){
 
 	var scode='${scode}';
 	var entryNum=0;
 	var contextPath='<%=request.getContextPath()%>';
 	var sname='${sname}';
 	
-///// 상세보기
+///////////// 상세보기
 	$(".card-footer > #modalreq").on("click",function(){
 	
 		var data=$(this).data();
 		
-	/////////////////외부게시판 view, 검색
+    ////////////외부게시판 view, 검색
          $.ajax({
+        	 ////ajax
 		    type:'get',
 			url:'<%=request.getContextPath()%>/board/'+data.scode+'/'+data.entrynum,
 			contentType: 'application/json; charset=UTF-8',
@@ -62,7 +63,7 @@ $(document).ready(function() {
 					$("#innerImg").prop("src",serverResult.imgPath);
 					$("#innerBoardTitle").html(serverResult.title);
 					$("#innerBoardContent").html(serverResult.content);
-					$(".blockquote-footer").html("From "+serverResult.writer);
+					$("#innerFooter").html("From "+serverResult.writer);
 					$("#regDate").html(formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"+"<i class='far fa-eye'>"+"&nbsp;"+serverResult.viewCount+"</i>");
 		      },
 		      error: function(xhr,status){
@@ -80,11 +81,11 @@ $(document).ready(function() {
 					      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
 					 }
 				 }
-        });
+        });/////// ajax 끝
 	
          $("#commentList").empty();
-         
-         $.ajax({
+         //댓글리스트 불러오기
+         $.ajax({/// ajax
         	 
         	 type:'get',
         	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
@@ -122,9 +123,9 @@ $(document).ready(function() {
 				 }
         	         	 
         	 
-         });
+         }); /////ajax 끝
 	
-	});
+	}); /////상세보기
 	
 	//////////////////////댓글 등록
   $(document).on("click","#innerBoardCommentBtn",function(){
@@ -159,8 +160,8 @@ $(document).ready(function() {
 						         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
 						         			+"'class='far fa-edit'></i></span><dd>"
 						         			+serverResult[i].content+"</dd></dl><hr>");
-					         
-							       }
+					               }
+							 
 							 $("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
 					         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
 
@@ -211,14 +212,13 @@ $(document).ready(function() {
 		}); 
 		
 		
-	}); 
+	}); ////댓글등록 끝
 
 
 ////////////////댓글삭제
    $(document).on("click","#commentDel",function(){
 		
 	var check=confirm("댓글을 삭제하시겠습니까?");	
-		
 	  if(check==true){
 			
 		var data=$(this).data();
@@ -241,7 +241,7 @@ $(document).ready(function() {
 				}else{
 				
 					$.ajax({
-			        	 type:'get',
+			        	 type:'GET',
 			        	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
 			 			 contentType: 'application/json; charset=UTF-8',
 						 success: function(serverResult){
@@ -252,8 +252,10 @@ $(document).ready(function() {
 						         	$("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
 						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
 						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"
-						         			+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-trash-alt'></i><i id='commentModify' class='far fa-edit'></i></span><dd>"
-						         			+serverResult[i].content+"</dd></dl><hr>");
+						         			+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-trash-alt'></i>"
+						         			+"<i id='commentModify' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"
+						         			+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-edit'></i></span><dd>"
+						         			+serverResult[i].content+"<hr></dd></dl>");
 							       }
 
 					         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
@@ -282,7 +284,6 @@ $(document).ready(function() {
 			        	 
 			         });
 					
-					
 				}
 			 },
 			 error: function(xhr,status){
@@ -305,29 +306,148 @@ $(document).ready(function() {
 		
 	  }////confirm 
 		
-	});
+	}); /// 댓글 삭제 끝
 
 	
-    ////////////////////댓글수정
+    ////////////////////댓글수정 폼
    $(document).on("click","#commentModify",function(){
-	   alert("실행");
-	   
-	$(this).append("<div class='form-group'><label><abbr class='initialism'>댓글수정</abbr>:</label><textarea class='form-control' rows='5' id='modifyContent'></textarea></div>")
-		
-
+	 var confm=confirm("댓글을 수정하시겠습니까?");
 	
-   });
-
-
-	
-	
+	 if(confm==true){
+	 var data=$(this).data();
+	 var ths=this;
+	 
+	 $.ajax({
+		 
+    	 type:'GET',
+    	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum+'/'+data.seq+'/'+data.wr,
+		 contentType: 'application/json; charset=UTF-8',
+		 success: function(serverResult){
+			 
+			 if(serverResult==null){
+				 alert("서버에 오류가 발생하였습니다.");
+			 }else{
+				
+				 $(ths).closest("dl").children("dd").html("<div class='form-group'><label><abbr class='initialism'>댓글수정</abbr>:</label>"
+							+"<textarea class='form-control' rows='5' id='modifyContent'>"+serverResult.content+"</textarea><button id='commmentModifyBtn' style='float:right' data-scode='"+serverResult.scode+"' data-entrynum="
+							+serverResult.entryNum+" data-commentseq="+serverResult.commentSeq+" data-writer='"+serverResult.writer+"' class='btn btn-outline-secondary'>수정</button></div>");
+				 
+			 }
+		 },
+		 error: function(xhr,status){
+			 if(xhr.status==0){
+			      alert('네트워크를 체크해주세요.');
+			 }else if(xhr.status==401){
+				 alert('권한이 없습니다');
+			 }else if(xhr.status==404){
+			      alert('페이지를 찾을수없습니다.');
+			 }else if(xhr.status==500){
+			      alert('서버에러 발생하였습니다.');
+			 }else if(status=='parsererror'){
+			      alert('Error.\nParsing JSON Request failed.');
+			 }else if(status=='timeout'){
+			      alert('시간을 초과하였습니다.');
+			 }else {
+			      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+			 }
+		 }
+		 
+		 
+	   });
+	 }			
+   }); ////// 댓글수정 폼 끝
+    
+   ////////////////////댓글수정
+   $(document).on("click","#commmentModifyBtn",function(){
+	  var data=$(this).data();
+	  
+	    $.ajax({
+			type:'PUT',
+			url: '<%=request.getContextPath()%>/comment',
+			contentType: 'application/json; charset=UTF-8',
+			data: JSON.stringify({ 
+				   'scode': data.scode,
+				   'entryNum' : data.entrynum,
+				   'content' : $(this).closest("div").children("#modifyContent").val(),
+				   'commentSeq' : data.commentseq
+			}),
+			success : function(serverResult){
+				
+				if(serverResult==0){
+					alert("서버에 오류가 발생하였습니다.");
+					
+				}else{
+					$.ajax({
+			        	 
+			        	 type:'get',
+			        	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
+			 			 contentType: 'application/json; charset=UTF-8',
+						 success: function(serverResult){
+							 
+							 $("#commentList").empty();
+							 for(var i=0;i<serverResult.length;i++){
+						         	
+								    $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
+						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
+						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+						         			+"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+						         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+						         			+"'class='far fa-edit'></i></span><dd>"
+						         			+serverResult[i].content+"</dd></dl><hr>");
+							      }
+						         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
+						         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
+					
+						   },
+						   error: function(xhr,status){
+								 if(xhr.status==0){
+								      alert('네트워크를 체크해주세요.');
+								 }else if(xhr.status==404){
+								      alert('페이지를 찾을수없습니다.');
+								 }else if(xhr.status==500){
+								      alert('서버에러 발생하였습니다.');
+								 }else if(status=='parsererror'){
+								      alert('Error.\nParsing JSON Request failed.');
+								 }else if(status=='timeout'){
+								      alert('시간을 초과하였습니다.');
+								 }else {
+								      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+								 }
+							 }
+			        	         	 
+			        	 
+			         });
+					
+				}
+				
+			},
+		  error: function(xhr,status){
+				 if(xhr.status==0){
+				      alert('네트워크를 체크해주세요.');
+				 }else if(xhr.status==404){
+				      alert('페이지를 찾을수없습니다.');
+				 }else if(xhr.status==500){
+				      alert('서버에러 발생하였습니다.');
+				 }else if(status=='parsererror'){
+				      alert('Error.\nParsing JSON Request failed.');
+				 }else if(status=='timeout'){
+				      alert('시간을 초과하였습니다.');
+				 }else {
+				      alert('알수없는 에러가 발생하였습니다.\n'+xhr.responseText);
+				 }
+		       }
+	      });
+    
+     }); /////// 댓글 수정끝
 
 ///////////////// 글작성 폼
 
 	$("#boardWrite").on("click",function(){
+		
 		if('${id}'==''){
 			alert("로그인 뒤에 이용해주세요");
-		}else{
+		} else {
+			
 		$(".container").empty();
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
 				+scode+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
@@ -369,7 +489,7 @@ $(document).ready(function() {
 	   if(check==true){
 	   
 	   $.ajax({
-		   type:'delete',
+		   type:'DELETE',
 			url:'<%=request.getContextPath()%>/board',
 			data:JSON.stringify({'scode': scode, 'entryNum':data.entry,'writer':data.writer}),
 			contentType: 'application/json; charset=UTF-8',
@@ -379,6 +499,7 @@ $(document).ready(function() {
 			      		alert("작성자가 아닙니다.");
 			      	}else if(result==0){
 			      	    alert("서버에 오류가 발생하였습니다");	
+			      	    
 			      	}else{
 			      		
 			        location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
@@ -497,13 +618,11 @@ $(document).ready(function() {
 					      }else {
 					      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
 					      }
-				}
-			});
-
-			
-		}
+				     }
+			});	
+		}//else 끝
 	});
-	  
+	
 //////////////////////글 수정 업데이트
    
 $(document).on("click","#modifyBtn",function(){
@@ -514,25 +633,24 @@ $(document).on("click","#modifyBtn",function(){
 		   alert("내용을 확인해주세요");
 	   }
        else {
-    	   alert("수정");
-    	   alert($("#modifyform").serialize());
     	   
     	   $("#modifyform").ajaxSubmit({
 			    type:'post',
 				url:'<%=request.getContextPath()%>/board/modify',
-				contentType: 'application/json; charset=UTF-8',
-				data:$("#modifyform").serialize(),
-				success: function(serverResult){
-					var result=JSON.parse(serverResult);
-					
-					if(result==0){
-						alert("서버에 오류가 발생하였습니다.")
-					}else{
-						location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
-					}
-					
-				},
-				error: function(x,e){
+	            contentType : 'application/json; charset=UTF-8',
+	            data : $("#modifyform").serialize(),
+	            success : function(serverResult) {
+		         
+	            	var result = JSON.parse(serverResult);
+
+		              if (result == 0) {
+			            alert("서버에 오류가 발생하였습니다.");
+		              } else {
+			            location.assign(contextPath+ "/board/external?scode="+ scode+ "&sname="+ sname);
+		              }
+
+	            },
+	            error: function(x,e){
 					 if(x.status==0){
 					      alert('네트워크를 체크해주세요.');
 					      }else if(x.status==404){
@@ -546,124 +664,18 @@ $(document).on("click","#modifyBtn",function(){
 					      }else {
 					      alert('알수없는 에러가 발생하였습니다.\n'+x.responseText);
 					      }
-				}
-			});
-    	 
-		}
+	                }
+             });																	
+
+          }
 	});
-});
+});///// ready 끝
 
 </script>
 
-<style>
-#commentDel {
-	float: right;
-}
-
-#boardDel {
-	position: relative;
-	top: 10px;
-	left: 110px;
-}
-
-#external_content {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	width: 150px;
-	display: inline-block;
-}
-
-.btn-file {
-	position: relative;
-	overflow: hidden;
-}
-
-.btn-file input[type=file] {
-	position: absolute;
-	top: 0;
-	right: 0;
-	min-width: 100%;
-	min-height: 100%;
-	font-size: 100px;
-	text-align: right;
-	filter: alpha(opacity = 0);
-	opacity: 0;
-	outline: none;
-	background: white;
-	cursor: inherit;
-	display: block;
-}
-
-#page-wrappe {
-	padding-left: 250px;
-}
-
-#page-wrapper {
-	padding-left: 250px;
-}
-
-#sidebar-wrapper {
-	position: fixed;
-	width: 250px;
-	height: 100%;
-	margin-left: -250px;
-	background: #000;
-	overflow-x: hidden;
-	overflow-y: auto;
-}
-
-#page-content-wrapper {
-	width: 100%;
-	padding: 20px;
-}
-/* 사이드바 스타일 */
-.sidebar-nav {
-	width: 250px;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.sidebar-nav li {
-	text-indent: 1.5em;
-	line-height: 2.8em;
-}
-
-.sidebar-nav li a {
-	display: block;
-	text-decoration: none;
-	color: #999;
-}
-
-.sidebar-nav li a:hover {
-	color: #fff;
-	background: rgba(255, 255, 255, 0.2);
-}
-
-.sidebar-nav>.sidebar-brand {
-	font-size: 1.3em;
-	line-height: 3em;
-	color: gray;
-}
-
-#innerImg {
-	width: auto;
-	height: 200px;
-}
-
-#outImg {
-	height: 225px;
-	width: 253px;
-}
-
-dt {
-	display: inline;
-}
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css">
 </head>
 <body>
-
 	<!--상단바-->
 	<nav>
 		<div id="topbar" class="navbar navbar-dark bg-dark fixed-top">
@@ -680,7 +692,7 @@ dt {
 					<li class="sidebar-brand">${stationList[0].line}호선</li>
 					<c:forEach var="key" items="${stationList}">
 						<li><a
-							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}">${key.sname}</a></li>
+							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&page=1">${key.sname}</a></li>
 					</c:forEach>
 				</ul>
 			</div>
@@ -692,10 +704,13 @@ dt {
 	<!--카드게시판-->
 
 	<div id="page-wrapper" style="padding-top: 150px">
-		<h1 style="margin-left: 150px">${sname}역 게시판 <hr />
+		<h1 style="margin-left: 150px">${sname}역
+			게시판
+			<hr />
 		</h1>
-		
+
 		<div class="container">
+		  
 			<form action="<%=request.getContextPath()%>/board/external"
 				method="post" class="text-right">
 				<input type="hidden" name="scode"
@@ -705,22 +720,22 @@ dt {
 					name="search" size="30"> <input type="submit" value="검색">
 			</form>
 			<br>
+			
 			<div id="reflash" class="row text-center">
 				<c:forEach var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
 						<div id="externalCard" class="card">
-						
 							<img id="outImg" class="card-img-top"
 								src="http://placehold.it/500x325" alt=""> <i id="boardDel"
 								data-entry='${board.entryNum}' data-writer='${board.writer}'
 								class="far fa-times-circle"></i>
-								
+
 							<div class="card-body" id="external_box">
 								<h4 class="card-title">${board.title}</h4>
 								<p class="card-text" id="external_content">${board.content}</p>
 								<footer class="blockquote-footer">From ${board.writer}</footer>
 							</div>
-							
+
 							<div class="card-footer">
 								<button style="margin-left: 10px" id="modalreq" type="button"
 									data-entrynum='${board.entryNum}' data-scode='${board.scode}'
@@ -730,21 +745,30 @@ dt {
 									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
 									data-writer='${board.writer}' class="btn btn-outline-danger">수정하기</button>
 							</div>
-							
+
 						</div>
 					</div>
 				</c:forEach>
-			
 			</div>
-			
-			
+
+
+     <!--페이지 처리-->
 			<button id="boardWrite" class="btn btn-outline-secondary float-right">글작성</button>
-			<ul style="text-align: center" class="pagination mx-auto">
-				<c:forEach begin="${pageMap.startPage}" end="${pageMap.endPage}"
-					var="i">
-					<li class="page-item"><a class="page-link"
-						href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${i}">${i}</a></li>
+			<ul style="float:center" class="pagination mx-auto justify-content-center">
+		   <c:if test="${param.page>1}" >
+				<li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${param.page-1}" >이전</a></li>
+            </c:if>
+				<c:forEach begin="${pageMap.startPage}" end="${pageMap.endPage}" var="i" >
+				    <c:if test="${param.page==i}">
+				     <li class="page-item active"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${i}">${i}</a></li>
+				    </c:if>
+				    <c:if test="${param.page!=i}">
+				    <li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${i}">${i}</a></li>
+				    </c:if>
 				</c:forEach>
+			<c:if test="${pageMap.totalPage > param.page}" >
+				<li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${param.page+1}" >다음</a></li>
+            </c:if>
 			</ul>
 		</div>
 	</div>
@@ -753,7 +777,8 @@ dt {
 
 
 	<!-- 게시판 상세보기 -->
-	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+		aria-labelledby="myLargeModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<!--        모달창 내부                      -->
@@ -774,9 +799,10 @@ dt {
 					<div class="card-body">
 						<h5 id="innerBoardTitle" class="card-title">title</h5>
 						<p class="card-text" id="innerBoardContent">error</p>
-						<footer class="blockquote-footer">From 작성자</footer>
+						<footer id='innerFooter' class="blockquote-footer">From
+							작성자</footer>
 					</div>
-					
+
 					<div id="regDate" class="card-footer text-right text-muted">
 						2018-10-04&nbsp;&nbsp; <i class="far fa-eye">&nbsp;3</i>
 					</div>
@@ -787,18 +813,17 @@ dt {
 				<div class="alert alert-secondary">
 					<strong>댓글목록 </strong>
 					<hr>
-					
-					<div id="commentList">
-					</div>
+
+					<div id="commentList"></div>
 
 					<div class="form-group">
 						<label><abbr class="initialism">댓글작성</abbr>:</label>
 						<textarea class="form-control" rows="5" id="commentContent"></textarea>
 					</div>
 
-					<div id="innerBoardComment" class="text-right" style="margin-right: 23px">
-					</div>
-					
+					<div id="innerBoardComment" class="text-right"
+						style="margin-right: 23px"></div>
+
 					<br>
 
 				</div>
