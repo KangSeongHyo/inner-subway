@@ -45,23 +45,17 @@
 		scode = #{scode} and entryNum=#{entryNum}
 	</update>
 	
-<!-- 
-	
-
-
-
-	<update id="updateViewcount" parameterType="java.util.Map">
+	<update id="updateViewcount" parameterType="com.intern.board.BoardVO">
 		UPDATE station_board
 		SET
-		viewcount=viewcount+1
+		viewCount=viewCount+1
 		WHERE
 		scode = #{scode} and
-		entry_num=#{entry_num}
+		entryNum=#{entryNum}
 	</update>
-
 	
+<!-- 
 
-	
 
 	<select id="getSearchBoard" parameterType="java.util.Map"
 		resultType="BoardVO">

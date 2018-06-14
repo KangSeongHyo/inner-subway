@@ -65,6 +65,9 @@ public class BoardService implements Board {
 
 	public BoardVO getBoardOne(BoardVO requstBoard, String id) {
 
+		BoardVO temp = new BoardVO();
+		int check;
+
 		if (!id.equals("load")) {
 			if (requstBoard.getWriter().equals(id)) {
 				return dao.getBoardOne(requstBoard);
@@ -74,8 +77,23 @@ public class BoardService implements Board {
 				return null;
 			}
 		} else {
+			temp = dao.getBoardOne(requstBoard);
 
-			return dao.getBoardOne(requstBoard);
+			if (temp == null) {
+
+				return temp;
+
+			} else {
+
+				check = dao.increaseViewcount(requstBoard);
+
+				if (check == Check.SUCCESS) {
+					return temp;
+				} else {
+					return null;
+				}
+
+			}
 		}
 
 	}
@@ -180,11 +198,7 @@ public class BoardService implements Board {
 	/*@Override
 	
 	
-	@Override
-	public void updateViewcount(Map map) {
-		// TODO Auto-generated method stub
-		dao.updateViewcount(map);
-	}
+	
 	
 	
 	@Override
@@ -217,7 +231,8 @@ public class BoardService implements Board {
 		System.out.println(totalBoard);
 		int boardCountPage = 4;//한 페이지에 보여줄 게시물개수
 
-		int totalPage = (totalBoard % boardCountPage == 0) ? (totalBoard / boardCountPage) : (totalBoard / boardCountPage + 1); //전체페이지수 
+		int totalPage = (totalBoard % boardCountPage == 0) ? (totalBoard / boardCountPage)
+			: (totalBoard / boardCountPage + 1); //전체페이지수 
 
 		System.out.println(totalPage);
 

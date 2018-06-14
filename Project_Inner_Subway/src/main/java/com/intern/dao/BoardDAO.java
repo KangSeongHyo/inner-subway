@@ -46,15 +46,12 @@ public class BoardDAO {
 	public BoardVO getBoardOne(BoardVO vo) {
 		return session.selectOne("board.getBoardOne", vo);
 	}
-
-	/*
 	
-	public void updateViewcount(Map map) {
-		session.update("board.updateViewcount", map);
+	public int increaseViewcount(BoardVO vo) {
+		return session.update("board.updateViewcount", vo);
 	}
 	
-	
-	
+	/*
 	
 	public List<BoardVO> getSearchBoard(Map<String, Object> map) {
 		return session.selectList("board.getSearchBoard", map);

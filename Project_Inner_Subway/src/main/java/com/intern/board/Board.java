@@ -9,7 +9,7 @@ import com.intern.station.StationVO;
 
 public interface Board {
 
-	List<BoardVO> getBoardList(StationVO requestStation,int page);
+	List<BoardVO> getBoardList(StationVO requestStation, int page);
 
 	Map<String, Integer> getPage(int page, StationVO requestStation);
 
@@ -53,7 +53,7 @@ public interface Board {
 
 	/*
 	
-	void updateViewcount(Map map);
+	
 	
 	
 	void updateBoard(BoardVO vo);
