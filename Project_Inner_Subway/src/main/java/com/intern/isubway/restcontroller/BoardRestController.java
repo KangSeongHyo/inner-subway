@@ -1,6 +1,7 @@
 package com.intern.isubway.restcontroller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.intern.board.BoardService;
 import com.intern.board.BoardVO;
+import com.intern.station.StationVO;
 
 @RestController
 @RequestMapping("/board")
@@ -44,7 +47,6 @@ public class BoardRestController {
 	@RequestMapping(value = "", method = RequestMethod.DELETE)
 	public ResponseEntity<Integer> removeBoard(@RequestBody BoardVO requestBoard, HttpSession session) {
 		ResponseEntity<Integer> responseEntity = null;
-		System.out.println(requestBoard.getEntryNum() + " " + requestBoard.getWriter());
 		try {
 			responseEntity = new ResponseEntity<Integer>(
 				boardService.romoveBoard(requestBoard, (String)session.getAttribute("id")), HttpStatus.OK);
@@ -56,7 +58,7 @@ public class BoardRestController {
 		return responseEntity;
 	}
 
-	///////////게시물 불러오기
+	///////////게시물 불러오기 + id check
 	@RequestMapping(value = "/{scode}/{entryNum}/{writer}", method = RequestMethod.GET)
 	public ResponseEntity<BoardVO> getBoardOne(@ModelAttribute BoardVO requestBoard, HttpSession session) {
 
@@ -72,7 +74,7 @@ public class BoardRestController {
 		return responseEntity;
 	}
 
-	///////////게시물 불러오기
+	///////////게시물 불러오기(상세보기)
 	@RequestMapping(value = "/{scode}/{entryNum}", method = RequestMethod.GET)
 	public ResponseEntity<BoardVO> getBoardOne(@ModelAttribute BoardVO requestBoard) {
 
@@ -104,7 +106,7 @@ public class BoardRestController {
 		return responseEntity;
 	}
 
-	///////////게시물 수정W
+	///////////게시물 수정
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public ResponseEntity<Integer> modifyBoard(@ModelAttribute BoardVO requestBoard,
 		MultipartFile file) {
@@ -122,4 +124,26 @@ public class BoardRestController {
 		return responseEntity;
 	}
 
+	///////////검색 게시물 불러오기
+	@RequestMapping(value = "/search/{scode}/{search}/{page}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> searchBoard(@ModelAttribute StationVO requestStation,
+		@PathVariable("search") String search, @PathVariable("page") int page) {
+		System.out.println(requestStation.getScode() + " " + search + " " + page);
+		ResponseEntity<Map<String, Object>> responseEntity = null;
+		Map<String, Object> searchBoardList = boardService.getSearchBoard(requestStation, search, page);
+		try {
+			if (searchBoardList == null) {
+				responseEntity = new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+
+			} else {
+				responseEntity = new ResponseEntity<Map<String, Object>>(searchBoardList, HttpStatus.OK);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseEntity = new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+		return responseEntity;
+	}
 }

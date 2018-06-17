@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.intern.check.Check;
 import com.intern.dao.MemberDAO;
 
 @Service
@@ -56,29 +57,33 @@ public class MemberService implements Member {
 	 * @return 1(로그인 OK),0(비밀번호가 일치하지 않음),-1(아이디가 존재하지 않음)
 	 */
 	@Override
-	public int loginCheck(MemberVO requestMember){
+	public int loginCheck(MemberVO requestMember) {
 
 		List<MemberVO> memberList = dao.getMemberList();
-		String pw="";
+		String pw = "";
 		boolean idCheck = false;
 
 		for (MemberVO mvo : memberList) {
+
 			if (requestMember.getId().equals(mvo.getId())) {
 				idCheck = true;
 				pw = mvo.getPw();
 			}
+
 		}
 
 		if (idCheck == false) {
-			return -1;
+
+			return Check.NOAUTH;
+
 		} else {
 
 			if (encoder.matches(requestMember.getPw(), pw)) {
-				
-				return 1;
+
+				return Check.SUCCESS;
 			}
 		}
-		return 0;
+		return Check.FAIL;
 
 	}
 

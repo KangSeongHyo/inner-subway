@@ -20,15 +20,15 @@ public class BoardDAO {
 	@Autowired
 	SqlSession session;
 
-	public List<BoardVO> getBoardList(StationVO requestStation, int startboard) {
+	public List<BoardVO> getBoardList(StationVO vo, int startBoard) {
 		int limit = 4;
-		RowBounds rowbound = new RowBounds(startboard, limit);
+		RowBounds rowbound = new RowBounds(startBoard, limit);
 
-		return session.selectList("board.getBoardList", requestStation,rowbound);
+		return session.selectList("board.getBoardList", vo, rowbound);
 	}
 
-	public int getEntryCount(StationVO requestStation) {
-		return session.selectOne("board.getEntryCount", requestStation);
+	public int getEntryCount(StationVO vo) {
+		return session.selectOne("board.getEntryCount", vo);
 	}
 
 	public int boardRegister(BoardVO vo) {
@@ -46,14 +46,19 @@ public class BoardDAO {
 	public BoardVO getBoardOne(BoardVO vo) {
 		return session.selectOne("board.getBoardOne", vo);
 	}
-	
+
 	public int increaseViewcount(BoardVO vo) {
 		return session.update("board.updateViewcount", vo);
 	}
-	
-	/*
-	
-	public List<BoardVO> getSearchBoard(Map<String, Object> map) {
-		return session.selectList("board.getSearchBoard", map);
-	}*/
+
+	public List<BoardVO> getSearchBoard(Map<String, Object> map, int startBoard) {
+		int limit = 4;
+		RowBounds rowBounds = new RowBounds(startBoard, limit);
+		return session.selectList("board.getSearchBoard", map, rowBounds);
+	}
+
+	public int getSearchBoardCount(Map<String, Object> map) {
+		return session.selectOne("board.getSearchBoardCount", map);
+	}
+
 }

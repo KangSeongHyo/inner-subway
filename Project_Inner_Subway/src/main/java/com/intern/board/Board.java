@@ -9,11 +9,28 @@ import com.intern.station.StationVO;
 
 public interface Board {
 
-	List<BoardVO> getBoardList(StationVO requestStation, int page);
+	/**
+	 * 총 게시물 개수 
+	 * @param requestStation 요청 게시판
+	 * @return 총 게시물 개수 
+	 */
+	int getEntryCount(StationVO requestStation);
 
+	/**
+	 * 페이징 처리 
+	 * @param page
+	 * @param requestStation 요청게시판
+	 * @return 페이징 정보
+	 */
 	Map<String, Integer> getPage(int page, StationVO requestStation);
 
-	int getEntryCount(StationVO requestStation);
+	/**
+	 * 게시물 리스트
+	 * @param requestStation 요청게시판
+	 * @param page 
+	 * @return 게시물 리스트
+	 */
+	List<BoardVO> getBoardList(StationVO requestStation, int page);
 
 	/**
 	 * 게시물 등록
@@ -49,16 +66,13 @@ public interface Board {
 	 */
 	BoardVO getBoardOne(BoardVO requestBoard, String id);
 
+	/**
+	 * Html 제거
+	 * @param boardList
+	 * @return Html 제거(미리보기) 
+	 */
 	List<BoardVO> removeHtml(List<BoardVO> boardList);
 
-	/*
-	
-	
-	
-	
-	void updateBoard(BoardVO vo);
-	
-	List<BoardVO> getSearchBoard(Map<String, Object> map);
-	 */
+	Map<String, Object> getSearchBoard(StationVO requestStation,String search, int page);
 
 }

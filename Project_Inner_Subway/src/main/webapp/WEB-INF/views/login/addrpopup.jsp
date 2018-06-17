@@ -24,16 +24,16 @@ function init(){
 		document.form.submit();
 	}else{
 		/** API 서비스 제공항목 확대 (2017.02) **/
-		opener.jusoCallBack("<%=roadFullAddr%>");
+		opener.addressCallBack("<%=roadFullAddr%>");
 		window.close();
 	}
 }
 </script>
 <body onload="init();">
 	<form id="form" name="form" method="post">
-		<input type="hidden" id="confmKey" name="confmKey" value="" /> <input
-			type="hidden" id="returnUrl" name="returnUrl" value="" /> <input
-			type="hidden" id="resultType" name="resultType" value="" />
+		<input type="hidden" id="confmKey" name="confmKey" /> 
+		<input type="hidden" id="returnUrl" name="returnUrl"  /> 
+		<input type="hidden" id="resultType" name="resultType" />
 	</form>
 </body>
 </html>
