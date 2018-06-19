@@ -53,21 +53,30 @@ $(document).ready(function(){
   					location.assign(contextPath+"/main");
   				}
 	         },
-	            error : function(request,status, error) {
-              alert("code = "+ request.status+ " message = "+ request.responseText+ " error = "+ error); // 실패 시 처리
-	            }
+	         error: function(xhr,status){
+				 if(xhr.status==0){
+				      alert('네트워크를 체크해주세요.');
+				 }else if(xhr.status==401){
+				      alert('권한이 없습니다.');
+				 }else if(xhr.status==404){
+				      alert('페이지를 찾을수없습니다.');
+				 }else if(xhr.status==500){
+				      alert('서버에러 발생하였습니다.');
+				 }else if(status=='timeout'){
+				      alert('시간을 초과하였습니다.');
+				 }else {
+				      alert('에러가 발생하였습니다');
+				 }
+			 }
 
            });
 		
-		
-		
 	});
-	
-	
-	
+
 });
 
 </script>
+
 </head>
 <body>
 

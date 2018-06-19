@@ -121,13 +121,10 @@ $(document).ready(function(){
 					      alert('에러가 발생하였습니다');
 					 }
 				   }
-		
-        	         	 
-        	 
+		    	 
          }); /////ajax 끝
 	
 	}); /////상세보기
-	
 	
 	/////검색
 	$(document).on("click","#searchBoardBtn",function(e){
@@ -159,7 +156,7 @@ $(document).ready(function(){
 					
 				 $("#reflash").append("<div class='col-lg-3 col-md-6 mb-4'>"
 				  +"<div id='externalCard' class='card'><img id='outImg' class='card-img-top' src="+serverResult['boardList'][key].imgPath+">"
-				  +"<i id='boardDel' data-entry="+serverResult['boardList'][key].entryNum
+				  +"<i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
 				  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i>"
 				  +"<div class='card-body' id='external_box'><h4 class='card-title'>"+serverResult['boardList'][key].title+"</h4>"
 				  +"<p class='card-text' id='external_content'>"+serverResult['boardList'][key].content+"</p>"
@@ -539,7 +536,7 @@ $(document).ready(function(){
 			
 		$(".container").empty();
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
-				+scode+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
+				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
 		}
 	 
        /////////// 에디터
@@ -578,7 +575,7 @@ $(document).ready(function(){
 	   $.ajax({
 		   type:'DELETE',
 			url:'<%=request.getContextPath()%>/board',
-			data:JSON.stringify({'scode': scode, 'entryNum':data.entry,'writer':data.writer}),
+			data:JSON.stringify({'scode': data.scode, 'entryNum':data.entry,'writer':data.writer}),
 			contentType: 'application/json; charset=UTF-8',
 			success: function(serverResult) {
 				var result=JSON.parse(serverResult);
@@ -589,7 +586,7 @@ $(document).ready(function(){
 			      	    
 			      	}else{
 			      		
-			        location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
+			        location.assign(contextPath+"/board/external?scode="+data.scode+"&sname="+'${sname}');
 			      		
 			      	}
 			      		
@@ -694,7 +691,7 @@ $(document).ready(function(){
 					if(result==0){
 						alert("서버에 오류가 발생하였습니다.")
 					}else{
-						location.assign(contextPath+"/board/external?scode="+scode+"&sname="+sname);
+						location.assign(contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}');
 					}
 					
 				},
@@ -740,7 +737,7 @@ $(document).on("click","#modifyBtn",function(){
 		              if (result == 0) {
 			            alert("서버에 오류가 발생하였습니다.");
 		              } else {
-			            location.assign(contextPath+ "/board/external?scode="+ scode+ "&sname="+ sname);
+			            location.assign(contextPath+ "/board/external?scode="+'${scode}'+"&sname="+'${sname}');
 		              }
 
 	            },
@@ -794,7 +791,12 @@ $(document).on("click","#modifyBtn",function(){
 			<div id="sidebar-wrapper">
 				<ul class="sidebar-nav">
 					<li class="sidebar-brand">${stationList[0].line}호선</li>
+					<c:if test="${stationList[0].line>=10}">
+					<li id='sidebar-br' class="sidebar-brand">분당선</li>
+					</c:if>
+					<c:if test="${stationList[0].line<10}">
 					<li id='sidebar-br' class="sidebar-brand">${stationList[0].line}호선</li>
+					</c:if>
 					<c:forEach var="key" items="${stationList}">
 						<li><a id="stationlist"
 							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&page=1">${key.sname}</a></li>
@@ -821,14 +823,14 @@ $(document).on("click","#modifyBtn",function(){
 				<button data-scode='${scode}' data-page=1  id="searchBoardBtn">검색</button>
 			</div>
 			<br>
-			
+			<!-- src="http://placehold.it/500x325" -->
 			<div id="reflash" class="row text-center">
 				<c:forEach  var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
 						<div id="externalCard" class="card">
 							<img id="outImg" class="card-img-top"
-								src="http://placehold.it/500x325" alt=""> <i id="boardDel"
-								data-entry='${board.entryNum}' data-writer='${board.writer}'
+								src='http://placehold.it/500x325' alt=""> <i id="boardDel"
+								data-scode='${board.scode}' data-entry='${board.entryNum}' data-writer='${board.writer}'
 								class="far fa-times-circle"></i>
 
 							<div class="card-body" id="external_box">

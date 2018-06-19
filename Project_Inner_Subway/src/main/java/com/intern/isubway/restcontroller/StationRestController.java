@@ -28,15 +28,19 @@ public class StationRestController {
 	 * @param requestStation 요청 호선정보
 	 * @return 요청 호선의 역들 정보
 	 */
-
 	@RequestMapping(value = "/{line}", method = RequestMethod.GET)
 	public ResponseEntity<List<StationVO>> getStations(@ModelAttribute StationVO requestStation) {
 
 		ResponseEntity<List<StationVO>> responseEntity = null;
 		try {
+			List<StationVO> stationList = stationService.getStations(requestStation.getLine());
 
-			responseEntity = new ResponseEntity<List<StationVO>>(stationService.getStations(requestStation.getLine()),
-				HttpStatus.OK);
+			if (stationList != null) {
+				responseEntity = new ResponseEntity<List<StationVO>>(stationList, HttpStatus.OK);
+			} else {
+				responseEntity = new ResponseEntity<List<StationVO>>(HttpStatus.SERVICE_UNAVAILABLE);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			responseEntity = new ResponseEntity<List<StationVO>>(HttpStatus.BAD_REQUEST);

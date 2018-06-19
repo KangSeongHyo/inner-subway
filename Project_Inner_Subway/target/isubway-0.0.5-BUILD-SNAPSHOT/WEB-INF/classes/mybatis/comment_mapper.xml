@@ -6,44 +6,52 @@
 	<select id="getCommentList" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
 		SELECT
-		scode,entryNum,commentSeq,content,writer,registrationDate
+		SCODE,ENTRYNUM,COMMENTSEQ,CONTENT,WRITER,REGISTRATIONDATE
 		FROM
-		station_comments
-		WHERE scode = #{scode} and
-		entryNum=#{entryNum}
+		STATION_COMMENTS
+		WHERE SCODE = #{scode} 
+		AND ENTRYNUM=#{entryNum}
 	</select>
 
 	<insert id="insertComment" parameterType="com.intern.comment.CommentVO">
 		INSERT INTO
-		station_comments(scode,entryNum,content,writer,registrationDate)
-		VALUES(#{scode},#{entryNum},#{content},#{writer},sysdate())
+		STATION_COMMENTS
+		(SCODE,ENTRYNUM,CONTENT,WRITER,REGISTRATIONDATE)
+		VALUES
+		(#{scode},#{entryNum},#{content},#{writer},sysdate())
 	</insert>
 
 	<delete id="deleteComment" parameterType="com.intern.comment.CommentVO">
 		DELETE
 		FROM
-		station_comments
-		WHERE scode = #{scode} and entryNum=#{entryNum} and
-		commentSeq=#{commentSeq}
+		STATION_COMMENTS
+		WHERE scode = #{scode} 
+		AND ENTRYNUM=#{entryNum} 
+		AND COMMENTSEQ=#{commentSeq}
 	</delete>
 
 
 	<select id="getCommentOne" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
 		SELECT
-		scode,entryNum,commentSeq,content,writer,registrationDate
+		SCODE,ENTRYNUM,COMMENTSEQ,CONTENT,WRITER,REGISTRATIONDATE
 		FROM
-		station_comments
-		WHERE scode = #{scode} and
-		entryNum=#{entryNum} and
-		commentSeq=#{commentSeq}
+		STATION_COMMENTS
+		WHERE 
+		SCODE = #{scode} 
+		AND ENTRYNUM=#{entryNum} 
+		AND COMMENTSEQ=#{commentSeq}
 	</select>
 
 	<update id="updateComment" parameterType="com.intern.comment.CommentVO">
-		UPDATE station_comments
-		SET content=#{content}
+		UPDATE 
+		STATION_COMMENTS
+		SET 
+		CONTENT=#{content}
 		WHERE
-		scode = #{scode} and entryNum = #{entryNum} and commentSeq = #{commentSeq}
+		SCODE = #{scode} 
+		AND ENTRYNUM = #{entryNum} 
+		AND COMMENTSEQ = #{commentSeq}
 	</update>
 
 	<!-- <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 

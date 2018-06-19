@@ -19,7 +19,6 @@
          <param name="ConversionPattern" 
           value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5p %C{1}.%M(%F:%L) - %m%n" />
        </layout>
-
 	</appender>
 	
 	   <!-- Application Loggers -->
@@ -63,7 +62,7 @@
 	<logger name="com.intern.isubway">
 		<level value="info" />
 	</logger>
-
+/home1/irteam/logs/log.log
 	<logger name="com.intern.isubway">
 		<level value="info" />
 	</logger>

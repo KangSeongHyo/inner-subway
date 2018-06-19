@@ -5,21 +5,20 @@ public class StationVO {
 	String scode;
 	String sname;
 	int line;
+	int x;
+	int y;
 
 	public StationVO() {
 		super();
 	}
 
-	public StationVO(String scode, String sname, int line) {
+	public StationVO(String scode, String sname, int line, int x, int y) {
 		super();
 		this.scode = scode;
 		this.sname = sname;
 		this.line = line;
-	}
-
-	@Override
-	public String toString() {
-		return "StationInfoVO [scode=" + scode + ", sname=" + sname + ", line=" + line + "]";
+		this.x = x;
+		this.y = y;
 	}
 
 	public String getScode() {
@@ -45,4 +44,21 @@ public class StationVO {
 	public void setLine(int line) {
 		this.line = line;
 	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
 }

@@ -7,91 +7,107 @@
 	<select id="getBoardOne" parameterType="com.intern.board.BoardVO"
 		resultType="com.intern.board.BoardVO">
 		SELECT
-		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-		FROM station_board
-		where scode=#{scode} and entryNum=#{entryNum}
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		STATION_BOARD
+		WHERE
+		SCODE=#{scode}
+		AND ENTRYNUM=#{entryNum}
 	</select>
 
 	<select id="getBoardList" parameterType="com.intern.station.StationVO"
 		resultType="com.intern.board.BoardVO">
 		SELECT
-		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-		FROM station_board
-		where scode=#{scode}
-		order by entryNum desc
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		STATION_BOARD
+		WHERE 
+		SCODE=#{scode}
+		ORDER BY 
+		ENTRYNUM DESC
 	</select>
 
 	<select id="getEntryCount" parameterType="com.intern.station.StationVO"
 		resultType="int">
-		SELECT count(*)
-		FROM station_board
-		where scode=#{scode}
+		SELECT 
+		COUNT(*)
+		FROM 
+		STATION_BOARD
+		WHERE 
+		SCODE=#{scode}
 	</select>
 
 	<insert id="insertBoard" parameterType="com.intern.board.BoardVO">
 		INSERT INTO
-		station_board(scode,title,writer,registrationDate,viewCount,content,imgPath)
-		VALUES(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
+		STATION_BOARD
+		(SCODE,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH)
+		VALUES
+		(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
 	</insert>
 
 	<delete id="deleteBoard" parameterType="com.intern.board.BoardVO">
-		DELETE FROM station_board
+		DELETE FROM 
+		STATION_BOARD
 		WHERE
-		scode = #{scode} and entryNum=#{entryNum}
+		SCODE = #{scode} 
+		AND ENTRYNUM=#{entryNum}
 	</delete>
 
 	<update id="updateBoard" parameterType="com.intern.board.BoardVO">
-		UPDATE station_board
+		UPDATE STATION_BOARD
 		SET
-		title=#{title},content=#{content}
+		TITLE=#{title},CONTENT=#{content}
 		<if test="imgPath!=null">
-			,img_path=#{img_path}
+		,IMGPATH=#{imgPath}
 		</if>
 		WHERE
-		scode = #{scode} and entryNum=#{entryNum}
+		SCODE = #{scode} 
+		AND ENTRYNUM = #{entryNum}
 	</update>
 
 	<update id="updateViewcount" parameterType="com.intern.board.BoardVO">
-		UPDATE station_board
+		UPDATE STATION_BOARD
 		SET
-		viewCount=viewCount+1
+		VIEWCOUNT=VIEWCOUNT+1
 		WHERE
-		scode = #{scode} and
-		entryNum=#{entryNum}
+		SCODE = #{scode} 
+		AND ENTRYNUM = #{entryNum}
 	</update>
 	
 	<select id="getSearchBoard" parameterType="java.util.Map"
 		resultType="com.intern.board.BoardVO">
 		SELECT 
-		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
 		FROM 
 		(SELECT
-		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
 		FROM 
-		station_board
+		STATION_BOARD
 		WHERE
-		scode=#{scode}
+		SCODE=#{scode}
 		ORDER BY 
-		entryNum desc) board
+		ENTRYNUM DESC) BOARD
 		WHERE 
-		title like CONCAT('%',#{search},'%') or writer like CONCAT('%',#{search},'%')
+		TITLE LIKE CONCAT('%',#{search},'%') 
+		OR WRITER LIKE CONCAT('%',#{search},'%')
 	</select>
 	
 	<select id="getSearchBoardCount" parameterType="java.util.Map"
 		resultType="Integer">
 		SELECT 
-		count(*)
+		COUNT(*)
 		FROM 
 		(SELECT
-		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
 		FROM 
-		station_board
+		STATION_BOARD
 		WHERE
-		scode=#{scode}
+		SCODE=#{scode}
 		ORDER BY 
-		entryNum desc) board
-		WHERE 
-		title like CONCAT('%',#{search},'%') or writer like CONCAT('%',#{search},'%')
+		ENTRYNUM DESC) BOARD
+		WHERE
+		TITLE LIKE CONCAT('%',#{search},'%') 
+		OR WRITER LIKE CONCAT('%',#{search},'%')
 	</select>
 	
 

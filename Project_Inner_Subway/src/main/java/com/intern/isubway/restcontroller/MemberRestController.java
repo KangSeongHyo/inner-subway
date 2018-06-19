@@ -52,7 +52,9 @@ public class MemberRestController {
 		if (list != null) {
 			responseEntity = new ResponseEntity<List<String>>(list, HttpStatus.OK);
 			log.info(" ID List return ");
+
 		} else {
+
 			throw new Exception();
 		}
 
@@ -80,6 +82,8 @@ public class MemberRestController {
 			} else {
 
 				responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+				log.warn("회원가입 FAIL");
+
 			}
 
 		} catch (Exception e) {

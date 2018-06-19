@@ -13,5 +13,8 @@
  -->
  <settings>
  <setting name="safeRowBoundsEnabled" value="false"/>
+ <setting name="mapUnderscoreToCamelCase" value="true"/>
  </settings>
+ 
+ 
 </configuration>

@@ -17,16 +17,12 @@ import com.intern.comment.CommentService;
 
 @Controller
 public class CommentViewController {
-	
-	@Autowired
-	CommentService service;
-	
-	
+
 	/*//////댓글 등록
 	@RequestMapping("/comment/insert")
 	@ResponseBody
 	public List<CommentVO> insertComment(String scode,int entry_num,String content,HttpSession session){
-
+	
 		String writer=(String)session.getAttribute("id");
 		CommentVO vo=new CommentVO(scode,entry_num,0,content, writer, new Date(0));
 		service.insertComment(vo);

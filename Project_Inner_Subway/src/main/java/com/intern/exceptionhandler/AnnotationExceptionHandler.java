@@ -30,7 +30,7 @@ public class AnnotationExceptionHandler {
 
 	@ExceptionHandler(FileNotFoundException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public void fileNotFoundExcption(SQLException e) {
+	public void fileNotFoundExcption(FileNotFoundException e) {
 		e.printStackTrace();
 		log.warn(e.getMessage());
 	}

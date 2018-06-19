@@ -4,74 +4,111 @@
 
 <mapper namespace="board">
 
-     <select id="getBoardOne" parameterType="com.intern.board.BoardVO" resultType="com.intern.board.BoardVO">
-		SELECT scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath 
-		FROM station_board
-		where scode=#{scode} and entryNum=#{entryNum}
+	<select id="getBoardOne" parameterType="com.intern.board.BoardVO"
+		resultType="com.intern.board.BoardVO">
+		SELECT
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		STATION_BOARD
+		WHERE
+		SCODE=#{scode}
+		AND ENTRYNUM=#{entryNum}
 	</select>
-     
-	<select id="getBoardList" parameterType="com.intern.station.StationVO"  resultType="com.intern.board.BoardVO" >
-		SELECT scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath FROM station_board
-		where scode=#{scode}
-		order by entryNum desc
+
+	<select id="getBoardList" parameterType="com.intern.station.StationVO"
+		resultType="com.intern.board.BoardVO">
+		SELECT
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		STATION_BOARD
+		WHERE 
+		SCODE=#{scode}
+		ORDER BY 
+		ENTRYNUM DESC
 	</select>
-	
-    <select id="getEntryCount" parameterType="com.intern.station.StationVO" resultType="int">
-		SELECT count(*) 
-		FROM station_board
-		where scode=#{scode}
+
+	<select id="getEntryCount" parameterType="com.intern.station.StationVO"
+		resultType="int">
+		SELECT 
+		COUNT(*)
+		FROM 
+		STATION_BOARD
+		WHERE 
+		SCODE=#{scode}
 	</select>
-	
+
 	<insert id="insertBoard" parameterType="com.intern.board.BoardVO">
 		INSERT INTO
-		station_board(scode,title,writer,registrationDate,viewCount,content,imgPath)
-		VALUES(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
+		STATION_BOARD
+		(SCODE,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH)
+		VALUES
+		(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
 	</insert>
-	
+
 	<delete id="deleteBoard" parameterType="com.intern.board.BoardVO">
-		DELETE FROM station_board
+		DELETE FROM 
+		STATION_BOARD
 		WHERE
-		scode = #{scode} and entryNum=#{entryNum}
+		SCODE = #{scode} 
+		AND ENTRYNUM=#{entryNum}
 	</delete>
-	
+
 	<update id="updateBoard" parameterType="com.intern.board.BoardVO">
-		UPDATE station_board
+		UPDATE STATION_BOARD
 		SET
-		title=#{title},content=#{content}
+		TITLE=#{title},CONTENT=#{content}
 		<if test="imgPath!=null">
-			,img_path=#{img_path}
+		,IMGPATH=#{imgPath}
 		</if>
 		WHERE
-		scode = #{scode} and entryNum=#{entryNum}
+		SCODE = #{scode} 
+		AND ENTRYNUM = #{entryNum}
 	</update>
-	
+
 	<update id="updateViewcount" parameterType="com.intern.board.BoardVO">
-		UPDATE station_board
+		UPDATE STATION_BOARD
 		SET
-		viewCount=viewCount+1
+		VIEWCOUNT=VIEWCOUNT+1
 		WHERE
-		scode = #{scode} and
-		entryNum=#{entryNum}
+		SCODE = #{scode} 
+		AND ENTRYNUM = #{entryNum}
 	</update>
 	
-<!-- 
-
-
 	<select id="getSearchBoard" parameterType="java.util.Map"
-		resultType="BoardVO">
-		SELECT * FROM station_board
-		where scode=#{scode}
-		<if test='select=="writer"'>
-			and writer like #{search}
-		</if>
-		<if test='select=="title"'>
-			and title like #{search}
-		</if>
-	</select> -->
-	<!-- <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 
-		column="columnname1" /> <result property="param2" column="columnname2" /> 
-		<result property="param3" column="columnname3" /> </resultMap> <select id="getAll" 
-		resultMap="YourResultSet"> SELECT * FROM tablename1 </select> <insert id="insertSomething" 
-		parameterType="#modelname"> INSERT INTO tablename1 (columnname1, columnname2, 
-		columnname3) VALUES(#{value1},#{value2},#{value3}) </insert> -->
+		resultType="com.intern.board.BoardVO">
+		SELECT 
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		(SELECT
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		STATION_BOARD
+		WHERE
+		SCODE=#{scode}
+		ORDER BY 
+		ENTRYNUM DESC) BOARD
+		WHERE 
+		TITLE LIKE CONCAT('%',#{search},'%') 
+		OR WRITER LIKE CONCAT('%',#{search},'%')
+	</select>
+	
+	<select id="getSearchBoardCount" parameterType="java.util.Map"
+		resultType="Integer">
+		SELECT 
+		COUNT(*)
+		FROM 
+		(SELECT
+		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		FROM 
+		STATION_BOARD
+		WHERE
+		SCODE=#{scode}
+		ORDER BY 
+		ENTRYNUM DESC) BOARD
+		WHERE
+		TITLE LIKE CONCAT('%',#{search},'%') 
+		OR WRITER LIKE CONCAT('%',#{search},'%')
+	</select>
+	
+
 </mapper>

@@ -5,16 +5,24 @@
 <mapper namespace="member">
 
 	<select id="getMemberList" resultType="com.intern.login.MemberVO">
-		SELECT id,pw,name,gender,address FROM member_info
+		SELECT 
+		ID,PW,NAME,GENDER,ADDRESS 
+		FROM 
+		MEMBER_INFO
 	</select>
 	
     <insert id="insertMember" parameterType="com.intern.login.MemberVO">
-		INSERT INTO member_info
-		VALUES(#{id},#{pw},#{name},#{gender},#{address})
+		INSERT INTO 
+		MEMBER_INFO
+		VALUES
+		(#{id},#{pw},#{name},#{gender},#{address})
 	</insert>
 	
 	<select id="getIdList" resultType="string">
-		SELECT id FROM member_info
+		SELECT 
+		ID 
+		FROM 
+		MEMBER_INFO
 	</select>
 <!--
  <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 

@@ -28,21 +28,6 @@ public class BoardRestController {
 	@Autowired
 	BoardService boardService;
 
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<BoardVO>> getBoardAll() {
-
-		ResponseEntity<List<BoardVO>> responseEntity = null;
-
-		try {
-			responseEntity = new ResponseEntity<List<BoardVO>>(HttpStatus.OK);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			responseEntity = new ResponseEntity<List<BoardVO>>(HttpStatus.BAD_REQUEST);
-		}
-		return responseEntity;
-	}
-
 	///////게시물삭제
 	@RequestMapping(value = "", method = RequestMethod.DELETE)
 	public ResponseEntity<Integer> removeBoard(@RequestBody BoardVO requestBoard, HttpSession session) {
@@ -128,9 +113,10 @@ public class BoardRestController {
 	@RequestMapping(value = "/search/{scode}/{search}/{page}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> searchBoard(@ModelAttribute StationVO requestStation,
 		@PathVariable("search") String search, @PathVariable("page") int page) {
-		System.out.println(requestStation.getScode() + " " + search + " " + page);
+
 		ResponseEntity<Map<String, Object>> responseEntity = null;
 		Map<String, Object> searchBoardList = boardService.getSearchBoard(requestStation, search, page);
+
 		try {
 			if (searchBoardList == null) {
 				responseEntity = new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);

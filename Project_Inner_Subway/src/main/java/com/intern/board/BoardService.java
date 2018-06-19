@@ -113,7 +113,7 @@ public class BoardService implements Board {
 			}
 			check = dao.modifyBoard(requestBoard);
 
-		} catch (IllegalStateException | IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -149,8 +149,8 @@ public class BoardService implements Board {
 
 			String uniqueName = uuid + ext; //유니크한 이름 생성 
 
-			String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-			//String uploadPath = "C:/new/" + uniqueName;
+			//String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
+			String uploadPath = "C:/new/" + uniqueName;
 
 			String imgPath = "/storage/" + uniqueName;
 
@@ -160,7 +160,7 @@ public class BoardService implements Board {
 
 			requestBoard.setImgPath(imgPath);
 
-		} catch (IllegalStateException | IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
