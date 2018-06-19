@@ -1,5 +1,9 @@
 # 지하철역 내부 정보 안내 웹서비스 개발
 
+### 목적
+
+-	사용자들이 서로 정보를 공유하여 자신이 원하는 역 내부 정보와 평가를 얻기 위함
+
 ### 소개
 
 -  개발내용 & 구현일정 : [feature list](https://oss.navercorp.com/2018-nbp-internship-team1/seonghyo/wiki/%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EB%B0%9C)
@@ -23,10 +27,6 @@
 - 개발언어 : JAVA, 서버 : CentOS 7.4, JDK 8, Tomcat 8
 
 - S/W : MySQL , Mybatis, Spring MVC, Eclipse, Bootstrap
-
-### 목적
-
--	사용자들이 서로 정보를 공유하여 자신이 원하는 역 내부 정보와 평가를 얻기 위함
 
 ### 기본기능
 
