@@ -23,8 +23,8 @@ public class MemberDAO {
 		return session.insert("member.insertMember", vo);
 	}
 
-	public List<String> getIdList() {
-		return session.selectList("member.getIdList");
+	public int getIdCheck(MemberVO vo) {
+		return session.selectOne("member.getIdCheck", vo);
 	}
 
 }

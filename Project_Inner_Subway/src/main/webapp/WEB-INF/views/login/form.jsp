@@ -25,9 +25,19 @@
 	margin-top: -150px;
 	margin-left: -150px;
 }
+
+body{
+  width: 100%;
+  height: 100%;
+   background: url("img/background.jpg");
+   background-size: cover;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
+	/* $("body").css("background","url(img/background.jpg)"); */
+	
 	var contextPath='<%=request.getContextPath()%>';
 	$("#btn").on("click",function(){
 		

@@ -418,9 +418,8 @@ $(document).ready(function(){
 			 }else{
 				
 				 $(ths).closest("dl").children("dd").html("<div class='form-group'><label><abbr class='initialism'>댓글수정</abbr>:</label>"
-							+"<textarea class='form-control' rows='5' id='modifyContent'>"+serverResult.content+"</textarea><button id='commmentModifyBtn' style='float:right' data-scode='"+serverResult.scode+"' data-entrynum="
-							+serverResult.entryNum+" data-commentseq="+serverResult.commentSeq+" data-writer='"+serverResult.writer+"' class='btn btn-outline-secondary'>수정</button></div>");
-				 
+							+"<textarea style='margin-bottom:10px' class='form-control' rows='5' id='modifyContent'>"+serverResult.content+"</textarea><button id='commmentModifyBtn' style='float:right' data-scode='"+serverResult.scode+"' data-entrynum="
+							+serverResult.entryNum+" data-commentseq="+serverResult.commentSeq+" data-writer='"+serverResult.writer+"' class='btn btn-outline-secondary'>수정</button></div><hr style='margin-top:60px'>");
 			 }
 		 },
 		  error: function(xhr,status){
@@ -536,7 +535,14 @@ $(document).ready(function(){
 			
 		$(".container").empty();
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
-				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title'><small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small></div><div class='form-group'><textarea name='content' id='summernote'></textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label><small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form></div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button><button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
+				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label>"
+				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
+				+"<small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small>"
+				+"</div><div class='form-group'><textarea name='content' id='summernote'></textarea><br>"
+				+"<label class='btn btn-success btn-file'>사진 첨부 <input type='file' name='file' id='file'></label>"
+				+"<small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
+				+"</div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button>"
+				+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
 		}
 	 
        /////////// 에디터
@@ -555,7 +561,16 @@ $(document).ready(function(){
 		        popover: {image: []}
 		});
 	});
-	
+
+////////file
+$(document).on("change","#file",function(){
+  		var filePath=$(this).val();
+  		if(filePath!=null||filePath!=""){
+  	     $("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
+  		} else{
+  			alert("오류가 발생하였습니다. 다시 첨부해주세요");
+  		}
+}); 
 /////////////////// 뒤로가기 버튼
 
 	$(document).on("click","#backpage",function(){
@@ -586,7 +601,7 @@ $(document).ready(function(){
 			      	    
 			      	}else{
 			      		
-			        location.assign(contextPath+"/board/external?scode="+data.scode+"&sname="+'${sname}');
+			        location.assign(contextPath+"/board/external?scode="+data.scode+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 			      		
 			      	}
 			      		
@@ -633,7 +648,7 @@ $(document).ready(function(){
 						+data.scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"
 						+serverResult.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 8글자이내)</small>"
 						+"</div><div class='form-group'><textarea name='content' id='summernote'>"
-						+serverResult.content+"</textarea><br><label class='btn btn-primary btn-file'>사진 첨부 <input type='file' id='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
+						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' id='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
 						+"<button id='modifyBtn' class='btn btn-outline-secondary float-right'>수정</button>"
 						+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");		    
 					
@@ -691,7 +706,7 @@ $(document).ready(function(){
 					if(result==0){
 						alert("서버에 오류가 발생하였습니다.")
 					}else{
-						location.assign(contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}');
+						location.assign(contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 					}
 					
 				},
@@ -737,7 +752,7 @@ $(document).on("click","#modifyBtn",function(){
 		              if (result == 0) {
 			            alert("서버에 오류가 발생하였습니다.");
 		              } else {
-			            location.assign(contextPath+ "/board/external?scode="+'${scode}'+"&sname="+'${sname}');
+			            location.assign(contextPath+ "/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 		              }
 
 	            },
@@ -773,6 +788,8 @@ $(document).on("click","#modifyBtn",function(){
   font-family: '28D';
   src: url('../font/28DaysLater.ttf');
 }
+
+
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css">
 </head>
@@ -799,7 +816,7 @@ $(document).on("click","#modifyBtn",function(){
 					</c:if>
 					<c:forEach var="key" items="${stationList}">
 						<li><a id="stationlist"
-							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&page=1">${key.sname}</a></li>
+							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&line=${key.line}&page=1">${key.sname}</a></li>
 					</c:forEach>
 				</ul>
 			</div>
@@ -824,6 +841,7 @@ $(document).on("click","#modifyBtn",function(){
 			</div>
 			<br>
 			<!-- src="http://placehold.it/500x325" -->
+			
 			<div id="reflash" class="row text-center">
 				<c:forEach  var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
@@ -858,18 +876,18 @@ $(document).on("click","#modifyBtn",function(){
 			<button id="boardWrite" class="btn btn-outline-secondary float-right">글작성</button>
 			<ul id="paging" style="float:center" class="pagination mx-auto justify-content-center">
 		   <c:if test="${param.page>1}" >
-				<li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${param.page-1}" >이전</a></li>
+				<li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&line=${line}&page=${param.page-1}" >이전</a></li>
             </c:if>
 				<c:forEach begin="${pageMap.startPage}" end="${pageMap.endPage}" var="i" >
 				    <c:if test="${param.page==i}">
-				     <li class="page-item active"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${i}">${i}</a></li>
+				     <li class="page-item active"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&line=${line}&page=${i}">${i}</a></li>
 				    </c:if>
 				    <c:if test="${param.page!=i}">
-				    <li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${i}">${i}</a></li>
+				    <li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&line=${line}&page=${i}">${i}</a></li>
 				    </c:if>
 				</c:forEach>
 			<c:if test="${pageMap.totalPage > param.page}" >
-				<li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&page=${param.page+1}" >다음</a></li>
+				<li class="page-item"><a class="page-link"  href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&line=${line}&page=${param.page+1}" >다음</a></li>
             </c:if>
 			</ul>
 		</div>
@@ -912,7 +930,7 @@ $(document).on("click","#modifyBtn",function(){
 				<br>
 
 
-				<div class="alert alert-secondary">
+				<div id='commentListFm' class="alert alert-secondary">
 					<strong>댓글목록 </strong>
 					<hr>
 

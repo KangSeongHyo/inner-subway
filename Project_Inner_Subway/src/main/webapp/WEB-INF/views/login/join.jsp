@@ -13,6 +13,8 @@
 	crossorigin="anonymous">
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
 <style type="text/css">
 .container {
 	position: absolute;
@@ -20,6 +22,12 @@
 	height: 200px;
 	margin-top: 7%;
 	margin-left: 35%;
+}
+body{
+  width: 100%;
+  height: 100%;
+   background: url("../img/background.jpg");
+   background-size: cover;
 }
 </style>
 
@@ -33,13 +41,15 @@ function addressCallBack(roadFullAddr) {
 }
 
 $(document).ready(function(){
-
+	
+	$('[data-toggle="tooltip"]').tooltip(); 
+	
 	var pwCheck;
-	var contextPath="<%=request.getContextPath()%>"
+	var contextPath="<%=request.getContextPath()%>";
 
 	//비밀번호 일치확인
-	$("#pwcheck").keyup(function() {
-		if($("#pwcheck").val()==$("#pw").val()){
+	$("#pwCheck").keyup(function() {
+		if($("#pwCheck").val()==$("#pw").val()){
 			$("#pwEqualView").css("color","green");
 			$("#pwEqualView").text("비밀번호가 일치합니다");
 			pwCheck=true;
@@ -49,31 +59,45 @@ $(document).ready(function(){
 			pwCheck=false;
 		}		
 	});
+	$('#form').on('change',function(){
+		var idReg = /^[a-z]+[0-9]+[a-z]*$/;
+		if(!idReg.test($("#id").val())){
+			$("#id").addClass("is-invalid");
+			$("#id").append("<a href='#' data-toggle='tooltip' title='Hooray!'>Hover over me</a>");
+			
+		}else{
+			$("#id").removeClass("is-invalid");
+		}
 		
+	});
+	
+	
+	//중복체크 & 공백체크
 	$("#btn").on("click",function(){
 		var arr=new Array();
+		
+		
+		
+		
 	    arr[0]=$("#id").val();
 	    arr[1]=$("#pw").val();
-	    arr[2]=$("#pwcheck").val();
+	    arr[2]=$("#pwCheck").val();
 	    arr[3]=$("#address").val();
-	  
 	    
 	 $.ajax({
-		type:'get',
-		url:'<%=request.getContextPath()%>/member',
-  	    dataType :'text',
+		type:'GET',
+		url:'<%=request.getContextPath()%>/member/'+$("#id").val(),
+		contentType : "application/json; charset=UTF-8",
 		success:function(serverResult){		
 			var result=JSON.parse(serverResult);
 			var str="";
 			var idCheck=true;
 			
-			   for(var i=0;i<result.length;i++){				  
-				   
-				   if(result[i]==$("#id").val()){
-					  idCheck=false; 
-					  break;
-				  }
-	    	   }
+			
+			if(result!=0){
+				idCheck=false;
+			}
+			
 			
 	         for(var i=0;i<arr.length;i++){
 	    	   if(arr[i]==""){
@@ -85,8 +109,10 @@ $(document).ready(function(){
 	    	
 	         if(idCheck==false){
 		        alert("이미 사용하고 있는 아이디 입니다.");
+	         
 	         }else if(pwCheck==false){
 		      alert("비밀번호가 일치하지 않습니다")
+	         
 	         }else{
 	        	 
 	    	  $.ajax({
@@ -100,7 +126,6 @@ $(document).ready(function(){
 	    		    	 "gender" : $('input[type=radio]').val(), 
 	    		    	 "address" :$('#address').val()
 	    		    }),
-	    		 
 	    	  	    dataType : 'JSON',
 	    			success:function(serverResult){
 	    				
@@ -111,14 +136,18 @@ $(document).ready(function(){
 		            error: function(xhr,status){
 						 if(xhr.status==0){
 						      alert('네트워크를 체크해주세요.');
+						 }else if(xhr.status==400){
+						      alert('요청에 오류가 있습니다.');
+						 }else if(xhr.status==401){
+						      alert('권한이 없습니다.');
 						 }else if(xhr.status==404){
-						      alert('페이지를 찾을수없습니다.');
+						      alert('페이지를 찾을 수 없습니다.');
 						 }else if(xhr.status==500){
-						      alert('서버에러가 발생하였습니다.');
+						      alert('서버에 오류가 발생하였습니다.');
 						 }else if(status=='timeout'){
 						      alert('시간을 초과하였습니다.');
 						 }else {
-						      alert('에러가 발생하였습니다.');
+						      alert("오류가 발생하였습니다.");
 						 }
 					 }
 
@@ -139,10 +168,10 @@ $(document).ready(function(){
 
 	<div class="container">
 
-		<form class="form-signin" id="form" method="post">
+		<form class="form-signin" id="form" name='form' method="POST">
 
 			<h1>회원가입</h1>
-			<input class="form-control" type="text" id="name"  placeholder="이름" ><br>
+			<input class="form-control" type="text" id="name"  placeholder="이름" required><br>
 
 			<div class="btn-group radio-group">
 				<label class="btn btn-outline-secondary not-active">남자
@@ -150,10 +179,11 @@ $(document).ready(function(){
 				<label class="btn btn-outline-secondary not-active">여자
 				<input type="radio" value="F" name="gender"></label>
 			</div><br><br> 
-			<input class="form-control" type="text" id="id"  placeholder="아이디"><br>
+			
+			<input class="form-control" type="text" id="id" name='id'  placeholder="아이디" required><br>
 			
 			<input class="form-control" type="password" id="pw"  placeholder="비밀번호">
-			<br> <input class="form-control" type="password" id="pwcheck" placeholder="비밀번호 확인">
+			<br> <input class="form-control" type="password" id="pwCheck" placeholder="비밀번호 확인">
 			<div id="pwEqualView"></div>
 			
 			<br> <input class="form-control" type="text" disabled="disabled" id="address" placeholder="도로명 주소"> <input type="button"

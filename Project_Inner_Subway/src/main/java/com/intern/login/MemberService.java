@@ -20,8 +20,6 @@ import com.intern.check.Check;
 import com.intern.dao.MemberDAO;
 
 @Service
-/*@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/mybatis/*_mapper.xml")*/
 public class MemberService implements Member {
 
 	@Autowired
@@ -31,21 +29,20 @@ public class MemberService implements Member {
 	BCryptPasswordEncoder encoder;
 
 	@Override
-	/*@Test*/
-	public int memberRegister(MemberVO mvo) {
+	public int memberRegister(MemberVO requestMember) {
 
-		mvo.setName(encoder.encode(mvo.getName()));
-		mvo.setPw(encoder.encode(mvo.getPw()));
-		mvo.setAddress(encoder.encode(mvo.getAddress()));
+		requestMember.setName(encoder.encode(requestMember.getName()));
+		requestMember.setPw(encoder.encode(requestMember.getPw()));
+		requestMember.setAddress(encoder.encode(requestMember.getAddress()));
 
-		int check = dao.memberRegister(mvo);
-		/*assertTrue("secess", check == 1);*/
+		int check = dao.memberRegister(requestMember);
 		return check;
 	}
 
 	@Override
-	public List<String> getIdList() {
-		return dao.getIdList();
+	public int idCheck(MemberVO requestMember) {
+
+		return dao.getIdCheck(requestMember);
 	}
 
 	/**

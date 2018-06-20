@@ -17,14 +17,14 @@
 
 	<select id="getBoardList" parameterType="com.intern.station.StationVO"
 		resultType="com.intern.board.BoardVO">
-		SELECT
-		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+		SELECT 	
+				SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
 		FROM 
-		STATION_BOARD
+		    	STATION_BOARD
 		WHERE 
-		SCODE=#{scode}
+				SCODE=#{scode}
 		ORDER BY 
-		ENTRYNUM DESC
+				ENTRYNUM DESC
 	</select>
 
 	<select id="getEntryCount" parameterType="com.intern.station.StationVO"

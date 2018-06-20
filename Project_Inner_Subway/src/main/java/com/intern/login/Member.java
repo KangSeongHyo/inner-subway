@@ -5,24 +5,23 @@ import java.util.Map;
 
 public interface Member {
 
-	
 	/**
 	 * ID 중복체크
-	 * @return ID값 리스트 
+	 * @return Success(1) Fail(0) 
 	 */
-	public List<String> getIdList();
+	public int idCheck(MemberVO requestMember);
+
 	/**
 	 * 멤버등록 (회원가입)
 	 * @param 유저정보
 	 * @return 1(성공),0(실패)
 	 */
-	public int memberRegister(MemberVO vo);
-	
+	public int memberRegister(MemberVO requestMember);
+
 	/**
-	 * ID 중복체크
-	 * @return ID값 리스트 
+	 * 로그인 체크
+	 * @return login 확인 
 	 */
-	public int loginCheck(MemberVO vo);
-	
-	
+	public int loginCheck(MemberVO requestMember);
+
 }

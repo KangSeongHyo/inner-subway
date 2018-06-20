@@ -6,23 +6,26 @@
 
 	<select id="getMemberList" resultType="com.intern.login.MemberVO">
 		SELECT 
-		ID,PW,NAME,GENDER,ADDRESS 
+				id,pw,name,gender,address 
 		FROM 
-		MEMBER_INFO
+				member_info
 	</select>
 	
     <insert id="insertMember" parameterType="com.intern.login.MemberVO">
 		INSERT INTO 
-		MEMBER_INFO
+				member_info
 		VALUES
-		(#{id},#{pw},#{name},#{gender},#{address})
+				(#{id},#{pw},#{name},#{gender},#{address})
 	</insert>
 	
-	<select id="getIdList" resultType="string">
+	<select id="getIdCheck" resultType="int" parameterType="com.intern.login.MemberVO">
 		SELECT 
-		ID 
+				COUNT(*)
 		FROM 
-		MEMBER_INFO
+				member_info
+		WHERE
+				id=#{id}
+				
 	</select>
 <!--
  <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 

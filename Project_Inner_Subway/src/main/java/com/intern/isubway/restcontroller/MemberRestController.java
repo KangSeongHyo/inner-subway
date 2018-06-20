@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,24 +39,24 @@ public class MemberRestController {
 	MemberService memberService;
 
 	/**
-	 * 모든 회원들의  ID List 반환 
-	 * @return id List
-	 * @throws Exception 
+	 * id 중복 체크 결과 반환 
+	 * @return Success(0) Fail(1)
+	 * @throws Exception(DB 오류)
 	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> getIdList() throws Exception {
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getIdList(@ModelAttribute MemberVO requestMember) throws Exception {
 
-		ResponseEntity<List<String>> responseEntity = null;
+		ResponseEntity<Integer> responseEntity = null;
 
-		List<String> list = memberService.getIdList();
+		int result = memberService.idCheck(requestMember);
 
-		if (list != null) {
-			responseEntity = new ResponseEntity<List<String>>(list, HttpStatus.OK);
-			log.info(" ID List return ");
+		if ((Integer)result != null) {
+			responseEntity = new ResponseEntity<Integer>(result, HttpStatus.OK);
+			log.info("Return ID check result");
 
 		} else {
 
-			throw new Exception();
+			throw new Exception("Error updating database");
 		}
 
 		return responseEntity;
@@ -71,26 +72,17 @@ public class MemberRestController {
 
 		ResponseEntity<Integer> responseEntity = null;
 
-		try {
+		int check = memberService.memberRegister(requestMember);
 
-			int check = memberService.memberRegister(requestMember);
+		if (check == Check.SUCCESS) {
+			responseEntity = new ResponseEntity<Integer>(check, HttpStatus.OK);
+			log.info("회원가입 OK");
 
-			if (check == Check.SUCCESS) {
-				responseEntity = new ResponseEntity<Integer>(check, HttpStatus.OK);
-				log.info("회원가입 OK");
+		} else {
 
-			} else {
-
-				responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
-				log.warn("회원가입 FAIL");
-
-			}
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			log.error(e.getMessage());
 			responseEntity = new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+			log.warn("회원가입 FAIL");
+
 		}
 
 		return responseEntity;

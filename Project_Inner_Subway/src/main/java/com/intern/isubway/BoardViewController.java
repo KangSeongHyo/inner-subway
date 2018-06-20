@@ -23,7 +23,7 @@ import com.intern.station.StationService;
 import com.intern.station.StationVO;
 
 @Controller
-@SessionAttributes({"sname", "scode"})
+@SessionAttributes({"sname", "scode", "line"})
 public class BoardViewController {
 
 	@Autowired
@@ -43,7 +43,7 @@ public class BoardViewController {
 		boardList = boardService.removeHtml(boardList);
 
 		List<StationVO> stationList = stationService
-			.getStations(Integer.parseInt(requestStation.getScode().substring(2, 4)));
+			.getStations(requestStation.getLine());
 
 		mv.addObject("boardList", boardList);
 		mv.addObject("stationList", stationList);
@@ -52,6 +52,7 @@ public class BoardViewController {
 
 		model.addAttribute("sname", requestStation.getSname());
 		model.addAttribute("scode", requestStation.getScode());
+		model.addAttribute("line", requestStation.getLine());
 
 		mv.setViewName("board/external");
 

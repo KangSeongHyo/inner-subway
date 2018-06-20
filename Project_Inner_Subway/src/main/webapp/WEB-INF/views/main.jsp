@@ -82,7 +82,7 @@ $(document).ready(function() {
 					 
 					  $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
 							+serverResult[key].scode+"&sname="+serverResult[key].sname
-						 +"&page=1'>"+serverResult[key].sname+"</a></li>");
+						 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
 					
 					      if(key==(serverResult.length-1)){
 						    break;
@@ -125,7 +125,7 @@ $(document).ready(function() {
 							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y-4)+"' data-dir='E' ></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
 										+serverResult[key].scode+"&sname="+serverResult[key].sname
-									 +"&page=1'>"+serverResult[key].sname+"</a></li>");
+									 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y+4)+"' ></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+(x-1)+","+(y+5)+"' data-dir='S' ></li>");
 	
@@ -141,7 +141,7 @@ $(document).ready(function() {
 							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y+4)+"' data-dir='W' ></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
 										+serverResult[key].scode+"&sname="+serverResult[key].sname
-									 +"&page=1'>"+serverResult[key].sname+"</a></li>");
+									 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y-4)+"'></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y-5)+"' data-dir='N' ></li>");
 								
@@ -152,7 +152,7 @@ $(document).ready(function() {
 			    	    
 			    	   $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
 								+serverResult[key].scode+"&sname="+serverResult[key].sname
-							 +"&page=1'>"+serverResult[key].sname+"</a></li>");
+							 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
 			    	   
 			    	    if(key==(serverResult.length-1)){
 							break;
@@ -171,7 +171,7 @@ $(document).ready(function() {
 					   
 					       $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
 								+serverResult[key].scode+"&sname="+serverResult[key].sname
-							 +"&page=1'>"+serverResult[key].sname+"</a></li>");
+							 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
 			    	   
 					    count++;
 					   
