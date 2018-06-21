@@ -1,10 +1,12 @@
 package com.intern.board;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.intern.globalexceptionhandler.NoAuthException;
 import com.intern.station.StationVO;
 
 public interface Board {
@@ -38,7 +40,7 @@ public interface Board {
 	 * @param file 첨부파일(사진)
 	 * @return 1(성공),0(오류)
 	 */
-	int boardRegister(BoardVO requestBoard, MultipartFile file);
+	int boardRegister(BoardVO requestBoard, MultipartFile file) throws IllegalStateException, IOException;
 
 	/**
 	 * 게시물 삭제
@@ -46,7 +48,7 @@ public interface Board {
 	 * @param id 로그인 된 아이디
 	 * @return 1(성공),0(오류),-1(작성자아님)
 	 */
-	int romoveBoard(BoardVO requestBoard, String id);
+	int romoveBoard(BoardVO requestBoard, String id) throws NoAuthException;
 
 	/**
 	 * 게시물 수정
@@ -56,15 +58,16 @@ public interface Board {
 	 * @return 1(성공),0(오류),-1(작성자아님)
 	 */
 
-	int modifyBoard(BoardVO requestBoard, MultipartFile file);
+	int modifyBoard(BoardVO requestBoard, MultipartFile file) throws IllegalStateException, IOException;
 
 	/**
 	 * 해당 게시물 정보 불러오기 
 	 * @param requestBoard 요청 board
 	 * @param 로그인 된 아이디
 	 * @return 요청 게시물 정보
+	 * @throws Exception 
 	 */
-	BoardVO getBoardOne(BoardVO requestBoard, String id);
+	BoardVO getBoardOne(BoardVO requestBoard, String id) throws NoAuthException, Exception;
 
 	/**
 	 * Html 제거
@@ -73,6 +76,6 @@ public interface Board {
 	 */
 	List<BoardVO> removeHtml(List<BoardVO> boardList);
 
-	Map<String, Object> getSearchBoard(StationVO requestStation,String search, int page);
+	Map<String, Object> getSearchBoard(StationVO requestStation, String search, int page) throws Exception;
 
 }

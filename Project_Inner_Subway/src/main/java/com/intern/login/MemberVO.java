@@ -7,8 +7,6 @@ public class MemberVO{
 	String name;
 	String gender;
 	String address;
-	
-	
 
 	public MemberVO() {
 		super();

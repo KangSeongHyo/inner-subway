@@ -13,8 +13,7 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/jquery.subwayMap-0.5.0.js" type="text/javascript"></script>
-<link rel="stylesheet" href="resources/css/mainstyle.css"
-	type="text/css">
+<link rel="stylesheet" href="resources/css/mainstyle.css" type="text/css">
 <style type="text/css">
 @font-face {
 	font-family: 'BU';
@@ -45,7 +44,7 @@ $(document).ready(function() {
 				$(".subway-map").subwayMap({ debug: false });
 				
 				var str="";
-				var count=0;
+				var stationCount=0;
 				var color="";
 				
 			   localStorage.setItem("line", data.line);
@@ -88,9 +87,9 @@ $(document).ready(function() {
 						    break;
 					      } 
 					
-					    count++;
+					      stationCount++;
 					
-				       if(count==6){
+				       if(stationCount==6){
 					       
 				    	   var x=serverResult[key].x;
 					       var y=serverResult[key].y;
@@ -99,7 +98,7 @@ $(document).ready(function() {
 					       $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y+5)+"'></li>");
 					       $(".subway-map > ul").append("<li data-coords='"+x+","+(y+5+1)+"' data-dir='S' ></li>");
 					   												
-					    }else if(count==12){
+					    }else if(stationCount==12){
 						 
 					    	var x=serverResult[key].x;
 						    var y=serverResult[key].y;
@@ -108,7 +107,7 @@ $(document).ready(function() {
 					        $(".subway-map > ul").append("<li data-coords='"+(x-1)+","+(y+5)+"'></li>");
 					        $(".subway-map > ul").append("<li data-coords='"+(x)+","+(y+5+1)+"' data-dir='S' ></li>");
 						
-					        count=0;
+					        stationCount=0;
 					     }
 					   }
 				 
@@ -118,7 +117,7 @@ $(document).ready(function() {
 			    	   
 			    	  for(var key in serverResult){
 			    	   
-			    	    if(count==6){
+			    	    if(stationCount==6){
 							   var x=serverResult[key].x;
 							   var y=serverResult[key].y;
 								
@@ -129,12 +128,12 @@ $(document).ready(function() {
 							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y+4)+"' ></li>");
 							    $(".subway-map > ul").append("<li data-coords='"+(x-1)+","+(y+5)+"' data-dir='S' ></li>");
 	
-							    count++;
+							    stationCount++;
 							continue;
 							
 							
 								
-						}else if(count==13){
+						}else if(stationCount==13){
 								var x=serverResult[key].x;
 								var y=serverResult[key].y;
 								
@@ -146,7 +145,7 @@ $(document).ready(function() {
 							    $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y-5)+"' data-dir='N' ></li>");
 								
 								
-							     count=0;
+							     stationCount=0;
 							     continue; 
 					     }
 			    	    
@@ -158,7 +157,7 @@ $(document).ready(function() {
 							break;
 						}
 			    	    
-			    	    count++;
+			    	    stationCount++;
 			    	        	   
 			          }
 			    	  
@@ -173,9 +172,9 @@ $(document).ready(function() {
 								+serverResult[key].scode+"&sname="+serverResult[key].sname
 							 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
 			    	   
-					    count++;
+					    stationCount++;
 					   
-					   if(count==2){
+					   if(stationCount==2){
 						   $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y+1)+"' data-dir='S' ></li>");
 					   }
 					   
@@ -185,23 +184,23 @@ $(document).ready(function() {
     	          $(".subway-map").show(1000);
 				  $(".subway-map").subwayMap({ debug: true });
 			  },
-			error: function(xhr,status){
-				 if(xhr.status==0){
-				      alert('네트워크를 체크해주세요.');
-				 }else if(xhr.status==401){
-				      alert('권한이 없습니다.');
-				 }else if(xhr.status==404){
-				      alert('페이지를 찾을수없습니다.');
-				 }else if(xhr.status==500){
-				      alert('서버에러 발생하였습니다.');
-				 }else if(xhr.status==503){
-				      alert('데이터를 찾을 수 없습니다.');
-				 }else if(status=='timeout'){
-				      alert('시간을 초과하였습니다.');
-				 }else {
-				      alert('에러가 발생하였습니다');
+			  error: function(xhr,status){
+					 if(xhr.status==0){
+					      alert('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+					      alert('요청에 오류가 있습니다.');
+					 }else if(xhr.status==401){
+					      alert('권한이 없습니다.');
+					 }else if(xhr.status==404){
+					      alert('페이지를 찾을 수 없습니다.');
+					 }else if(xhr.status==500){
+					      alert('서버에 오류가 발생하였습니다.');
+					 }else if(status=='timeout'){
+					      alert('시간을 초과하였습니다.');
+					 }else {
+					      alert('오류가 발생하였습니다.');
+					 }
 				 }
-			 }
 			
 		 }); 
    });

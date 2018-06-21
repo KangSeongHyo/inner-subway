@@ -16,20 +16,22 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- 스타일 -->
 <style type="text/css">
-.container {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 300px;
-	height: 200px;
-	margin-top: -150px;
-	margin-left: -150px;
+
+.container{
+  position: absolute;
+	top: 30%;
+	left: 40%;
+	background-color:#F5F5F5;
+	width: 25%;
+	height: 30%;
+	margin-top: 7%;
+	margin-left: 35%;
+
 }
 
 body{
-  width: 100%;
-  height: 100%;
-   background: url("img/background.jpg");
+   width: 100%;
+   height: 100%;
    background-size: cover;
 }
 
@@ -39,10 +41,13 @@ $(document).ready(function(){
 	/* $("body").css("background","url(img/background.jpg)"); */
 	
 	var contextPath='<%=request.getContextPath()%>';
+	var FAIL = 0;
+	var DISCORDANCE = -2;
+	
 	$("#btn").on("click",function(){
 		
 		  $.ajax({
-  			type:'post',
+  			type:'POST',
   			url:'<%=request.getContextPath()%>/member/login',
   			contentType : "application/json; charset=UTF-8",
   		    data:JSON.stringify({ 
@@ -52,14 +57,14 @@ $(document).ready(function(){
   		    
   	  	    dataType : 'JSON',
   			success:function(serverResult){
+  				
   				var result=JSON.parse(serverResult);
   				
-  				if(result==-1){
+  				if(result==FAIL){
 	                alert("아이디가 없습니다.")
-  				}else if(result==0){
+  				}else if(result==DISCORDANCE){
   					alert("비밀번호가 일치하지 않습니다.")
-  				}else{
-  					
+  				}else{		
   					location.assign(contextPath+"/main");
   				}
 	         },
@@ -89,8 +94,7 @@ $(document).ready(function(){
 
 </head>
 <body>
-
-	<div class="container">
+	<div id="container">
 		<h1>로그인</h1>
 		<form class="form-signin">
 			<input class="form-control" type="text" id="id" placeholder="아이디"><br>
@@ -99,6 +103,5 @@ $(document).ready(function(){
 			혹시 회원이 아니신가요? <a href="login/join">회원가입</a>
 		</form>
 	</div>
-
 </body>
 </html>

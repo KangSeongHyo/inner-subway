@@ -16,7 +16,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 		throws Exception {
 		if (log.isDebugEnabled()) {
 			log.debug(" ==================================START======================================");
-			log.debug(" Request URI \t:  " + request.getRequestURI());
+			log.debug(" Request URI : " + request.getRequestURI()
+				+ " ( RequestAddress : " + request.getRemoteAddr() + " )");
 		}
 		return super.preHandle(request, response, handler);
 	}

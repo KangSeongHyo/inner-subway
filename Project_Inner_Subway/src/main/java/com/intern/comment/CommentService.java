@@ -1,13 +1,12 @@
 package com.intern.comment;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.intern.check.Check;
 import com.intern.dao.CommentDAO;
+import com.intern.globalexceptionhandler.NoAuthException;
 
 @Service
 public class CommentService implements Comment {
@@ -28,28 +27,32 @@ public class CommentService implements Comment {
 	}
 
 	@Override
-	public int removeComment(CommentVO requestComment, String id) {
+	public int removeComment(CommentVO requestComment, String id) throws NoAuthException {
 
-		int check;
+		int resultValue;
 
 		if (requestComment.getWriter().equals(id)) {
-			check = dao.removeComment(requestComment);
+			resultValue = dao.removeComment(requestComment);
 		} else {
-			check = Check.NOAUTH;
+			throw new NoAuthException("Error occurred : Discordance writer");
 		}
 
-		return check;
+		return resultValue;
 	}
 
 	@Override
-	public CommentVO getCommentOne(CommentVO requestComment, String id) {
+	public CommentVO getCommentOne(CommentVO requestComment, String id) throws NoAuthException {
 
 		CommentVO cvo = new CommentVO();
 
 		if (requestComment.getWriter().equals(id)) {
+
 			cvo = dao.getCommentOne(requestComment);
+
 		} else {
-			cvo.setWriter("NOAUTH");
+
+			throw new NoAuthException("Error occurred : Discordance writer");
+
 		}
 
 		return cvo;

@@ -1,12 +1,10 @@
 package com.intern.isubway;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.intern.login.MemberService;
 
 @Controller
 public class LoginViewController {
@@ -17,6 +15,7 @@ public class LoginViewController {
 	public ModelAndView loginform() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login/form");
+		log.info("Result : request Ok, Return loginForm view page ");
 		return mv;
 	}
 
@@ -24,6 +23,7 @@ public class LoginViewController {
 	public ModelAndView join() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login/join");
+		log.info("Result : request Ok, Return join view page ");
 		return mv;
 	}
 
@@ -31,6 +31,7 @@ public class LoginViewController {
 	public ModelAndView addrpopup() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login/addrpopup");
+		log.info("Result : request Ok, Return addrpopup view page ");
 		return mv;
 
 	}

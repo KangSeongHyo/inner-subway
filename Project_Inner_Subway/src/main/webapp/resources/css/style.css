@@ -30,8 +30,8 @@
 
 #boardDel {
 	position: relative;
-	top: 10px;
-	left: 110px;
+    margin-top: 3%;
+    left: 45%;
 }
 
 #external_content {
@@ -117,14 +117,17 @@
 
 #innerImg {
 	width: auto;
-	height: 200px;
+    max-height: 450px;
 }
 
 #outImg {
-	height: 225px;
-	width: 253px;
+	/* height: 225px;
+	width: 253px; */
+	height: 195px;
 }
-
+#innerImgdiv{
+	text-align: center;
+}
 dt {
 	display: inline;
 }
@@ -149,4 +152,6 @@ font-family: 'BU';
 #fileCheck{
   color: 'green';
 }
-
+#externalContent{
+font-family: '고딕';
+}

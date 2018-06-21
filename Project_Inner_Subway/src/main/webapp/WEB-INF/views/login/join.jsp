@@ -12,25 +12,8 @@
 	integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
 	crossorigin="anonymous">
 <title>Insert title here</title>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-
-<style type="text/css">
-.container {
-	position: absolute;
-	width: 500px;
-	height: 200px;
-	margin-top: 7%;
-	margin-left: 35%;
-}
-body{
-  width: 100%;
-  height: 100%;
-   background: url("../img/background.jpg");
-   background-size: cover;
-}
-</style>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/joinstyle.css" type="text/css">
 <script>
 function goPopup() {
 	var pop = window.open("addrpopup", "pop",
@@ -41,14 +24,16 @@ function addressCallBack(roadFullAddr) {
 }
 
 $(document).ready(function(){
+	var FAIL=0;
+	var pwCheck=false;
+	var idPtn=false;
+	var pwPtn=false;
+	var namePtn=false;
 	
-	$('[data-toggle="tooltip"]').tooltip(); 
-	
-	var pwCheck;
 	var contextPath="<%=request.getContextPath()%>";
 
 	//비밀번호 일치확인
-	$("#pwCheck").keyup(function() {
+	$("#pw").on("keyup",function() {
 		if($("#pwCheck").val()==$("#pw").val()){
 			$("#pwEqualView").css("color","green");
 			$("#pwEqualView").text("비밀번호가 일치합니다");
@@ -59,16 +44,63 @@ $(document).ready(function(){
 			pwCheck=false;
 		}		
 	});
-	$('#form').on('change',function(){
-		var idReg = /^[a-z]+[0-9]+[a-z]*$/;
+	$("#pwCheck").on("keyup",function() {
+		
+		if($("#pwCheck").val()==$("#pw").val()){
+			$("#pwEqualView").css("color","green");
+			$("#pwEqualView").text("비밀번호가 일치합니다");
+			pwCheck=true;
+		}else{
+			$("#pwEqualView").css("color","red");
+			$("#pwEqualView").text("비밀번호가 일치하지 않습니다.");
+			pwCheck=false;
+		}		
+	});
+	
+	//이름 패턴
+	$('#name').on('change',function(){
+		var nameReg = /^[|가-힣|a-z|A-Z|\*]+$/;
+		
+		if(!nameReg.test($("#name").val())){
+			$("#name").addClass("is-invalid");
+			$("#namePatternCheckView").text("내용을 확인해 주세요.");
+			namePtn=false;
+		}else{
+			$("#name").removeClass("is-invalid");
+			$("#namePatternCheckView").empty();
+			namePtn=true;
+		}
+	});
+	
+	//아이디 패턴
+	$('#id').on('change',function(){
+		var idReg = /^[a-z]{3,}[0-9]+[a-z]*$/;
+		
 		if(!idReg.test($("#id").val())){
 			$("#id").addClass("is-invalid");
-			$("#id").append("<a href='#' data-toggle='tooltip' title='Hooray!'>Hover over me</a>");
-			
+			$("#idPatternCheckView").text("영문소문자(3자리 이상)와 숫자로 구성해주세요");
+			idPtn=false;
 		}else{
 			$("#id").removeClass("is-invalid");
+			$("#idPatternCheckView").empty();
+			idPtn=true;
 		}
+	});
+	
+	$('#pw').on('change',function(){
+		var pwReg = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+
 		
+		if(!pwReg.test($("#pw").val())){
+			$("#pw").addClass("is-invalid");
+			$("#pwPatternCheckView").text("영문과 숫자로 구성해주세요(6자리 이상 20자리 이내)");
+			pwPtn=false;
+		}else{
+			
+			$("#pw").removeClass("is-invalid");
+			$("#pwPatternCheckView").empty();
+			pwPtn=true;
+		}
 	});
 	
 	
@@ -76,13 +108,26 @@ $(document).ready(function(){
 	$("#btn").on("click",function(){
 		var arr=new Array();
 		
-		
-		
-		
 	    arr[0]=$("#id").val();
 	    arr[1]=$("#pw").val();
 	    arr[2]=$("#pwCheck").val();
 	    arr[3]=$("#address").val();
+	    
+	    //공백체크
+	    for(var i=0;i<arr.length;i++){
+	    	   if(arr[i]==""){
+	    		 alert("입력을 확인해주세요");
+	    		 return; 
+	    	     }
+	         }
+	    
+	    
+	     //패턴&비밀번호 확인체크
+	     if(pwPtn==false||idPtn==false||pwCheck==false||namePtn==false){
+	    	 alert("양식을 확인해주세요.");
+	    	 return;
+	     }
+	    
 	    
 	 $.ajax({
 		type:'GET',
@@ -93,26 +138,8 @@ $(document).ready(function(){
 			var str="";
 			var idCheck=true;
 			
-			
-			if(result!=0){
-				idCheck=false;
-			}
-			
-			
-	         for(var i=0;i<arr.length;i++){
-	    	   if(arr[i]==""){
-	    		 alert("양식을 확인해주세요");
-	    		 return; 
-	    	     }
-	          }
-	       
-	    	
-	         if(idCheck==false){
+	         if(result==FAIL){
 		        alert("이미 사용하고 있는 아이디 입니다.");
-	         
-	         }else if(pwCheck==false){
-		      alert("비밀번호가 일치하지 않습니다")
-	         
 	         }else{
 	        	 
 	    	  $.ajax({
@@ -167,33 +194,37 @@ $(document).ready(function(){
 <body>
 
 	<div class="container">
+	 <h1>회원가입</h1>
 
-		<form class="form-signin" id="form" name='form' method="POST">
+		<form class="form-signin" id="form" name="form" method="POST">
 
-			<h1>회원가입</h1>
-			<input class="form-control" type="text" id="name"  placeholder="이름" required><br>
-
+			<input class="form-control" type="text" id="name"  placeholder="이름">
+			<span id="namePatternCheckView"></span><br>
+			
 			<div class="btn-group radio-group">
 				<label class="btn btn-outline-secondary not-active">남자
 				<input type="radio" value="M" name="gender"></label> 
 				<label class="btn btn-outline-secondary not-active">여자
 				<input type="radio" value="F" name="gender"></label>
-			</div><br><br> 
+			</div><br><br>
+			   
+			   <input class="form-control" data-toggle='tooltip' type="text" id="id" placeholder="아이디">
+			   <span id="idPatternCheckView"></span><br>	
 			
-			<input class="form-control" type="text" id="id" name='id'  placeholder="아이디" required><br>
+			<input class="form-control" type="password" id="pw"  placeholder="비밀번호" >
+			 <span id="pwPatternCheckView"></span><br>
+			 
+			<input class="form-control" type="password" id="pwCheck" placeholder="비밀번호 확인">
+			<span id="pwEqualView"></span><br>
 			
-			<input class="form-control" type="password" id="pw"  placeholder="비밀번호">
-			<br> <input class="form-control" type="password" id="pwCheck" placeholder="비밀번호 확인">
-			<div id="pwEqualView"></div>
-			
-			<br> <input class="form-control" type="text" disabled="disabled" id="address" placeholder="도로명 주소"> <input type="button"
+			<input class="form-control" type="text" disabled="disabled" id="address" placeholder="도로명 주소"> <input type="button"
 				class="btn btn-lg btn-default btn-block" value="주소검색"
 				onclick="goPopup()"><br> <input
 				class="btn btn-lg btn-success btn-block" id="btn" type="button"
 				value="회원가입">
 		</form>
 		<br>
-		<h7>가입 시 이용약관 및 쿠키 사용을 포함한 개인정보 처리방침에 동의하게 됩니다.</h7>
+		<h6>가입 시 이용약관 및 쿠키 사용을 포함한 개인정보 처리방침에 동의하게 됩니다.</h6>
 	</div>
 
 </body>

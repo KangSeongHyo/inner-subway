@@ -1,10 +1,8 @@
 package com.intern.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.intern.board.BoardVO;
 import com.intern.station.StationVO;
-import com.mysql.cj.api.result.Row;
 
 @Component
 public class BoardDAO {
