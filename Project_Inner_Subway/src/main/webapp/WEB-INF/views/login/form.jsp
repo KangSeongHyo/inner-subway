@@ -30,6 +30,12 @@
 	font-family: 'BM';
 	src: url('font/BMJUA_ttf.ttf');
 }
+label{
+    font-family: 'NS';
+
+}
+
+
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -104,12 +110,12 @@ $(document).ready(function(){
                             <form class="form" id="formLogin"  method="POST">
                                 <div class="form-group">
                                     <label style="font-family: 'BM'">아이디</label>
-                                    <input type="text" class="form-control form-control-lg rounded-0" id="id">
+                                    <input type="text" class="form-control form-control-lg rounded-1" id="id">
                                 </div>
 
                                 <div class="form-group">
                                     <label style="font-family: 'BM'">비밀번호</label>
-                                    <input type="password" class="form-control form-control-lg rounded-0" id="pw">
+                                    <input type="password" class="form-control form-control-lg rounded-1" id="pw">
                                 </div>
                                                                      혹시 회원이 아니신가요? <a href="login/join">회원가입</a>
                                 <button type="button" class="btn btn-success btn-lg float-right" id="btn" style="font-family:'BM'">로그인</button>

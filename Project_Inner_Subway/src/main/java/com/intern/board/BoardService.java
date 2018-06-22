@@ -22,7 +22,7 @@ import com.intern.board.BoardVO;
 import com.intern.check.CheckValue;
 import com.intern.board.BoardService;
 
-/*@RunWith(SpringJUnit4ClassRunner.class) //d요거로 테스트하겠다
+/*@RunWith(SpringJUnit4ClassRunner.class) // 테스트하겠다
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/**.xml")// xml 위치설정 스프링로드*/
 @Component
 public class BoardService implements Board {
@@ -142,8 +142,8 @@ public class BoardService implements Board {
 
 		String uniqueName = uuid + ext;
 
-		//String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-		String uploadPath = "C:/new/" + uniqueName;
+	    String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
+		//String uploadPath = "C:/new/" + uniqueName;
 
 		String imgPath = "/storage/" + uniqueName;
 

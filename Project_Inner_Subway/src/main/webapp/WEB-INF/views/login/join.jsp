@@ -74,7 +74,7 @@ $(document).ready(function(){
 	
 	//아이디 패턴
 	$('#id').on('change',function(){
-		var idReg = /^[a-z]{3,}[0-9]+[a-z]*$/;
+		var idReg = /^[a-z]{3,}[0-9|a-z]+$/;
 		
 		if(!idReg.test($("#id").val())){
 			$("#id").addClass("is-invalid");
@@ -187,13 +187,101 @@ $(document).ready(function(){
    });
 
 });
-
-	
 </script>
+<style type="text/css">
+
+@font-face {
+	font-family: '28D';
+	src: url('../font/28DaysLater.ttf');
+}
+
+@font-face {
+	font-family: 'BM';
+	src: url('../font/BMJUA_ttf.ttf');
+}
+@font-face {
+	font-family: 'NS';
+	src: url('../font/NanumSquareRoundR.ttf');
+}
+label{
+  font-family: 'BM';
+}
+span{
+  display : block;
+  font-family: 'NS';
+  color: red;
+}
+</style>
 </head>
 <body class="bg-dark">
 
-	<div class="container">
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+           <h1 class="text-center text-white mb-4" style="font-size: 100px;font-family: '28D'">Inner Subway</h1>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card rounded-1">
+                        <div class="card-header">
+                            <h3 class="mb-0" style="font-family: 'NS'">회원가입</h3>
+                        </div>
+                        <div class="card-body">
+                            <form class="form" id="join"  method="POST">
+                                <div class="form-group">
+                                    <label>이름</label>
+                                    <input type="text" class="form-control form-control-lg rounded-1" id="name">
+                                </div>
+                                <span id="namePatternCheckView"></span>
+
+
+                               <label>성별</label><br>
+                               <div class="btn-group radio-group">
+				                <label class="btn btn-outline-secondary not-active">남자
+				                <input type="radio" value="M" name="gender"></label> 
+				                <label class="btn btn-outline-secondary not-active">여자
+				                <input type="radio" value="F" name="gender"></label>
+			                   </div><br>
+
+			                   <div class="form-group">
+                                    <label>아이디</label>
+                                    <input type="text" class="form-control form-control-lg rounded-1" id="id">
+                                </div>
+                                <span id="idPatternCheckView"></span>
+
+                                <div class="form-group">
+                                    <label>비밀번호</label>
+                                    <input type="password" class="form-control form-control-lg rounded-1" id="pw">
+                                </div>
+                                <span id="pwPatternCheckView"></span>
+
+                                <div class="form-group">
+                                    <label>비밀번호 확인</label>
+                                    <input type="password" class="form-control form-control-lg rounded-1" id="pwCheck">
+                                </div>
+                                <span id="pwEqualView"></span>
+
+                                <input class="form-control" type="text" disabled="disabled" id="address" placeholder="도로명 주소"> 
+                                <input type="button" class="btn btn-lg btn-default btn-block" value="주소검색" onclick="goPopup()"><br> 
+			                    <input class="btn btn-lg btn-success btn-block" id="btn" type="button" value="회원가입">
+                            </form>
+                        </div>
+                        <!--/card-block-->
+                    </div>
+                    <!-- /form card login -->
+
+                </div>
+
+
+            </div>
+            <!--/row-->
+
+        </div>
+        <!--/col-->
+    </div>
+    <!--/row-->
+</div>
+
+	<!-- <div class="container">
 	
 	 <h1>회원가입</h1>
 
@@ -209,7 +297,7 @@ $(document).ready(function(){
 				<input type="radio" value="F" name="gender"></label>
 			</div><br><br>
 			   
-			   <input class="form-control" data-toggle='tooltip' type="text" id="id" placeholder="아이디">
+			   <input class="form-control"  type="text" id="id" placeholder="아이디">
 			   <span id="idPatternCheckView"></span><br>	
 			
 			<input class="form-control" type="password" id="pw"  placeholder="비밀번호" >
@@ -220,13 +308,12 @@ $(document).ready(function(){
 			
 			<input class="form-control" type="text" disabled="disabled" id="address" placeholder="도로명 주소"> <input type="button"
 				class="btn btn-lg btn-default btn-block" value="주소검색"
-				onclick="goPopup()"><br> <input
-				class="btn btn-lg btn-success btn-block" id="btn" type="button"
-				value="회원가입">
+				onclick="goPopup()"><br> 
+			<input class="btn btn-lg btn-success btn-block" id="btn" type="button" value="회원가입">
 		</form>
 		<br>
 		<h6>가입 시 이용약관 및 쿠키 사용을 포함한 개인정보 처리방침에 동의하게 됩니다.</h6>
 	</div>
-
+ -->
 </body>
 </html>

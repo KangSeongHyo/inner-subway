@@ -535,7 +535,7 @@ $(document).ready(function(){
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
 				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label>"
 				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
-				+"<small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 12글자이내)</small>"
+				+"<small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 10글자이내)</small>"
 				+"</div><div class='form-group'><textarea name='content' id='summernote'></textarea><br>"
 				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg,.jpeg,.png' type='file' name='file' id='file'></label>"
 				+"<small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
@@ -562,11 +562,17 @@ $(document).ready(function(){
 
 //file 첨부 확인
 $(document).on("change","#file",function(){
-  		var filePath=$(this).val();
-  		if(filePath!=null||filePath!=""){
+	
+  		if( $("#file").val() != "" ){
+  			var ext = $('#file').val().split('.').pop().toLowerCase();
+  			if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+  				 alert('png,jpg,jpeg 파일만 업로드 할수 있습니다.');
+  				 return;
+  			}
   	     $("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
-  		} else{
-  			alert("오류가 발생하였습니다. 다시 첨부해주세요");
+  		
+  		}else{
+  			alert("파일에 오류가 있습니다. 다시 검색해주세요");
   		}
 }); 
 
@@ -681,7 +687,7 @@ $(document).on("change","#file",function(){
 	  });
 	///////제목 유효성 검사  
 		$(document).on("keyup","#titleInput",function(){
-			var titleReg = /^[|가-힣|a-z|A-Z|0-9|\*]{1,10}$/;
+			var titleReg = /^[|가-힣|a-z|A-Z|0-9|\s|\*]{1,10}$/;
 			
 			
 			if(!titleReg.test($("#titleInput").val())){
