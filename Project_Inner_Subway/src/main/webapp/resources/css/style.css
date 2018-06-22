@@ -34,14 +34,6 @@
     left: 45%;
 }
 
-#externalContent {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	width: 150px;
-	display: inline-block;
-}
-
 .btn-file {
 	position: relative;
 	overflow: hidden;

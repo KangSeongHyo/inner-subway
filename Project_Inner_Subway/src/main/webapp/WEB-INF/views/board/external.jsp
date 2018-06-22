@@ -815,6 +815,13 @@ $(document).on("click","#modifyBtn",function(){
 	font-family: '28D';
 	src: url('../font/28DaysLater.ttf');
 }
+#externalContent {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 150px;
+	display: inline-block;
+}
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css">
 </head>
@@ -883,7 +890,7 @@ $(document).on("click","#modifyBtn",function(){
 							<img id="outImg" class="card-img-top"
 								src='${board.imgPath}' ><span><i id="boardDel"
 								data-scode='${board.scode}' data-entry='${board.entryNum}'
-								data-writer='${board.writer}' class="far fa-times-circle"></i><i class="far fa-thumbs-up"></i></span> 
+								data-writer='${board.writer}' class="far fa-times-circle"></i></span> 
 
 							<div class="card-body" id="externalBox">
 								<h4 class="card-title">${board.title}</h4>
