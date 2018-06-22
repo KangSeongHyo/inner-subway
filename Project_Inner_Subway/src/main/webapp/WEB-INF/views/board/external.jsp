@@ -875,7 +875,7 @@ $(document).on("click","#modifyBtn",function(){
 					<div class="col-lg-3 col-md-6 mb-4">
 						<div id="externalCard" class="card border-info">
 							<img id="outImg" class="card-img-top"
-								src='http://placehold.it/500x325' ><span><i id="boardDel"
+								src='${board.imgPath}' ><span><i id="boardDel"
 								data-scode='${board.scode}' data-entry='${board.entryNum}'
 								data-writer='${board.writer}' class="far fa-times-circle"></i><i class="far fa-thumbs-up"></i></span> 
 
