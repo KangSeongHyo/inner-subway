@@ -6,22 +6,22 @@
 
 	 <select id="getStationInfo" parameterType="int" resultType="com.intern.station.StationVO">
 		SELECT 
-		SCODE,SNAME,LINE,X,Y
+				scode,sname,line,x,y
 		FROM 
-		STATION_MAIN
+				station_main
 		WHERE
-		LINE=#{line}
+				line=#{line}
 		ORDER BY 
-		SEQ
+				seq
 	</select>
 	
 	<select id="getStationName" parameterType="com.intern.station.StationVO" resultType="String">
 		SELECT 
-		SNAME 
+				sname 
 		FROM 
-		STATION_MAIN
+				station_main
 		WHERE 
-		SCODE=#{scode}
+				scode=#{scode}
 	</select>
 
 </mapper>

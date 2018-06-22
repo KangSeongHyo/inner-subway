@@ -7,107 +7,115 @@
 	<select id="getBoardOne" parameterType="com.intern.board.BoardVO"
 		resultType="com.intern.board.BoardVO">
 		SELECT
-		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
 		FROM 
-		STATION_BOARD
+				station_board
 		WHERE
-		SCODE=#{scode}
-		AND ENTRYNUM=#{entryNum}
+				scode=#{scode}
+		AND 
+				entryNum=#{entryNum}
 	</select>
 
 	<select id="getBoardList" parameterType="com.intern.station.StationVO"
 		resultType="com.intern.board.BoardVO">
 		SELECT 	
-				SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
 		FROM 
-		    	STATION_BOARD
+		    	station_board
 		WHERE 
-				SCODE=#{scode}
+				scode=#{scode}
 		ORDER BY 
-				ENTRYNUM DESC
+				entryNum DESC
 	</select>
 
 	<select id="getEntryCount" parameterType="com.intern.station.StationVO"
 		resultType="int">
 		SELECT 
-		COUNT(*)
+				COUNT(*)
 		FROM 
-		STATION_BOARD
+				station_board
 		WHERE 
-		SCODE=#{scode}
+				scode=#{scode}
 	</select>
 
 	<insert id="insertBoard" parameterType="com.intern.board.BoardVO">
 		INSERT INTO
-		STATION_BOARD
-		(SCODE,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH)
+				station_board
+				(scode,title,writer,registrationDate,viewCount,content,imgPath)
 		VALUES
-		(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
+				(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
 	</insert>
 
 	<delete id="deleteBoard" parameterType="com.intern.board.BoardVO">
 		DELETE FROM 
-		STATION_BOARD
+				station_board
 		WHERE
-		SCODE = #{scode} 
-		AND ENTRYNUM=#{entryNum}
+				scode = #{scode} 
+		AND 
+				entrynum=#{entryNum}
 	</delete>
 
 	<update id="updateBoard" parameterType="com.intern.board.BoardVO">
-		UPDATE STATION_BOARD
+		UPDATE 
+				station_board
 		SET
-		TITLE=#{title},CONTENT=#{content}
+				title=#{title},content=#{content}
 		<if test="imgPath!=null">
-		,IMGPATH=#{imgPath}
+				,imgPath=#{imgPath}
 		</if>
 		WHERE
-		SCODE = #{scode} 
-		AND ENTRYNUM = #{entryNum}
+				scode = #{scode} 
+		AND 
+				entryNum = #{entryNum}
 	</update>
 
 	<update id="updateViewcount" parameterType="com.intern.board.BoardVO">
-		UPDATE STATION_BOARD
+		UPDATE 
+				station_board
 		SET
-		VIEWCOUNT=VIEWCOUNT+1
+				viewCount=viewCount+1
 		WHERE
-		SCODE = #{scode} 
-		AND ENTRYNUM = #{entryNum}
+				scode = #{scode} 
+		AND 
+				entryNum = #{entryNum}
 	</update>
 	
 	<select id="getSearchBoard" parameterType="java.util.Map"
 		resultType="com.intern.board.BoardVO">
 		SELECT 
-		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
+				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
 		FROM 
-		(SELECT
-		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
-		FROM 
-		STATION_BOARD
-		WHERE
-		SCODE=#{scode}
-		ORDER BY 
-		ENTRYNUM DESC) BOARD
+			(SELECT
+					scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
+			 FROM 
+					station_board
+			 WHERE
+			 		scode=#{scode}
+			 ORDER BY 
+					entryNum DESC) BOARD
 		WHERE 
-		TITLE LIKE CONCAT('%',#{search},'%') 
-		OR WRITER LIKE CONCAT('%',#{search},'%')
+				title LIKE CONCAT('%',#{search},'%') 
+		OR 
+				writer LIKE CONCAT('%',#{search},'%')
 	</select>
 	
 	<select id="getSearchBoardCount" parameterType="java.util.Map"
 		resultType="Integer">
 		SELECT 
-		COUNT(*)
+				COUNT(*)
 		FROM 
-		(SELECT
-		SCODE,ENTRYNUM,TITLE,WRITER,REGISTRATIONDATE,VIEWCOUNT,CONTENT,IMGPATH
-		FROM 
-		STATION_BOARD
-		WHERE
-		SCODE=#{scode}
-		ORDER BY 
-		ENTRYNUM DESC) BOARD
-		WHERE
-		TITLE LIKE CONCAT('%',#{search},'%') 
-		OR WRITER LIKE CONCAT('%',#{search},'%')
+				(SELECT
+						scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
+				 FROM 
+						station_board
+				 WHERE
+						scode=#{scode}
+				 ORDER BY 
+						entryNum DESC) BOARD
+				 WHERE
+						title LIKE CONCAT('%',#{search},'%') 
+		         OR 
+		        		writer LIKE CONCAT('%',#{search},'%')
 	</select>
 	
 

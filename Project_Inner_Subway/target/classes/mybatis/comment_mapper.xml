@@ -6,59 +6,60 @@
 	<select id="getCommentList" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
 		SELECT
-		SCODE,ENTRYNUM,COMMENTSEQ,CONTENT,WRITER,REGISTRATIONDATE
+				scode,entryNum,commentSeq,content,writer,registrationDate
 		FROM
-		STATION_COMMENTS
-		WHERE SCODE = #{scode} 
-		AND ENTRYNUM=#{entryNum}
+				station_comments
+		WHERE 
+				scode = #{scode} 
+		AND 
+				entryNum=#{entryNum}
 	</select>
 
 	<insert id="insertComment" parameterType="com.intern.comment.CommentVO">
 		INSERT INTO
-		STATION_COMMENTS
-		(SCODE,ENTRYNUM,CONTENT,WRITER,REGISTRATIONDATE)
+				station_comments
+				(scode,entryNum,content,writer,registrationDate)
 		VALUES
-		(#{scode},#{entryNum},#{content},#{writer},sysdate())
+				(#{scode},#{entryNum},#{content},#{writer},sysdate())
 	</insert>
 
 	<delete id="deleteComment" parameterType="com.intern.comment.CommentVO">
-		DELETE
-		FROM
-		STATION_COMMENTS
-		WHERE scode = #{scode} 
-		AND ENTRYNUM=#{entryNum} 
-		AND COMMENTSEQ=#{commentSeq}
+		DELETE FROM
+				station_comments
+		WHERE 
+				scode = #{scode} 
+		AND 
+				entryNum = #{entryNum} 
+		AND 
+				commentSeq = #{commentSeq}
 	</delete>
 
 
 	<select id="getCommentOne" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
 		SELECT
-		SCODE,ENTRYNUM,COMMENTSEQ,CONTENT,WRITER,REGISTRATIONDATE
+				scode,entryNum,commentSeq,content,writer,registrationDate
 		FROM
-		STATION_COMMENTS
+				station_comments
 		WHERE 
-		SCODE = #{scode} 
-		AND ENTRYNUM=#{entryNum} 
-		AND COMMENTSEQ=#{commentSeq}
+				scode = #{scode} 
+		AND 
+				entryNum=#{entryNum} 
+		AND 
+				commentSeq=#{commentSeq}
 	</select>
 
 	<update id="updateComment" parameterType="com.intern.comment.CommentVO">
 		UPDATE 
-		STATION_COMMENTS
+				station_comments
 		SET 
-		CONTENT=#{content}
+				content=#{content}
 		WHERE
-		SCODE = #{scode} 
-		AND ENTRYNUM = #{entryNum} 
-		AND COMMENTSEQ = #{commentSeq}
+				scode = #{scode} 
+		AND 
+				entryNum = #{entryNum} 
+		AND 
+				commentSeq = #{commentSeq}
 	</update>
-
-	<!-- <resultMap type="#modelname" id="YourResultSet"> <id property="param1" 
-		column="columnname1" /> <result property="param2" column="columnname2" /> 
-		<result property="param3" column="columnname3" /> </resultMap> <select id="getAll" 
-		resultMap="YourResultSet"> SELECT * FROM tablename1 </select> <update id="updateSomething" 
-		parameterType="#modelname"> UPDATE tablename1 SET columnname1=#{param1} WHERE 
-		columnname2 = #{param2} </update> -->
 
 </mapper>
