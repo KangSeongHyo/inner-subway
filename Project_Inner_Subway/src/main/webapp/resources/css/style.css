@@ -34,7 +34,7 @@
     left: 45%;
 }
 
-#external_content {
+#externalContent {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
