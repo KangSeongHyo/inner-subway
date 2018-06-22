@@ -191,9 +191,10 @@ $(document).ready(function(){
 	
 </script>
 </head>
-<body>
+<body class="bg-dark">
 
 	<div class="container">
+	
 	 <h1>회원가입</h1>
 
 		<form class="form-signin" id="form" name="form" method="POST">

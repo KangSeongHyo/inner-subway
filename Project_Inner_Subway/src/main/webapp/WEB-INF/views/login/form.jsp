@@ -14,27 +14,22 @@
 	crossorigin="anonymous">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- 스타일 -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/loginstyle.css" type="text/css">
 <style type="text/css">
-
-.container{
-  position: absolute;
-	top: 30%;
-	left: 40%;
-	background-color:#F5F5F5;
-	width: 25%;
-	height: 30%;
-	margin-top: 7%;
-	margin-left: 35%;
-
+@font-face {
+	font-family: 'NS';
+	src: url('font/NanumSquareRoundR.ttf');
 }
 
-body{
-   width: 100%;
-   height: 100%;
-   background-size: cover;
+@font-face {
+	font-family: '28D';
+	src: url('font/28DaysLater.ttf');
 }
 
+@font-face {
+	font-family: 'BM';
+	src: url('font/BMJUA_ttf.ttf');
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -93,15 +88,44 @@ $(document).ready(function(){
 </script>
 
 </head>
-<body>
-	<div id="container">
-		<h1>로그인</h1>
-		<form class="form-signin">
-			<input class="form-control" type="text" id="id" placeholder="아이디"><br>
-			<input class="form-control" type="password" id="pw" placeholder="비밀번호"><br> 
-			<input id="btn" class="btn btn-lg btn-success btn-block" type="button" value="로그인"><br>
-			혹시 회원이 아니신가요? <a href="login/join">회원가입</a>
-		</form>
-	</div>
+<body class="bg-dark">
+	<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center text-white mb-4" style="font-size: 100px;margin-top: 10%;font-family: '28D'">Inner Subway</h1>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <!-- form card login -->
+                    <div class="card rounded-1">
+                        <div class="card-header">
+                            <h3 class="mb-0" style="font-family:'NS'">로그인</h3>
+                        </div>
+                        <div class="card-body">
+                            <form class="form" id="formLogin"  method="POST">
+                                <div class="form-group">
+                                    <label style="font-family: 'BM'">아이디</label>
+                                    <input type="text" class="form-control form-control-lg rounded-0" id="id">
+                                </div>
+
+                                <div class="form-group">
+                                    <label style="font-family: 'BM'">비밀번호</label>
+                                    <input type="password" class="form-control form-control-lg rounded-0" id="pw">
+                                </div>
+                                                                     혹시 회원이 아니신가요? <a href="login/join">회원가입</a>
+                                <button type="button" class="btn btn-success btn-lg float-right" id="btn" style="font-family:'BM'">로그인</button>
+                            </form>
+                        </div>
+                        <!--/card-block-->
+                    </div>
+                    <!-- /form card login -->
+
+                </div>
+
+            </div>
+        </div>
+        <!--/col-->
+    </div>
+    <!--/row-->
+</div>
 </body>
 </html>

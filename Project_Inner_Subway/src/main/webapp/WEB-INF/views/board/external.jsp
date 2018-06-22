@@ -537,7 +537,7 @@ $(document).ready(function(){
 				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
 				+"<small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 12글자이내)</small>"
 				+"</div><div class='form-group'><textarea name='content' id='summernote'></textarea><br>"
-				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg, .jpeg, .png' type='file' name='file' id='file'></label>"
+				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg,.jpeg,.png' type='file' name='file' id='file'></label>"
 				+"<small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
 				+"</div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button>"
 				+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
@@ -873,11 +873,11 @@ $(document).on("click","#modifyBtn",function(){
 			<div id="reflash" class="row text-center">
 				<c:forEach var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
-						<div id="externalCard" class="card">
+						<div id="externalCard" class="card border-info">
 							<img id="outImg" class="card-img-top"
-								src='http://placehold.it/500x325' > <i id="boardDel"
+								src='http://placehold.it/500x325' ><span><i id="boardDel"
 								data-scode='${board.scode}' data-entry='${board.entryNum}'
-								data-writer='${board.writer}' class="far fa-times-circle"></i>
+								data-writer='${board.writer}' class="far fa-times-circle"></i><i class="far fa-thumbs-up"></i></span> 
 
 							<div class="card-body" id="externalBox">
 								<h4 class="card-title">${board.title}</h4>

@@ -310,12 +310,13 @@ a:link { color: white; text-decoration: none;}
 a:visited { color: white; text-decoration: none;}
 
 h1{
+   
   color: white;
   font-size: 140px;
   text-align: center;
-   font-family: 'BU';
 }
 .contain{
+	font-family: '28D';
   width: 70%;
   height: 70%;
   margin-left:20%;

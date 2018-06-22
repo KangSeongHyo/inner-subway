@@ -13,6 +13,8 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/jquery.subwayMap-0.5.0.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="resources/css/mainstyle.css" type="text/css">
 <style type="text/css">
 @font-face {
@@ -21,14 +23,49 @@
 }
 
 @font-face {
-	font-family: 'Cactus';
-	src: url('font/Cactus Tequila.ttf');
+	font-family: '28D';
+	src: url('font/28DaysLater.ttf');
 }
+
+[data-tooltip-text]:hover {
+	position: relative;
+}
+
+[data-tooltip-text]:hover:after {
+	background-color: #ffffff;
+	background-color: rgba(0, 0, 0, 0.8);
+
+	-webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+	-moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+	box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+	color: #000000;
+	font-size: 12px;
+	content: attr(data-tooltip-text);
+
+  margin-bottom: 10px;
+	top: 130%;
+	left: 0;    
+	padding: 7px 12px;
+	position: absolute;
+	width: auto;
+	min-width: 50px;
+	max-width: 300px;
+	word-wrap: break-word;
+
+	z-index: 9999;
+}
+
 </style>
 <script type="text/javascript">
 
 $(document).ready(function() {
 	
+	  
 	
  $(document).on("click",".menuText",function(){
 	var data=$(this).data();
@@ -112,9 +149,6 @@ $(document).ready(function() {
 					   }
 				 
 			       }else if(data.line==2){
-			    	 
-			    	   
-			    	   
 			    	  for(var key in serverResult){
 			    	   
 			    	    if(stationCount==6){
@@ -130,8 +164,7 @@ $(document).ready(function() {
 	
 							    stationCount++;
 							continue;
-							
-							
+						
 								
 						}else if(stationCount==13){
 								var x=serverResult[key].x;
@@ -152,7 +185,6 @@ $(document).ready(function() {
 			    	   $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
 								+serverResult[key].scode+"&sname="+serverResult[key].sname
 							 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
-			    	   
 			    	    if(key==(serverResult.length-1)){
 							break;
 						}
@@ -160,6 +192,8 @@ $(document).ready(function() {
 			    	    stationCount++;
 			    	        	   
 			          }
+			    	  
+			    	   
 			    	  
 			       }else if(data.line==10){
 			    	   
@@ -246,10 +280,10 @@ $(document).ready(function() {
 
 	</div>
 
-
 	<div class="contain">
-		<h1>Inner Subway</h1>
+		<h1 style="font-family: '28D'">Inner Subway</h1>
 	</div>
+	
 	
 	            <!-- <li data-coords='8,3'><a href='#'>홍대입구</a></li>
 				<li data-coords='14,3'><a href='#'>신촌</a></li>
@@ -312,6 +346,5 @@ $(document).ready(function() {
 					    $(".subway-map > ul").append("<li data-coords='12,12' ><a href='#' >광교중앙</a></li>");
 					    $(".subway-map > ul").append("<li data-coords='6,12' ><a href='#' >광교</a></li>"); */
  -->
-
 </body>
 </html>
