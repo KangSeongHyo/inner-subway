@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.intern.globalexceptionhandler.NoAuthException;
@@ -76,6 +78,24 @@ public interface Board {
 	 */
 	List<BoardVO> removeHtml(List<BoardVO> boardList);
 
-	Map<String, Object> getSearchBoard(StationVO requestStation, String search, int page) throws Exception;
+	Map<String, Object> getSearchBoard(StationVO requestStation, String search, String id, int page)
+		throws Exception;
 
+	/**
+	 * 게시물 추천
+	 * @param requestBoard 추천된 게시물 정보
+	 * @return 
+	 * @throws Exception
+	 */
+	int recommendBoard(BoardVO requestBoard) throws Exception;
+
+	/**
+	 * 게시물 정렬
+	 * @param requestStation
+	 * @param target 정렬 
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String, Object> getSortBoardList(BoardVO requestStation, int page) throws Exception;
 }

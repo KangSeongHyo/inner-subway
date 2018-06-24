@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="recommend">
+  <update id="updateRecommend" parameterType="com.intern.board.BoardVO" >
+	    UPDATE 
+				station_recommend
+		SET
+		   <choose>
+				<when test="recommendCheck==false">
+					recommendCheck=false
+				</when>
+				
+				<when test="recommendCheck==true">
+					recommendCheck=true
+				</when>
+			</choose>
+		WHERE
+				scode = #{scode} 
+		AND 
+				entryNum = #{entryNum}
+		AND
+				id = #{id}
+  </update>
+ 
+   <insert id="insertRecommend" parameterType="com.intern.board.BoardVO" >
+	 INSERT INTO
+				station_recommend
+				(scode,entryNum,id,recommendCheck)
+		VALUES
+			    <if test="recommendCheck==true">
+				(#{scode},#{entryNum},#{id},true)
+				</if>
+				<if test="recommendCheck==false">
+				(#{scode},#{entryNum},#{id},false)
+				</if>
+   </insert>
+   
+   <select id="selectRecommend" parameterType="com.intern.board.BoardVO" resultType="Integer">
+		SELECT
+				COUNT(*)
+		FROM 
+				station_recommend
+		WHERE
+				scode=#{scode}
+		AND 
+				entryNum=#{entryNum}
+		AND
+		        id=#{id}
+   </select>
+  
+   <select id="selectRecommendCheck" parameterType="com.intern.board.BoardVO" resultType="boolean">
+        select
+               recommendCheck
+        From
+                station_recommend
+        Where
+        		scode=#{scode}
+		AND 
+				entryNum=#{entryNum}
+	    AND
+		        id=#{id}
+   </select>
+   
+   <update id="setRecommend" parameterType="com.intern.board.BoardVO" >
+		UPDATE 
+			    station_board
+		SET
+				recommend=
+				<if test="recommendCheck==true">
+				recommend+1
+				</if>
+				<if test="recommendCheck==false">
+				recommend-1
+				</if>
+		WHERE
+				scode = #{scode} 
+		AND 
+				entryNum = #{entryNum}
+	</update>
+   
+ 
+ 
+</mapper>

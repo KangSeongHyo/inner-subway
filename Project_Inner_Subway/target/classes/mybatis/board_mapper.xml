@@ -7,116 +7,154 @@
 	<select id="getBoardOne" parameterType="com.intern.board.BoardVO"
 		resultType="com.intern.board.BoardVO">
 		SELECT
-				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-		FROM 
+				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath,recommend
+		FROM
 				station_board
 		WHERE
 				scode=#{scode}
-		AND 
+		AND
 				entryNum=#{entryNum}
 	</select>
 
 	<select id="getBoardList" parameterType="com.intern.station.StationVO"
 		resultType="com.intern.board.BoardVO">
-		SELECT 	
-				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-		FROM 
-		    	station_board
-		WHERE 
-				scode=#{scode}
-		ORDER BY 
+
+		SELECT
+				b.scode,b.entryNum,b.title,b.writer,b.registrationDate,b.viewCount,b.content,b.imgPath,b.recommend,ifnull(r.recommendCheck,false)
+				as recommendCheck
+		FROM
+				station_board b
+		LEFT JOIN
+				(select scode,entryNum,recommendCheck from station_recommend where id=#{id}) r
+		ON
+				b.scode = r.scode and b.entryNum=r.entryNum
+		WHERE
+				b.scode=#{scode}
+		ORDER BY
 				entryNum DESC
 	</select>
 
+
 	<select id="getEntryCount" parameterType="com.intern.station.StationVO"
 		resultType="int">
-		SELECT 
+		SELECT
 				COUNT(*)
-		FROM 
+		FROM
 				station_board
-		WHERE 
+		WHERE
 				scode=#{scode}
 	</select>
 
 	<insert id="insertBoard" parameterType="com.intern.board.BoardVO">
 		INSERT INTO
 				station_board
-				(scode,title,writer,registrationDate,viewCount,content,imgPath)
+				(scode,title,writer,registrationDate,viewCount,content,imgPath,recommend)
 		VALUES
-				(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath})
+				(#{scode},#{title},#{writer},sysdate(),0,#{content},#{imgPath},0)
 	</insert>
 
 	<delete id="deleteBoard" parameterType="com.intern.board.BoardVO">
-		DELETE FROM 
+		DELETE FROM
 				station_board
 		WHERE
-				scode = #{scode} 
-		AND 
+				scode = #{scode}
+		AND
 				entrynum=#{entryNum}
 	</delete>
 
 	<update id="updateBoard" parameterType="com.intern.board.BoardVO">
-		UPDATE 
+		UPDATE
 				station_board
 		SET
 				title=#{title},content=#{content}
-		<if test="imgPath!=null">
-				,imgPath=#{imgPath}
-		</if>
+				<if test="imgPath!=null">
+					,imgPath=#{imgPath}
+				</if>
 		WHERE
-				scode = #{scode} 
-		AND 
+				scode = #{scode}
+		AND
 				entryNum = #{entryNum}
 	</update>
 
 	<update id="updateViewcount" parameterType="com.intern.board.BoardVO">
-		UPDATE 
+		UPDATE
 				station_board
 		SET
 				viewCount=viewCount+1
 		WHERE
-				scode = #{scode} 
-		AND 
+				scode = #{scode}
+		AND
 				entryNum = #{entryNum}
 	</update>
-	
+
 	<select id="getSearchBoard" parameterType="java.util.Map"
 		resultType="com.intern.board.BoardVO">
-		SELECT 
-				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-		FROM 
+		SELECT
+				scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath,recommend,recommendCheck
+		FROM
 			(SELECT
-					scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-			 FROM 
-					station_board
-			 WHERE
-			 		scode=#{scode}
-			 ORDER BY 
-					entryNum DESC) BOARD
-		WHERE 
-				title LIKE CONCAT('%',#{search},'%') 
-		OR 
+					b.scode,b.entryNum,b.title,b.writer,b.registrationDate,b.viewCount,b.content,b.imgPath,b.recommend,ifnull(r.recommendCheck,false)
+					as recommendCheck
+			FROM
+					station_board b
+			LEFT JOIN
+					(select scode,entryNum,recommendCheck from station_recommend where id=#{id}) r
+			ON
+					b.scode = r.scode and b.entryNum=r.entryNum
+			WHERE
+					b.scode=#{scode}
+		    ORDER BY
+				entryNum DESC) BOARD
+			WHERE
+				title LIKE CONCAT('%',#{search},'%')
+			OR
 				writer LIKE CONCAT('%',#{search},'%')
 	</select>
-	
+
 	<select id="getSearchBoardCount" parameterType="java.util.Map"
 		resultType="Integer">
-		SELECT 
-				COUNT(*)
-		FROM 
-				(SELECT
-						scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath
-				 FROM 
-						station_board
-				 WHERE
-						scode=#{scode}
-				 ORDER BY 
-						entryNum DESC) BOARD
-				 WHERE
-						title LIKE CONCAT('%',#{search},'%') 
-		         OR 
-		        		writer LIKE CONCAT('%',#{search},'%')
+		SELECT
+		COUNT(*)
+		FROM
+		(SELECT
+		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath,recommend
+		FROM
+		station_board
+		WHERE
+		scode=#{scode}
+		ORDER BY
+		entryNum DESC) BOARD
+		WHERE
+		title LIKE CONCAT('%',#{search},'%')
+		OR
+		writer LIKE CONCAT('%',#{search},'%')
 	</select>
-	
+
+	<select id="getSortBoardList" parameterType="com.intern.board.BoardVO"
+		resultType="com.intern.board.BoardVO">
+
+		SELECT
+				b.scode,b.entryNum,b.title,b.writer,b.registrationDate,b.viewCount,b.content,b.imgPath,b.recommend,ifnull(r.recommendCheck,false)
+				as recommendCheck
+		FROM
+				station_board b
+		LEFT JOIN
+				(select scode,entryNum,recommendCheck from station_recommend where id=#{id}) r
+		ON
+				b.scode = r.scode and b.entryNum=r.entryNum
+		WHERE
+				b.scode=#{scode}
+		<if test="target != null and target !=''">
+				ORDER BY	
+					<choose>
+						<when test="target eq 'recommend'"> recommend </when>
+						<when test="target eq 'viewCount'"> viewCount </when>
+					</choose>
+					<choose>
+						<when test="target != null and target !=''">DESC</when>
+					</choose>
+		</if>
+	</select>
+
 
 </mapper>

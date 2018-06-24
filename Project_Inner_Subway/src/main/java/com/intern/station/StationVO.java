@@ -2,24 +2,40 @@ package com.intern.station;
 
 public class StationVO {
 
-	String scode;
-	String sname;
-	int line;
-	int x;
-	int y;
+	private String scode;
+	private String sname;
+	private int line;
+	private int x;
+	private int y;
+	private String id;
 
 	public StationVO() {
 		super();
 	}
 
-	public StationVO(String scode, String sname, int line, int x, int y) {
+	public StationVO(String scode, String sname, int line, int x, int y, String id) {
 		super();
 		this.scode = scode;
 		this.sname = sname;
 		this.line = line;
 		this.x = x;
 		this.y = y;
+		this.id = id;
 	}
+
+
+
+	public String getId() {
+		return id;
+	}
+
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
 
 	public String getScode() {
 		return scode;

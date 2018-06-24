@@ -58,4 +58,31 @@ public class BoardDAO {
 		return session.selectOne("board.getSearchBoardCount", map);
 	}
 
+	public int boardRecommend(BoardVO vo) {
+		return session.update("recommend.setRecommend", vo);
+	}
+
+	public int recommendModify(BoardVO vo) {
+		return session.update("recommend.updateRecommend", vo);
+	}
+
+	public int recommendRegister(BoardVO vo) {
+		return session.insert("recommend.insertRecommend", vo);
+	}
+
+	public int recommendComfirm(BoardVO vo) {
+		return session.selectOne("recommend.selectRecommend", vo);
+	}
+
+	public Boolean getRecommendOne(BoardVO vo) {
+		return session.selectOne("recommend.selectRecommendCheck", vo);
+	}
+
+	public List<BoardVO> getSortBoardList(BoardVO vo, int startBoard) {
+		int limit = 4;
+		RowBounds rowbound = new RowBounds(startBoard, limit);
+
+		return session.selectList("board.getSortBoardList", vo, rowbound);
+	}
+
 }

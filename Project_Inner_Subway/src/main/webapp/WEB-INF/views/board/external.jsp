@@ -21,14 +21,21 @@
 	href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
 	integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
 	crossorigin="anonymous">
+<script type='text/javascript' src='http://malsup.github.com/jquery.form.js'></script>
+	
 <!-- include summernote css/js-->
 <link
 	href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css"
 	rel="stylesheet">
 <script
 	src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
-<script type='text/javascript'
-	src='http://malsup.github.com/jquery.form.js'></script>
+	
+ <!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.core.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.default.min.css" rel="stylesheet">
+
 <script type="text/javascript">
 
 function formatDate(date) { 
@@ -41,13 +48,16 @@ function formatDate(date) {
 	return [year, month, day].join('-'); }
 	
 $(document).ready(function(){
-	/* $("body").css("background-color","#F5F5F5");  */
-	//$("body").css("background","url(../img/41.jpg)")
 
 	var contextPath='<%=request.getContextPath()%>';
 	var SUCCESS = 1;
 	var FAIL = 0;
- 
+	var CHECK=1;
+	var RELEASE=0;
+	
+	$('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
     // 상세보기
 	$(document).on("click","#modalReq",function(){
 	
@@ -64,7 +74,7 @@ $(document).ready(function(){
 					$("#innerBoardTitle").html(serverResult.title);
 					$("#innerBoardContent").html(serverResult.content);
 					$("#innerFooter").html("From "+serverResult.writer);
-					$("#regDate").html(formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"
+					$("#regDate").html("<i id='innerRecommendIcon' class='far fa-thumbs-up'>"+serverResult.recommend+"</i>"+formatDate(serverResult.registrationDate)+"&nbsp;&nbsp;"
 					+"<i class='far fa-eye'>"+"&nbsp;"+serverResult.viewCount+"</i>");
 		      },
 		      error: function(xhr,status){
@@ -155,9 +165,7 @@ $(document).ready(function(){
 					return;
 				}
 				
-				for(var key in serverResult['boardList']){
-					
-				 $("#reflash").append("<div class='col-lg-3 col-md-6 mb-4'>"
+				 /* $("#reflash").append("<div class='col-lg-3 col-md-6 mb-4'>"
 				  +"<div id='externalCard' class='card'><img id='outImg' class='card-img-top' src="+serverResult['boardList'][key].imgPath+">"
 				  +"<i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
 				  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i>"
@@ -170,9 +178,45 @@ $(document).ready(function(){
 				  +"<button style='margin-left: 10px' id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
 				  +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
 				  +" class='btn btn-outline-danger'>수정하기</button></div></div></div>" );	
-					
-				}
+				*/
+			for(var key in serverResult['boardList']){
+				var str="";
 				
+				 str+="<div class='col-lg-3 col-md-6 mb-4'>"+"<div id='externalCard' class='card border-success'><img id='outImg' class='card-img-top' src="+serverResult['boardList'][key].imgPath+">";
+				 
+				  if(serverResult['boardList'][key].writer=='${id}'){
+					 str+="<div class='card bg-light rounded-0'><span><i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
+					  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i><i id='recommendIcon' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+				  }else{
+					  str+="<div class='card bg-light rounded-0'><span><i id='recommendIcon' style='margin-top: 3%;right: 35%' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+				  }
+				  
+				  
+				  str+="<div class='card-body' id='externalBox'><h4 class='card-title'>"+serverResult['boardList'][key].title+"</h4>"
+				       +"<p class='card-text' id='externalContent'>"+serverResult['boardList'][key].content+"</p>"
+				       +"<footer class='blockquote-footer' >From "+serverResult['boardList'][key].writer+" ["+formatDate(serverResult['boardList'][key].registrationDate)+"]</footer></div>"
+				  	   +"<div class='card-footer border-dark'><button style='margin-left: 10px' id='modalReq' type='button' "
+				  	   +"data-entrynum="+serverResult['boardList'][key].entryNum+" data-scode="+serverResult['boardList'][key].scode
+				  	   +" class='btn btn-outline-secondary' data-toggle='modal' data-target='.bd-example-modal-lg' >상세보기</button> ";
+
+				  if(serverResult['boardList'][key].writer=='${id}'){
+				      str+="<button style='margin-left: 10px' id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
+				  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+				  	   +" class='btn btn-outline-danger'>수정하기</button></div></div></div>";
+				  	   
+				  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==false){
+					  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+				  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+				  	   +" class='btn btn-outline-success'>추천하기</button></div></div></div>";	
+				  
+				  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==true){
+					  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+				  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+				  	   +" class='btn btn-success'>추천해체</button></div></div></div>";
+				  }
+				  
+				$("#reflash").append(str);
+			 }
 				$("#paging").empty();
 				
 				if(data.page>1){
@@ -532,6 +576,9 @@ $(document).ready(function(){
 	$("#boardWrite").on("click",function(){
 			
 		$(".container").empty();
+		$(".container").append("<h1 id='stationname'>"+'${sname}'+"역 게시판</h1><hr/>");
+		$(".container").append("<br>");
+		
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
 				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label>"
 				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
@@ -569,8 +616,9 @@ $(document).on("change","#file",function(){
   				 alert('png,jpg,jpeg 파일만 업로드 할수 있습니다.');
   				 return;
   			}
-  	     $("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
-  		
+  	       $("#fileCheck").remove();
+  			$("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
+  		 
   		}else{
   			alert("파일에 오류가 있습니다. 다시 검색해주세요");
   		}
@@ -587,8 +635,18 @@ $(document).on("change","#file",function(){
 	   
 	   var data=$(this).data();
 	   
-	   var check=confirm("삭제 하시겠습니까?");
+	  alertify.confirm("해당 게시물을 삭제하시겠습니까?",function (e){ 
+			if(e){
+				  callback(true);
+			}
+			else{
+				  callback(false);
+			} 
+		});
 	   
+     function callback(check) {
+		
+		   
 	   if(check==true){
 	   
 	   $.ajax({
@@ -627,7 +685,8 @@ $(document).on("change","#file",function(){
 		   
 	      });
 	   
-	  }
+	   }
+     }
    });
     
    //글수정 불러오기
@@ -685,7 +744,7 @@ $(document).on("change","#file",function(){
 		
 	      });
 	  });
-	///////제목 유효성 검사  
+	     //제목 유효성 검사  
 		$(document).on("keyup","#titleInput",function(){
 			var titleReg = /^[|가-힣|a-z|A-Z|0-9|\s|\*]{1,10}$/;
 			
@@ -697,9 +756,9 @@ $(document).on("change","#file",function(){
 			}
 			
 		});
+	     
     //글 작성
 	$(document).on("click","#boardRegister",function(){
-		
 		
 		
 		if($("#titleInput").val()==""||$("#titleInput").hasClass("is-invalid")==true){
@@ -744,7 +803,7 @@ $(document).on("change","#file",function(){
 		}//else 끝
 	});
 	
-//////////////////////글 수정 업데이트
+////////글 수정 업데이트
    
 $(document).on("click","#modifyBtn",function(){
 	   if($("#titleInput").val()==""||$("#titleInput").hasClass("is-invalid")==true){
@@ -798,7 +857,206 @@ $(document).on("click","#modifyBtn",function(){
 			location.assign(contextPath+"/board/logout");
 			
 		});
+   
+		//추천하기
+		$(document).on("click","#recommend",function(){
+			
+			var data=$(this).data();
+			var ths=$(this);
+			var checkValue;
+			
+			if(ths.text()=='추천하기'){				
+				
+				alertify.confirm("해당 게시물을 추천하시겠습니까?",function (e){ 
+					if(e){
+						  callback(true);
+					}
+					else{
+						  callback(false);
+					} 
+				});
+				
+				checkValue=true;
+			}else{
+				
+				alertify.confirm("추천을 해제하시겠습니까?",function (e){ 
+					if(e){
+						  callback(true);
+					}
+					else{
+						  callback(false);
+					} 
+				});
+				
+				checkValue=false;
+			}
+			
+			function callback(value) {
+				
+			  if(value==true){
+				 $.ajax({
+					type:'PUT',
+					url: '<%=request.getContextPath()%>/board/recommend',
+					contentType: 'application/json; charset=UTF-8',
+					data:JSON.stringify({ 
+						   'scode': data.scode,
+						   'entryNum' : data.entrynum,
+						   'id' : '${id}',
+						   'recommendCheck' : checkValue
+					}),
+					success : function(serverResult){
+					    
+						if(serverResult==SUCCESS){
+							var value=ths.closest("#externalCard").find("#recommendIcon").text()*1;
+						  if(ths.text()=="추천하기"){
+							  ths.prop('class','btn btn-success');
+							  ths.text("추천해제");
+							  ths.closest("#externalCard").find("#recommendIcon").text(value+1);
+				           }else{
+				        	   ths.prop('class','btn btn-outline-success');
+				        	   ths.text("추천하기");
+				        	   ths.closest("#externalCard").find("#recommendIcon").text(value-1);
+				           }
+						
+						}else{
+					    	alert("오류가 발생하였습니다.");
+					    }
+				
+					},
+				    error: function(xhr,status){
+						 if(xhr.status==0){
+						      alert('네트워크를 체크해주세요.');
+						 }else if(xhr.status==400){
+						      alert('요청에 오류가 있습니다.');
+						 }else if(xhr.status==401){
+						      alert('권한이 없습니다.');
+						 }else if(xhr.status==404){
+						      alert('페이지를 찾을수없습니다.');
+						 }else if(xhr.status==500){
+						      alert('서버에 오류가 발생하였습니다.');
+						 }else if(status=='timeout'){
+						      alert('시간을 초과하였습니다.');
+						 }else {
+						      alert('에러가 발생하였습니다');
+						 }
+					 }
+					
+				 });
+			
+		       }//value
+			}//callback
+		});
+   
+   
+        //정렬
+		$(document).on("click","#sortBtn",function(e){
+			e.preventDefault();
+			
+			var data=$(this).data();
+			
+			
+			if(data.target=='latest'){
 		
+		    	location.assign(contextPath+"/board/external?scode="+data.scode+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
+			} else { 
+			
+	          $.ajax({/// ajax
+	             type:'GET',
+	        	 url:'<%=request.getContextPath()%>/board/recommend/'+data.scode+'/'+data.target+'/'+data.page,
+	 			 contentType: 'application/json; charset=UTF-8',
+				 success: function(serverResult){
+					 
+					$("#reflash").empty();
+					
+					if(serverResult['boardList'].length==0){
+						return;
+					}
+					
+				
+				for(var key in serverResult['boardList']){
+					var str="";
+					
+					 str+="<div class='col-lg-3 col-md-6 mb-4'>"+"<div id='externalCard' class='card border-success'><img id='outImg' class='card-img-top' src="+serverResult['boardList'][key].imgPath+">";
+					 
+					  if(serverResult['boardList'][key].writer=='${id}'){
+						 str+="<div class='card bg-light rounded-0'><span><i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
+						  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i><i id='recommendIcon' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+					  }else{
+						  str+="<div class='card bg-light rounded-0'><span><i id='recommendIcon' style='margin-top: 3%;right: 35%' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+					  }
+					  
+					  
+					  str+="<div class='card-body' id='externalBox'><h4 class='card-title'>"+serverResult['boardList'][key].title+"</h4>"
+					       +"<p class='card-text' id='externalContent'>"+serverResult['boardList'][key].content+"</p>"
+					       +"<footer class='blockquote-footer' >From "+serverResult['boardList'][key].writer+" ["+formatDate(serverResult['boardList'][key].registrationDate)+"]</footer></div>"
+					  	   +"<div class='card-footer border-dark'><button style='margin-left: 10px' id='modalReq' type='button' "
+					  	   +"data-entrynum="+serverResult['boardList'][key].entryNum+" data-scode="+serverResult['boardList'][key].scode
+					  	   +" class='btn btn-outline-secondary' data-toggle='modal' data-target='.bd-example-modal-lg' >상세보기</button> ";
+
+					  if(serverResult['boardList'][key].writer=='${id}'){
+					      str+="<button style='margin-left: 10px' id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
+					  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+					  	   +" class='btn btn-outline-danger'>수정하기</button></div></div></div>";
+					  	   
+					  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==false){
+						  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+					  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+					  	   +" class='btn btn-outline-success'>추천하기</button></div></div></div>";	
+					  
+					  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==true){
+						  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+					  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+					  	   +" class='btn btn-success'>추천해체</button></div></div></div>";
+					  }
+					  
+					$("#reflash").append(str);
+				    }
+					$("#paging").empty();
+					
+					if(data.page>1){
+						$("#paging").append("<li class='page-item'><a id='sortBtn' data-scode="
+								+data.scode+" data-page="+(data.page-1)+" data-target="+data.target+" class='page-link' href='#' >이전</a></li>");
+					}
+					
+					for(var i=serverResult['pageMap'].startPage;i<=serverResult['pageMap'].endPage;i++){
+						if(data.page==i){
+							
+							$("#paging").append("<li class='page-item active'><a id='sortBtn' data-scode="
+									+data.scode+" data-page="+i+" data-target="+data.target+" class='page-link' href='#' >"+i+"</a></li>");
+							
+						}else{
+							$("#paging").append("<li class='page-item '><a id='sortBtn' data-scode="
+									+data.scode+" data-page="+i+" data-target="+data.target+" class='page-link' href='#' >"+i+"</a></li>");
+						}
+					}
+					
+					if(serverResult['pageMap'].endPage>data.page){
+						$("#paging").append("<li class='page-item'><a id='sortBtn' data-scode="
+								+data.scode+" data-page="+(data.page+1)+" data-target="+data.target+" class='page-link' href='#' >다음</a></li>");
+					}
+					
+				 },
+				  error: function(xhr,status){
+						 if(xhr.status==0){
+						      alert('네트워크를 체크해주세요.');
+						 }else if(xhr.status==401){
+						      alert('권한이 없습니다.');
+						 }else if(xhr.status==404){
+						      alert('페이지를 찾을수없습니다.');
+						 }else if(xhr.status==500){
+							 alert('서버에 오류가 발생하였습니다.');
+						 }else if(status=='timeout'){
+						      alert('시간을 초과하였습니다.');
+						 }else {
+						      alert('에러가 발생하였습니다');
+						 }
+					 }
+	        	 
+	            });
+			
+	         }
+		});
+  
 		
 		
 		
@@ -824,89 +1082,118 @@ $(document).on("click","#modifyBtn",function(){
 }
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css">
+
 </head>
 <body>
 
-	<!--상단바-->
-	<nav>
-		<div id="topbar" class="navbar navbar-dark bg-dark fixed-top">
-			<a id='navbar-br' class="navbar-brand" href="#" onclick="history.go(0)"> Inner Subway</a>
-		    <div><button id="logOutBtn" style="font-family:'BU'" type="button" class="btn btn-light">로그아웃</button></div>
-		</div>
-		
-		<!--/상단바-->
+<div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h1 style="font-family: '28D'">InnerSubway</h1>
+            </div>
 
-		<!-- 사이드바 -->
-		<div id="page-wrapper">
-			<div id="sidebar-wrapper">
-				<ul class="sidebar-nav">
-					<li class="sidebar-brand">${stationList[0].line}호선</li>
-					<c:if test="${stationList[0].line>=10}">
-						<li id='sidebar-br' class="sidebar-brand">분당선</li>
-					</c:if>
-					<c:if test="${stationList[0].line<10}">
-						<li id='sidebar-br' class="sidebar-brand">${stationList[0].line}호선</li>
-					</c:if>
-					<c:forEach var="key" items="${stationList}">
-						<li><a id="stationlist"
-							href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&line=${key.line}&page=1">${key.sname}</a></li>
-					</c:forEach>
-				</ul>
-			</div>
-		</div>
+            <ul class="list-unstyled components">
+                <c:if test="${stationList[0].line==10}">
+				  <p>분당선</p>
+				</c:if>
+                <c:if test="${stationList[0].line<10}">
+				  <p>${stationList[0].line}호선</p>
+				</c:if>
+				
+                <c:forEach var="key" items="${stationList}">
+				<li><a id="stationlist" href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&line=${key.line}&page=1">${key.sname}</a></li>
+			    </c:forEach>
+            </ul>
+        </nav>
 
-	</nav>
-	<!-- /사이드바 -->
+        <!-- Page Content  -->
+        <div id="content">
 
-	<!--카드게시판-->
-
-	<div id="page-wrapper" style="padding-top: 150px">
-		<h1 id="stationname" style="margin-left: 7%">${sname}역
-			게시판
-			<hr/>
-		</h1>
-
-		<div class="container">
-
-			<div id="searchForm" class="text-right">
-			  
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>사이드바</span>
+                    </button>
+                  <button id="logOutBtn" style="font-family:'BU'" type="button" class="btn btn-danger">로그아웃</button>
+                  
+                </div>
+            </nav>
+            
+            <!-- 카드게시판 -->
+            
+           <div id="page-wrapper">
+           <div class="container">
+		    <h1 id="stationname">${sname}역 게시판</h1><hr/>
+		    
+		   
+		    <div id="searchForm" class="text-right">
 			  <span>
+			   <span id='sort'>
+			   		<a id='sortBtn' data-scode='${scode}' data-target='latest' data-page=1  href="#" >최신순<i class="fas fa-sort-down"></i></a>&nbsp;&nbsp;
+			   		<a id='sortBtn' data-scode='${scode}' data-target='recommend' data-page=1  href="#" >추천순<i class="fas fa-sort-down"></i></a>&nbsp;&nbsp;
+			   		<a id='sortBtn' data-scode='${scode}' data-target='viewCount' data-page=1  href="#" >조회수순<i class="fas fa-sort-down"></i></a>
+			   </span>
+				
+				
 				<input type="search" class="form-control mr-sm-2" style="display: inline;width:25%;" id="searchBoard" size="20"
-				placeholder="제목&내용">
+				placeholder="장소이름&작성자">
 				<button class="btn btn-success" data-scode='${scode}' data-page=1 id="searchBoardBtn">검색</button>
 			  </span>
+			 </div>  
 			 
-			 </div>
-			  
 			   <c:if test="${fn:length(boardList)==0}">
 			   <div style="text-align: center; margin-top: 15%; margin-bottom: 15%"><h1>게시물이 없습니다.<br>등록해주세요~</h1></div>
 			   </c:if>
-			<br>
-			<!-- src="http://placehold.it/500x325" -->
-			<div id="reflash" class="row text-center">
+			              <br>
+			 <div id="reflash" class="row text-center">
 				<c:forEach var="board" items="${boardList}">
 					<div class="col-lg-3 col-md-6 mb-4">
-						<div id="externalCard" class="card border-info">
-							<img id="outImg" class="card-img-top"
-								src='${board.imgPath}' ><span><i id="boardDel"
-								data-scode='${board.scode}' data-entry='${board.entryNum}'
-								data-writer='${board.writer}' class="far fa-times-circle"></i></span> 
-
+						<div id="externalCard" class="card border-success">
+							<img id="outImg" class="card-img-top" src='${board.imgPath}' >
+							
+							<c:if test="${board.writer==id}">
+							<div class="card bg-light rounded-0">
+								<span><i id="boardDel" data-scode='${board.scode}' data-entry='${board.entryNum}'
+								data-writer='${board.writer}' class="far fa-times-circle"></i><i id='recommendIcon' class="far fa-thumbs-up">${board.recommend}</i></span> 
+							</div>
+							</c:if>
+							
+						    <c:if test="${board.writer!=id}">
+							<div class="card bg-light rounded-0">
+								<span><i id='recommendIcon' class="far fa-thumbs-up" style="margin-top: 3%;right: 35%">${board.recommend}</i></span> 
+							</div>
+							</c:if>
+							
 							<div class="card-body" id="externalBox">
 								<h4 class="card-title">${board.title}</h4>
 								<p class="card-text" id="externalContent">${board.content}</p>
 								<footer style="font-family: '고딕'" class="blockquote-footer">From
-									${board.writer}</footer>
+									${board.writer}&nbsp;[${board.registrationDate}]</footer>
 							</div>
 
-							<div class="card-footer">
+							<div class="card-footer border-dark">
 								<button style="margin-left: 10px" id="modalReq" type="button"
 									data-entrynum='${board.entryNum}' data-scode='${board.scode}'
 									class="btn btn-outline-secondary" data-toggle="modal"
 									data-target=".bd-example-modal-lg">상세보기</button>
+								<c:if test="${board.writer==id}">	
 								<button style="margin-left: 10px" id="boardMod" type="button"
 									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
 									data-writer='${board.writer}' class="btn btn-outline-danger">수정하기</button>
+							   </c:if>
+							   <c:if test="${board.writer!=id && board.recommendCheck==false}">	
+								<button style="margin-left: 10px" id="recommend" type="button"
+									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
+									data-writer='${board.writer}' class="btn btn-outline-success">추천하기</button>
+							   </c:if>
+							   <c:if test="${board.writer!=id && board.recommendCheck==true}">	
+								<button style="margin-left: 10px" id="recommend" type="button"
+									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
+									data-writer='${board.writer}' class="btn btn-success">추천해제</button>
+							   </c:if>
 							</div>
 						</div>
 					</div>
@@ -938,10 +1225,13 @@ $(document).on("click","#modifyBtn",function(){
 					<li class="page-item"><a class="page-link"
 						href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&line=${line}&page=${param.page+1}">다음</a></li>
 				</c:if>
-			</ul>
-		</div>
-	</div>
-	<!--카드게시판-->
+			  </ul>
+		   </div>
+		   </div>
+		  </div><!-- pagewapper -->
+	    </div><!-- conetent -->
+    </div><!-- wraaper -->
+
 
 
 
@@ -958,7 +1248,7 @@ $(document).on("click","#modifyBtn",function(){
 					<div id="innerImgdiv" class="card-body">
 						<p class="card-text">
 							<img id="innerImg" alt="이미지"
-								src="http://www.city.kr/files/attach/images/1326/645/312/004/79f2a902776bb2a0e895ea7e2255a1d9.jpg">
+								src="">
 							<!-- <img alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"> -->
 						</p>
 					</div>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler {
 		log.error(e);
 		log.debug(" ===================================END=======================================");
 
+	}
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public void dataIntegrityViolationException(DataIntegrityViolationException e) {
+		log.error(e);
+		log.debug(" ===================================END=======================================");
+		
 	}
 
 	@ExceptionHandler(NoAuthException.class)

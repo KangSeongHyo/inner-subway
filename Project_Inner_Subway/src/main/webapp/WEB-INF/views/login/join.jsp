@@ -58,7 +58,7 @@ $(document).ready(function(){
 	});
 	
 	//이름 패턴
-	$('#name').on('change',function(){
+	$('#name').on('keyup',function(){
 		var nameReg = /^[|가-힣|a-z|A-Z|\*]+$/;
 		
 		if(!nameReg.test($("#name").val())){
@@ -73,7 +73,7 @@ $(document).ready(function(){
 	});
 	
 	//아이디 패턴
-	$('#id').on('change',function(){
+	$('#id').on('keyup',function(){
 		var idReg = /^[a-z]{3,}[0-9|a-z]+$/;
 		
 		if(!idReg.test($("#id").val())){
@@ -87,7 +87,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('#pw').on('change',function(){
+	$('#pw').on('keyup',function(){
 		var pwReg = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
 
 		

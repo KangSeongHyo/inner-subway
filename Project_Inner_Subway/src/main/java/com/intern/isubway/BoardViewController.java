@@ -51,6 +51,8 @@ public class BoardViewController {
 
 		} else {
 
+			requestStation.setId((String)session.getAttribute("id"));
+
 			List<BoardVO> boardList = boardService.getBoardList(requestStation, page);
 
 			boardList = boardService.removeHtml(boardList);

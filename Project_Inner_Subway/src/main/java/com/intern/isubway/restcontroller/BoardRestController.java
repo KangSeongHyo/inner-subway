@@ -1,5 +1,7 @@
 package com.intern.isubway.restcontroller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -183,11 +185,12 @@ public class BoardRestController {
 	 */
 	@RequestMapping(value = "/search/{scode}/{search}/{page}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> searchBoard(@ModelAttribute StationVO requestStation,
-		@PathVariable("search") String search, @PathVariable("page") int page) throws Exception {
+		@PathVariable("search") String search, @PathVariable("page") int page, HttpSession session) throws Exception {
 
 		ResponseEntity<Map<String, Object>> responseEntity = null;
 
-		Map<String, Object> searchBoardList = boardService.getSearchBoard(requestStation, search, page);
+		Map<String, Object> searchBoardList = boardService.getSearchBoard(requestStation, search,
+			(String)session.getAttribute("id"), page);
 
 		if (searchBoardList != null) {
 
@@ -201,4 +204,73 @@ public class BoardRestController {
 
 		return responseEntity;
 	}
+
+	/**
+	 * 게시물 추천
+	 * @param requestBoard 요청 게시물정보
+	 * @return 요청 게시물
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/recommend", method = RequestMethod.PUT)
+	public ResponseEntity<Integer> recommend(@RequestBody BoardVO requestBoard) throws Exception {
+		ResponseEntity<Integer> responseEntity = null;
+
+		int resultValue = boardService.recommendBoard(requestBoard);
+
+		if (resultValue == CheckValue.SUCCESS) {
+
+			responseEntity = new ResponseEntity<Integer>(resultValue, HttpStatus.OK);
+			log.info("Result : board recommend request OK, Retrun SUCCESS");
+
+		} else {
+
+			log.error("Result : board recommend request Fail, Retrun Bad_request");
+			throw new Exception("Error occurred : database update(BoardRestController.java:225)");
+
+		}
+
+		return responseEntity;
+	}
+
+	/**
+	 * 게시물 정렬
+	 * @param requestBoard target(정렬할 부분)
+	 * @param page
+	 * @param session
+	 * @return 정렬된 게시물 List
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/recommend/{scode}/{target}/{page}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> recommendSort(@ModelAttribute BoardVO requestBoard,
+		@PathVariable("page") int page, HttpSession session)
+		throws Exception {
+
+		ResponseEntity<Map<String, Object>> responseEntity = null;
+
+		String id = (String)session.getAttribute("id");
+
+		if (id != null) {
+
+			requestBoard.setId(id);
+
+			Map<String, Object> resultMap = boardService.getSortBoardList(requestBoard, page);
+
+			if (resultMap != null) {
+				responseEntity = new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+				log.info(
+					"Result : board sort[target : " + requestBoard.getTarget() + "] request OK, Retrun boardSortList");
+
+			} else {
+				log.error("Result : board sort request Fail, Retrun Bad_request");
+				throw new Exception("Error occurred : database update(BoardRestController.java:225)");
+			}
+
+		} else {
+			log.info("Result : request Fail, Return Invalid request ");
+			throw new Exception("Error occurred : Invalid request (BoardRestController.java:262)");
+		}
+		return responseEntity;
+
+	}
+
 }
