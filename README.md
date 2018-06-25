@@ -22,20 +22,32 @@
  
  - 역 근처 정보는 많지만 역 내부 정보는 많지 않음
  
-### 사용도구
+### 기술스택
 
-- 개발언어 : JAVA, 서버 : CentOS 7.4, JDK 8, Tomcat 8
+- WAS : CentOS 7.4, JDK 8, Tomcat 8
 
-- S/W : MySQL , Mybatis, Spring MVC, Eclipse, Bootstrap
+- Language : Javascript(JQuery), Java
+
+- FrameWork : Spring 5.0.5
+
+- DB server : MySQL
+
+- Front : BootStrap 4.1
+
+- Build/Deploy : Jenkins
+
+- Local : Eclipse Neon, Workbench 6.3
 
 ### 기능
 
 -	로그인 & 회원가입
 
--	게시판 CRUD (카드 게시판 형식)
+-	게시판 등록, 수정, 삭제
 
-- 제목,작성자 검색
+- 게시글 추천 & 정렬
 
-- 이미지첨부
+- 제목(장소명), 작성자 검색
 
-- 댓글
+- 이미지첨부, 불러오기(사진게시판)
+
+- 댓글 등록,수정,삭제
