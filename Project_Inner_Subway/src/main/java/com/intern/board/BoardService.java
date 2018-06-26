@@ -20,6 +20,7 @@ import io.swagger.annotations.Info;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,6 +121,10 @@ public class BoardService implements Board {
 			file.transferTo(newfile);
 
 			requestBoard.setImgPath(imgPath);
+
+		} else {
+			
+			requestBoard.setImgPath("NotFound");
 		}
 
 		return dao.modifyBoard(requestBoard);
@@ -146,24 +151,28 @@ public class BoardService implements Board {
 	public int boardRegister(BoardVO requestBoard, MultipartFile file) throws IllegalStateException, IOException {
 		//////////////file 업로드
 
-		String realName = file.getOriginalFilename();
+		if (file != null) {
+			String realName = file.getOriginalFilename();
 
-		String ext = realName.substring(realName.lastIndexOf("."));
+			String ext = realName.substring(realName.lastIndexOf("."));
 
-		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 
-		String uniqueName = uuid + ext;
+			String uniqueName = uuid + ext;
 
-		String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-		//String uploadPath = "C:/new/" + uniqueName;
+			String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
+			//String uploadPath = "C:/new/" + uniqueName;
 
-		String imgPath = "/storage/" + uniqueName;
+			String imgPath = "/storage/" + uniqueName;
 
-		File newfile = new File(uploadPath);
+			File newfile = new File(uploadPath);
 
-		file.transferTo(newfile);
+			file.transferTo(newfile);
 
-		requestBoard.setImgPath(imgPath);
+			requestBoard.setImgPath(imgPath);
+		} else {
+			throw new FileNotFoundException("Error occurred : invail date[file]");
+		}
 
 		return dao.boardRegister(requestBoard);
 	}

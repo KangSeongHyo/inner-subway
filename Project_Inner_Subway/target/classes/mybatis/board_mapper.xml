@@ -67,8 +67,10 @@
 				station_board
 		SET
 				title=#{title},content=#{content}
-				<if test="imgPath!=null">
-					,imgPath=#{imgPath}
+				<if test="imgPath != null">	
+				  <choose>
+					<when test="imgPath ne 'NotFound'">,imgPath= #{imgPath} </when>
+					</choose>
 				</if>
 		WHERE
 				scode = #{scode}
