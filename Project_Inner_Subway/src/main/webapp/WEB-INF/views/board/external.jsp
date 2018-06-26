@@ -828,6 +828,10 @@ $(document).on("change","#file",function(){
 			success: function(serverResult) {
 				
 				$(".container").empty();
+				
+				$(".container").append("<h1 id='stationname'>${sname}역 게시판</h1><hr/>");
+				$(".container").append("<br>")
+				
 				$(".container").append("<div id='reflash' class='row'><form id='modifyform' method='post' enctype='multipart/form-data' ><input type='hidden' name='entryNum' value="
 						+data.entrynum+"><input type='hidden' name='scode' value="
 						+data.scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"
@@ -1259,6 +1263,7 @@ $(document).on("click","#modifyBtn",function(){
             <!-- 카드게시판 -->
             
            <div id="page-wrapper">
+           
            <div class="container">
 		    <h1 id="stationname">${sname}역 게시판</h1><hr/>
 		    
