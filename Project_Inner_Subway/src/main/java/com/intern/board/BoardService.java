@@ -34,11 +34,14 @@ import com.intern.board.BoardService;
 /*@RunWith(SpringJUnit4ClassRunner.class) // 테스트하겠다
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/**.xml")// xml 위치설정 스프링로드*/
 @Component
+@Transactional
 public class BoardService implements Board {
 	Logger log = Logger.getLogger(this.getClass());
+
 	@Autowired
 	BoardDAO dao;
 
+	@Override
 	public BoardVO getBoardOne(BoardVO requstBoard, String id) throws NoAuthException, Exception {
 
 		int resultValue;
@@ -107,8 +110,8 @@ public class BoardService implements Board {
 
 			String uniqueName = uuid + ext; //유니크한 이름 생성 
 
-			//String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-			String uploadPath = "C:/new/" + uniqueName;
+			String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
+			//String uploadPath = "C:/new/" + uniqueName;
 
 			String imgPath = "/storage/" + uniqueName;
 
@@ -140,7 +143,6 @@ public class BoardService implements Board {
 	}
 
 	@Override
-	@Transactional
 	public int boardRegister(BoardVO requestBoard, MultipartFile file) throws IllegalStateException, IOException {
 		//////////////file 업로드
 
@@ -152,8 +154,8 @@ public class BoardService implements Board {
 
 		String uniqueName = uuid + ext;
 
-		//String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-		String uploadPath = "C:/new/" + uniqueName;
+		String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
+		//String uploadPath = "C:/new/" + uniqueName;
 
 		String imgPath = "/storage/" + uniqueName;
 
@@ -223,9 +225,7 @@ public class BoardService implements Board {
 		Map<String, Object> searchBoardMap = new HashMap<String, Object>();
 		Map<String, Integer> pageMap = new HashMap<String, Integer>();
 
-		if (boardList == null) {
-			throw new Exception("Error occurred : database select");
-		} else {
+		if (boardList != null) {
 
 			boardList = removeHtml(boardList);
 
@@ -253,6 +253,9 @@ public class BoardService implements Board {
 				pageMap.put("endPage", endPage);
 				pageMap.put("totalPage", totalPage);
 			}
+		} else {
+
+			throw new Exception("Error occurred : database select");
 		}
 		searchBoardMap.put("boardList", boardList);
 		searchBoardMap.put("pageMap", pageMap);

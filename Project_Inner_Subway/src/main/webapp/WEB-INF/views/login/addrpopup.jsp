@@ -5,10 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<% 
-	String inputYn = request.getParameter("inputYn"); 
-	String roadFullAddr = request.getParameter("roadFullAddr"); 
-	%>
+<% 	
+String inputYn = request.getParameter("inputYn"); 
+String roadFullAddr = request.getParameter("roadFullAddr"); 
+%>
 </head>
 <script>
 function init(){

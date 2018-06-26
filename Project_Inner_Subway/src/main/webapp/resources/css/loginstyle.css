@@ -5,6 +5,14 @@ h3{
 	font-family: '28D';
 }
 
-label{
+#header{
+	font-size: 100px;
+	margin-top: 10%;
+	font-family: '28D';
+}
+h3{
 	font-family: 'NS';
+}
+button, label{
+	font-family: 'BM'
 }

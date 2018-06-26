@@ -10,12 +10,15 @@
 	rel="stylesheet"
 	integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
 	crossorigin="anonymous">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/jquery.subwayMap-0.5.0.js" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="resources/css/mainstyle.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.core.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.default.min.css" rel="stylesheet">
+<script type="text/javascript" src="js/main.js"></script>
 <style type="text/css">
 @font-face {
 	font-family: 'BU';
@@ -26,225 +29,10 @@
 	font-family: '28D';
 	src: url('font/28DaysLater.ttf');
 }
-
-[data-tooltip-text]:hover {
-	position: relative;
-}
-
-[data-tooltip-text]:hover:after {
-	background-color: #ffffff;
-	background-color: rgba(0, 0, 0, 0.8);
-
-	-webkit-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-	-moz-box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-	box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-
-	color: #000000;
-	font-size: 12px;
-	content: attr(data-tooltip-text);
-
-  margin-bottom: 10px;
-	top: 130%;
-	left: 0;    
-	padding: 7px 12px;
-	position: absolute;
-	width: auto;
-	min-width: 50px;
-	max-width: 300px;
-	word-wrap: break-word;
-
-	z-index: 9999;
-}
-
-</style>
-<script type="text/javascript">
-
-$(document).ready(function() {
-	
-	  
-	
- $(document).on("click",".menuText",function(){
-	var data=$(this).data();
-	var contextPath='<%=request.getContextPath()%>';
-	
-    	$.ajax({
-			type:'GET',
-			url:'<%=request.getContextPath()%>/station/'+data.line,
-			success:function(serverResult){		
-				
-				$(".subway-map").css("display","none");
-			    $(".subway-map").empty();
-				$(".subway-map").subwayMap({ debug: false });
-				
-				var str="";
-				var stationCount=0;
-				var color="";
-				
-			   localStorage.setItem("line", data.line);
-				
-				switch (data.line) {
-				case 1:
-					color="#0D47A1";
-					break;
-					
-				case 2:
-					color="#00C853";
-					break;
-					
-				case 7:
-					color="#827717";
-					break;
-				case 10:
-					color="#B71C1C";
-					break;
-
-				default:
-					break;
-				}
-				
-				
-				
-				$(".subway-map").append("<ul data-color='"+color+"' data-label='jQuery Widgets'></ul>");
-
-				
-				  if(data.line==1||data.line==7){
-					  
-					 for(var key in serverResult){
-						 
-					 
-					  $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
-							+serverResult[key].scode+"&sname="+serverResult[key].sname
-						 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
-					
-					      if(key==(serverResult.length-1)){
-						    break;
-					      } 
-					
-					      stationCount++;
-					
-				       if(stationCount==6){
-					       
-				    	   var x=serverResult[key].x;
-					       var y=serverResult[key].y;
-						
-					       $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y+1)+"' data-dir='E' ></li>");
-					       $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y+5)+"'></li>");
-					       $(".subway-map > ul").append("<li data-coords='"+x+","+(y+5+1)+"' data-dir='S' ></li>");
-					   												
-					    }else if(stationCount==12){
-						 
-					    	var x=serverResult[key].x;
-						    var y=serverResult[key].y;
-						
-					        $(".subway-map > ul").append("<li data-coords='"+(x-1)+","+(y+1)+"' data-dir='W' ></li>");
-					        $(".subway-map > ul").append("<li data-coords='"+(x-1)+","+(y+5)+"'></li>");
-					        $(".subway-map > ul").append("<li data-coords='"+(x)+","+(y+5+1)+"' data-dir='S' ></li>");
-						
-					        stationCount=0;
-					     }
-					   }
-				 
-			       }else if(data.line==2){
-			    	  for(var key in serverResult){
-			    	   
-			    	    if(stationCount==6){
-							   var x=serverResult[key].x;
-							   var y=serverResult[key].y;
-								
-							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y-4)+"' data-dir='E' ></li>");
-							    $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
-										+serverResult[key].scode+"&sname="+serverResult[key].sname
-									 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
-							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y+4)+"' ></li>");
-							    $(".subway-map > ul").append("<li data-coords='"+(x-1)+","+(y+5)+"' data-dir='S' ></li>");
-	
-							    stationCount++;
-							continue;
-						
-								
-						}else if(stationCount==13){
-								var x=serverResult[key].x;
-								var y=serverResult[key].y;
-								
-							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y+4)+"' data-dir='W' ></li>");
-							    $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
-										+serverResult[key].scode+"&sname="+serverResult[key].sname
-									 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
-							    $(".subway-map > ul").append("<li data-coords='"+x+","+(y-4)+"'></li>");
-							    $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y-5)+"' data-dir='N' ></li>");
-								
-								
-							     stationCount=0;
-							     continue; 
-					     }
-			    	    
-			    	   $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
-								+serverResult[key].scode+"&sname="+serverResult[key].sname
-							 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
-			    	    if(key==(serverResult.length-1)){
-							break;
-						}
-			    	    
-			    	    stationCount++;
-			    	        	   
-			          }
-			    	  
-			    	   
-			    	  
-			       }else if(data.line==10){
-			    	   
-			    	   for(var key in serverResult){
-			    	     
-			    		   var x=serverResult[key].x;
-					       var y=serverResult[key].y;
-					   
-					       $(".subway-map > ul").append("<li data-coords='"+serverResult[key].x+","+serverResult[key].y+"'><a href='"+contextPath+"/board/external?scode="
-								+serverResult[key].scode+"&sname="+serverResult[key].sname
-							 +"&line="+serverResult[key].line+"&page=1'>"+serverResult[key].sname+"</a></li>");
-			    	   
-					    stationCount++;
-					   
-					   if(stationCount==2){
-						   $(".subway-map > ul").append("<li data-coords='"+(x+1)+","+(y+1)+"' data-dir='S' ></li>");
-					   }
-					   
-			          }
-			       }
-			  
-    	          $(".subway-map").show(1000);
-				  $(".subway-map").subwayMap({ debug: true });
-			  },
-			  error: function(xhr,status){
-					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
-					 }else if(xhr.status==400){
-					      alert('요청에 오류가 있습니다.');
-					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
-					 }else if(xhr.status==404){
-					      alert('페이지를 찾을 수 없습니다.');
-					 }else if(xhr.status==500){
-					      alert('서버에 오류가 발생하였습니다.');
-					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
-					 }else {
-					      alert('오류가 발생하였습니다.');
-					 }
-				 }
-			
-		 }); 
-   });
-
-});
-</script>
-<style type="text/css">
 </style>
 </head>
 <body>
+
 	<div id="ballMenuContainer">
 		<div id="menuBall1" class="menuBall">
 			<a href="#" class="ball blueball">
@@ -277,74 +65,11 @@ $(document).ready(function() {
 			data-gridNumbers="true" data-grid="false" data-lineWidth="28">
 			
 		</div>
-
 	</div>
 
 	<div class="contain">
-		<h1 style="font-family: '28D'">Inner Subway</h1>
+		<h1>Inner Subway</h1>
 	</div>
 	
-	
-	            <!-- <li data-coords='8,3'><a href='#'>홍대입구</a></li>
-				<li data-coords='14,3'><a href='#'>신촌</a></li>
-				<li data-coords="20,3"><a href="#">충정로</a></li>
-				<li data-coords="26,3"><a href="#">을지로4가</a></li>
-				<li data-coords="32,3"><a href="#">왕십리</a></li>
-				<li data-coords="38,3"><a href="#">성수</a></li>
-				<li data-coords="39,4" data-dir="E"></li>
-				<li data-coords="39,8"><a href="#">건대입구</a></li>
-				<li data-coords="39,12"></li>
-				<li data-coords="38,13" data-dir="S"></li>
-				<li data-coords="38,13"><a href="#">잠실</a></li>
-				<li data-coords="32,13"><a href="#">선릉</a></li>
-				<li data-coords="26,13"><a href="#">강남</a></li>
-				<li data-coords="20,13"><a href="#">사당</a></li>
-				<li data-coords="14,13"><a href="#">신림</a></li>
-				<li data-coords="8,13"><a href="#">구로디지털단지</a></li>
-				<li data-coords="7,12" data-dir="W"></li>
-				<li data-coords="7,8" data-dir="W"><a href="#">신도림</a></li>
-				<li data-coords="7,4" data-dir="W"></li>
-				<li data-coords="8,3" data-dir="N"></li>
-	 -->
-	
-	
-	
-	<%--           <li data-coords='8,3' ><a href='#'>병점</a></li>
-				 <li data-coords='14,3'><a href='#'>수원</a></li>
-				<li data-coords="20,3" ><a href="#">금정</a></li>
-				<li data-coords="26,3" ><a href="#">안양</a></li>
-				<li data-coords="32,3" ><a href="<%=request.getContextPath()%>/board/external?scode=SN0101&sname=금천구청&page=1">금천구청</a></li>
-				<li data-coords="38,3" ><a href="#">가산디지털단지</a></li> 
-				
-				<li data-coords="39,8"  ></li>
-				<li data-coords="38,9" data-dir="S" ></li>  
-				<li data-coords="38,9"  ><a href="#">구로</a></li>
-				<li data-coords="32,9"  ><a href="#">신도림</a></li>
-				<li data-coords="26,9"  ><a href="#">영등포</a></li>
-				<li data-coords="20,9" ><a href="#">신길</a></li>
-				<li data-coords="14,9"  ><a href="#">노량진</a></li>
-				<li data-coords="8,9"  ><a href="#">용산</a></li>
-				<li data-coords="7,10" data-dir="W"></li>
-			    <li data-coords="7,14"></li>
-				<li data-coords="8,15" data-dir="S"></li>
-				<li data-coords="8,15"  ><a href="#">서울역</a></li>
-				<li data-coords="14,15" ><a href="#">시청</a></li>
-				<li data-coords="20,15" ><a href="#">종로3가</a></li>
-				<li data-coords="26,15" ><a href="#">동대문</a></li>
-				<li data-coords="32,15" ><a href="#">청량리</a></li>
-				<li data-coords="38,15" ><a href="#">회기</a></li> --%>
-				
-				<!-- /*  $(".subway-map > ul").append("<li data-coords='15,3' ><a href='#' >강남</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='15,7' ><a href='#' >양재</a></li>");
-					    
-					    $(".subway-map > ul").append("<li data-coords='23,8' ><a href='#' >청계산입구</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='36,8' ><a href='#' >판교</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='36,12' ><a href='#' >정자</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='30,12' ><a href='#' >동천</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='24,12' ><a href='#' >수지구청</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='18,12' ><a href='#' >성복</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='12,12' ><a href='#' >광교중앙</a></li>");
-					    $(".subway-map > ul").append("<li data-coords='6,12' ><a href='#' >광교</a></li>"); */
- -->
 </body>
 </html>

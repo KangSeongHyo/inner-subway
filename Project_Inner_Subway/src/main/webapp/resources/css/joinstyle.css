@@ -1,21 +1,20 @@
 @CHARSET "UTF-8";
 
-/* .container {
-	position: absolute;
-	width: 40%;
-	height: 70%;
-	width : 40%;
-	min-height : 70%;
-	background-color:#F5F5F5;
-	margin-top: 7%;
-	margin-left: 35%;
+label{
+  font-family: 'BM';
 }
-body{
-  width: 100%;
-  height: 100%;
-   background: url("../img/background.jpg");
-   background-size: cover;
+span{
+  display : block;
+  font-family: 'NS';
+  color: red;
 }
-span {
-	color: red;
-} */
+h1{
+	font-size: 100px; 
+	font-family: '28D';
+}
+h3{
+	font-family: 'NS';
+}
+input{
+	font-family: 'NS';
+}

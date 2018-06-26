@@ -1,6 +1,7 @@
 package com.intern.comment;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class CommentVO {
 
@@ -9,13 +10,14 @@ public class CommentVO {
 	int commentSeq;
 	String content;
 	String writer;
-	Date registrationDate;
+	Timestamp registrationDate;
 
 	public CommentVO() {
 		super();
 	}
 
-	public CommentVO(String scode, int entryNum, int commentSeq, String content, String writer, Date registrationDate) {
+	public CommentVO(String scode, int entryNum, int commentSeq, String content, String writer,
+		Timestamp registrationDate) {
 		super();
 		this.scode = scode;
 		this.entryNum = entryNum;
@@ -24,6 +26,19 @@ public class CommentVO {
 		this.writer = writer;
 		this.registrationDate = registrationDate;
 	}
+
+
+	public Timestamp getRegistrationDate() {
+		return registrationDate;
+	}
+
+
+
+	public void setRegistrationDate(Timestamp registrationDate) {
+		this.registrationDate = registrationDate;
+	}
+
+
 
 	public String getScode() {
 		return scode;
@@ -65,13 +80,7 @@ public class CommentVO {
 		this.writer = writer;
 	}
 
-	public Date getRegistrationDate() {
-		return registrationDate;
-	}
-
-	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
-	}
+	
 	
 
 

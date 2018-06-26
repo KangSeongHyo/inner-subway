@@ -5,12 +5,13 @@
 <mapper namespace="comment">
 	<select id="getCommentList" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
+		
 		SELECT
-				scode,entryNum,commentSeq,content,writer,registrationDate
+				scode,entryNum,commentSeq,content,writer,CONVERT_TZ(registrationDate, '+0:00', '-9:00') registrationDate
 		FROM
 				station_comments
 		WHERE 
-				scode = #{scode} 
+				scode = #{scode}
 		AND 
 				entryNum=#{entryNum}
 	</select>
@@ -38,7 +39,7 @@
 	<select id="getCommentOne" parameterType="com.intern.comment.CommentVO"
 		resultType="com.intern.comment.CommentVO">
 		SELECT
-				scode,entryNum,commentSeq,content,writer,registrationDate
+				scode,entryNum,commentSeq,content,writer,CONVERT_TZ(registrationDate, '+0:00', '-9:00') registrationDate
 		FROM
 				station_comments
 		WHERE 

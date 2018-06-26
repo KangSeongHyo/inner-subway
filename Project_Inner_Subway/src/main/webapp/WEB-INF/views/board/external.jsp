@@ -22,14 +22,9 @@
 	integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
 	crossorigin="anonymous">
 <script type='text/javascript' src='http://malsup.github.com/jquery.form.js'></script>
-	
 <!-- include summernote css/js-->
-<link
-	href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css"
-	rel="stylesheet">
-<script
-	src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
-	
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
  <!-- Popper.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.min.js"></script>
@@ -46,14 +41,41 @@ function formatDate(date) {
 	if (month.length < 2) month = '0' + month; 
 	if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); }
-	
-$(document).ready(function(){
 
+function formatTime(date) {
+	var d=new Date(date);
+    hours = format_two_digits(d.getHours());
+    minutes = format_two_digits(d.getMinutes());
+    seconds = format_two_digits(d.getSeconds());
+    return hours + ":" + minutes + ":" + seconds;
+}
+
+function format_two_digits(n) {
+    return n < 10 ? '0' + n : n;
+}
+	
+function getUrlParameter(sParam) {
+	var sPageURL = decodeURIComponent(window.location.search.substring(1));
+	var sURLVariables = sPageURL.split('&');
+	var sParameterName;
+	
+	for (var i = 0; i < sURLVariables.length; i++) {
+		sParameterName = sURLVariables[i].split('=');
+
+		if (sParameterName[0] === sParam) {
+			return sParameterName[1] === undefined ? true : sParameterName[1];
+		}
+	}
+};
+
+$(document).ready(function(){
+	
 	var contextPath='<%=request.getContextPath()%>';
 	var SUCCESS = 1;
 	var FAIL = 0;
 	var CHECK=1;
 	var RELEASE=0;
+	var line=getUrlParameter("line");
 	
 	$('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
@@ -79,17 +101,19 @@ $(document).ready(function(){
 		      },
 		      error: function(xhr,status){
 					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
+						 alertify.error('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
+						 alertify.error('권한이 없습니다.');
 					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
+						 alertify.error('페이지를 찾을수없습니다.');
 					 }else if(xhr.status==500){
-						 alert('서버에 오류가 발생하였습니다.');
+						 alertify.error('서버에 오류가 발생하였습니다.');
 					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
+						 alertify.error('시간을 초과하였습니다.');
 					 }else {
-					      alert('에러가 발생하였습니다');
+						 alertify.error('에러가 발생하였습니다');
 					 }
 				 }
         });
@@ -105,34 +129,53 @@ $(document).ready(function(){
 			 success: function(serverResult){
 				
 				 for(var i=0;i<serverResult.length;i++){
-			         	
-					    $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
+					 
+					 var str="";
+					 	str+="<dl id='comment'><dt>"+serverResult[i].writer
+					 	  +"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)+" "+formatTime(serverResult[i].registrationDate);
+					 	  
+				      if(serverResult[i].writer=='${id}'){
+				    	 str+="&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+				    	 	 +"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+			         		 +data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+			         		 +"'class='far fa-edit'></i></span>";
+					 }
+					 
+					 str+="<dd>"+serverResult[i].content+"</dd></dl><hr>";
+					 
+					 $("#commentList").append(str);
+				  }  
+					  /*   $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
 			         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
 			         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-			         			+"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+			         		    +"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
 			         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
 			         			+"'class='far fa-edit'></i></span><dd>"
 			         			+serverResult[i].content+"</dd></dl><hr>");
-				      }
+					  */   
+				    
+				 
 			         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
 			         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
 		
 			   },
 			   error: function(xhr,status){
 					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
+						 alertify.error('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
+						 alertify.error('권한이 없습니다.');
 					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
+						 alertify.error('페이지를 찾을수없습니다.');
 					 }else if(xhr.status==500){
-						 alert('서버에 오류가 발생하였습니다.');
+						 alertify.error('서버에 오류가 발생하였습니다.');
 					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
+						 alertify.error('시간을 초과하였습니다.');
 					 }else {
-					      alert('에러가 발생하였습니다');
+						 alertify.error('에러가 발생하였습니다');
 					 }
-				   }
+				 }
 		    	 
          }); 
 	
@@ -150,7 +193,7 @@ $(document).ready(function(){
 		
 		var data=$(this).data();
 		
-          $.ajax({/// ajax
+          $.ajax({// ajax
         	  
              type:'GET',
         	 url:'<%=request.getContextPath()%>/board/search/'+data.scode+'/'+search+'/'+data.page,
@@ -158,10 +201,11 @@ $(document).ready(function(){
 			 success: function(serverResult){
 				 
 				$("#reflash").empty();
-				$("#searchForm").append("<button type='button' class='btn btn-danger' onClick='history.go(0)' >검색취소</button>");
+				$("#searchForm > #searchCancel").remove();
+				$("#searchForm").append("<button id='searchCancel' type='button' class='btn btn-danger' onClick='history.go(0)' >검색취소</button>");
 				
 				if(serverResult['boardList'].length==0){
-					$("#reflash").append("<h3 style=''>등록된 게시글이 없습니다.</h3>");
+					$("#reflash").append("<div id=noSearch><h2>&nbsp;&nbsp;&nbsp;&nbsp;등록된 게시글이 없습니다.</h2></div>");
 					return;
 				}
 				
@@ -186,9 +230,9 @@ $(document).ready(function(){
 				 
 				  if(serverResult['boardList'][key].writer=='${id}'){
 					 str+="<div class='card bg-light rounded-0'><span><i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
-					  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i><i id='recommendIcon' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+					  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i><i style='right:36.5%' id='recommendIcon' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
 				  }else{
-					  str+="<div class='card bg-light rounded-0'><span><i id='recommendIcon' style='margin-top: 3%;right: 35%' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+					  str+="<div class='card bg-light rounded-0'><span><i id='recommendIcon' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
 				  }
 				  
 				  
@@ -200,17 +244,17 @@ $(document).ready(function(){
 				  	   +" class='btn btn-outline-secondary' data-toggle='modal' data-target='.bd-example-modal-lg' >상세보기</button> ";
 
 				  if(serverResult['boardList'][key].writer=='${id}'){
-				      str+="<button style='margin-left: 10px' id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
+				      str+="<button id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
 				  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
 				  	   +" class='btn btn-outline-danger'>수정하기</button></div></div></div>";
 				  	   
 				  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==false){
-					  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+					  str+="<button id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
 				  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
 				  	   +" class='btn btn-outline-success'>추천하기</button></div></div></div>";	
 				  
 				  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==true){
-					  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+					  str+="<button id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
 				  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
 				  	   +" class='btn btn-success'>추천해체</button></div></div></div>";
 				  }
@@ -242,21 +286,23 @@ $(document).ready(function(){
 				}
 				
 			 },
-			  error: function(xhr,status){
-					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
-					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
-					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
-					 }else if(xhr.status==500){
-						 alert('서버에 오류가 발생하였습니다.');
-					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
-					 }else {
-					      alert('에러가 발생하였습니다');
-					 }
+			 error: function(xhr,status){
+				 if(xhr.status==0){
+					 alertify.error('네트워크를 체크해주세요.');
+				 }else if(xhr.status==400){
+					 alertify.error('요청에 오류가 있습니다.');
+				 }else if(xhr.status==401){
+					 alertify.error('권한이 없습니다.');
+				 }else if(xhr.status==404){
+					 alertify.error('페이지를 찾을수없습니다.');
+				 }else if(xhr.status==500){
+					 alertify.error('서버에 오류가 발생하였습니다.');
+				 }else if(status=='timeout'){
+					 alertify.error('시간을 초과하였습니다.');
+				 }else {
+					 alertify.error('에러가 발생하였습니다');
 				 }
+			 }
         	 
          });
 		
@@ -267,6 +313,11 @@ $(document).ready(function(){
   $(document).on("click","#innerBoardCommentBtn",function(){
 		var data=$(this).data();
 	  
+		if($("#commentContent").val()==""){
+			alertify.error("내용을 입력해주세요");
+			return ;
+		}
+		
 		$.ajax({
 			type:'POST',
 			url: '<%=request.getContextPath()%>/comment',
@@ -278,10 +329,10 @@ $(document).ready(function(){
 			}),
 			success : function(serverResult){
 				/////댓글 불러오기(reflash)
-				if(serverResult==1){
+				if(serverResult==SUCCESS){
 					
 					 $.ajax({
-			        	 type:'get',
+			        	 type:'GET',
 			        	 url:'<%=request.getContextPath()%>/comment/'+data.scode+'/'+data.entrynum,
 			 			 contentType: 'application/json; charset=UTF-8',
 						 success: function(serverResult){
@@ -289,13 +340,22 @@ $(document).ready(function(){
 							 $("#commentList").empty();
 							 
 							 for(var i=0;i<serverResult.length;i++){
-								 $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
-						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
-						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-						         			+"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
-						         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-						         			+"'class='far fa-edit'></i></span><dd>"
-						         			+serverResult[i].content+"</dd></dl><hr>");
+								 
+									 var str="";
+									 	str+="<dl id='comment'><dt>"+serverResult[i].writer
+									 	  +"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)+" "+formatTime(serverResult[i].registrationDate);
+									 	  
+								      if(serverResult[i].writer=='${id}'){
+								    	 str+="&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+								    	 	 +"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+							         		 +data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+							         		 +"'class='far fa-edit'></i></span>";
+									 }
+									 
+									 str+="<dd>"+serverResult[i].content+"</dd></dl><hr>";
+									 
+									 $("#commentList").append(str);
+									 
 					               }
 							 
 							 $("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
@@ -303,21 +363,23 @@ $(document).ready(function(){
 
 							 $("#commentContent").val("");
 						 },
-						  error: function(xhr,status){
-								 if(xhr.status==0){
-								      alert('네트워크를 체크해주세요.');
-								 }else if(xhr.status==401){
-								      alert('권한이 없습니다.');
-								 }else if(xhr.status==404){
-								      alert('페이지를 찾을수없습니다.');
-								 }else if(xhr.status==500){
-								      alert('서버에 오류가 발생하였습니다.');
-								 }else if(status=='timeout'){
-								      alert('시간을 초과하였습니다.');
-								 }else {
-								      alert('에러가 발생하였습니다');
-								 }
+						 error: function(xhr,status){
+							 if(xhr.status==0){
+								 alertify.error('네트워크를 체크해주세요.');
+							 }else if(xhr.status==400){
+								 alertify.error('요청에 오류가 있습니다.');
+							 }else if(xhr.status==401){
+								 alertify.error('권한이 없습니다.');
+							 }else if(xhr.status==404){
+								 alertify.error('페이지를 찾을수없습니다.');
+							 }else if(xhr.status==500){
+								 alertify.error('서버에 오류가 발생하였습니다.');
+							 }else if(status=='timeout'){
+								 alertify.error('시간을 초과하였습니다.');
+							 }else {
+								 alertify.error('에러가 발생하였습니다');
 							 }
+						 }
 			        	         	 
 			        	 
 			         });
@@ -327,22 +389,23 @@ $(document).ready(function(){
 					alert('서버에 오류가 발생하였습니다');
 				}
 			},
-			  error: function(xhr,status){
-					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
-					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
-					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
-					 }else if(xhr.status==500){
-					      alert('서버에 오류가 발생하였습니다.');
-					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
-					 }else {
-					      alert('에러가 발생하였습니다');
-					 }
+			 error: function(xhr,status){
+				 if(xhr.status==0){
+					 alertify.error('네트워크를 체크해주세요.');
+				 }else if(xhr.status==400){
+					 alertify.error('요청에 오류가 있습니다.');
+				 }else if(xhr.status==401){
+					 alertify.error('권한이 없습니다.');
+				 }else if(xhr.status==404){
+					 alertify.error('페이지를 찾을수없습니다.');
+				 }else if(xhr.status==500){
+					 alertify.error('서버에 오류가 발생하였습니다.');
+				 }else if(status=='timeout'){
+					 alertify.error('시간을 초과하였습니다.');
+				 }else {
+					 alertify.error('에러가 발생하였습니다');
 				 }
-
+			 }
 		}); 
 		
 		
@@ -352,10 +415,20 @@ $(document).ready(function(){
    //댓글삭제
    $(document).on("click","#commentDel",function(){
 		
-	var check=confirm("댓글을 삭제하시겠습니까?");	
-	  if(check==true){
-			
+      alertify.confirm("댓글을 삭제하시겠습니까?",function(e){
+    	  if(e){
+    		  callback(true);
+    		  
+    	  }else{
+    		  callback(false);
+    	  }
+      });
+	
 		var data=$(this).data();
+	
+	function callback(value){
+	  if(value==true){
+			
 		
 		$.ajax({
 			type:'DELETE',
@@ -369,9 +442,9 @@ $(document).ready(function(){
 			  }),
 			success : function(serverResult){
 				if(serverResult==-1){
-					alert("댓글 작성자가 아닙니다.");
-				}else if(serverResult==0){
-					alert("서버에 오류가 발생하였습니다.");				 	
+					alertify.error("댓글 작성자가 아닙니다.");
+				}else if(serverResult==FAIL){
+					alertify.error("서버에 오류가 발생하였습니다.");				 	
 				}else{
 				
 					$.ajax({
@@ -383,13 +456,20 @@ $(document).ready(function(){
 							 $("#commentList").empty();
 							 
 							 for(var i=0;i<serverResult.length;i++){
-						         	$("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
-						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
-						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"
-						         			+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-trash-alt'></i>"
-						         			+"<i id='commentModify' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"
-						         			+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq+"' class='far fa-edit'></i></span><dd>"
-						         			+serverResult[i].content+"<hr></dd></dl>");
+										var str="";
+										 	str+="<dl id='comment'><dt>"+serverResult[i].writer
+										 	  +"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
+										 	  
+									      if(serverResult[i].writer=='${id}'){
+									    	 str+="&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+									    	 	 +"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+								         		 +data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+								         		 +"'class='far fa-edit'></i></span>";
+										     }
+										 
+										 str+="<dd>"+serverResult[i].content+"</dd></dl><hr>";
+										 
+										 $("#commentList").append(str);
 							       }
 
 					         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
@@ -398,22 +478,23 @@ $(document).ready(function(){
 
 							 $("#commentContent").val("");
 						 },
-						 
-						  error: function(xhr,status){
-								 if(xhr.status==0){
-								      alert('네트워크를 체크해주세요.');
-								 }else if(xhr.status==401){
-								      alert('권한이 없습니다.');
-								 }else if(xhr.status==404){
-								      alert('페이지를 찾을수없습니다.');
-								 }else if(xhr.status==500){
-								      alert('서버에 오류가 발생하였습니다.');
-								 }else if(status=='timeout'){
-								      alert('시간을 초과하였습니다.');
-								 }else {
-								      alert('에러가 발생하였습니다');
-								 }
+						 error: function(xhr,status){
+							 if(xhr.status==0){
+								 alertify.error('네트워크를 체크해주세요.');
+							 }else if(xhr.status==400){
+								 alertify.error('요청에 오류가 있습니다.');
+							 }else if(xhr.status==401){
+								 alertify.error('권한이 없습니다.');
+							 }else if(xhr.status==404){
+								 alertify.error('페이지를 찾을수없습니다.');
+							 }else if(xhr.status==500){
+								 alertify.error('서버에 오류가 발생하였습니다.');
+							 }else if(status=='timeout'){
+								 alertify.error('시간을 초과하였습니다.');
+							 }else {
+								 alertify.error('에러가 발생하였습니다');
 							 }
+						 }
 			        	         	 
 			        	 
 			         });
@@ -422,21 +503,24 @@ $(document).ready(function(){
 			 },
 			  error: function(xhr,status){
 					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
+						 alertify.error('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
+						 alertify.error('권한이 없습니다.');
 					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
+						 alertify.error('페이지를 찾을수없습니다.');
 					 }else if(xhr.status==500){
-					      alert('서버에 오류가 발생하였습니다.');
+						 alertify.error('서버에 오류가 발생하였습니다.');
 					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
+						 alertify.error('시간을 초과하였습니다.');
 					 }else {
-					      alert('에러가 발생하였습니다');
+						 alertify.error('에러가 발생하였습니다');
 					 }
 				 }
 		}); 
 		
+	   }
 	  }////confirm 
 		
 	}); /// 댓글 삭제 끝
@@ -444,12 +528,22 @@ $(document).ready(function(){
 	
     ////////////////////댓글수정 폼
    $(document).on("click","#commentModify",function(){
-	 var confm=confirm("댓글을 수정하시겠습니까?");
-	
-	 if(confm==true){
+		
+	 alertify.confirm("댓글을 수정하시겠습니까?",function (e){ 
+		if(e){
+				  callback(true);
+			 }
+		else{
+				  callback(false);
+			}
+		}); 
+
+	   var data=$(this).data();
+	   var ths=this;
+   function callback(value){
+	 
+	if(value==true){
 		 
-	  var data=$(this).data();
-	  var ths=this;
 	 
 	  $.ajax({
 		 
@@ -459,7 +553,7 @@ $(document).ready(function(){
 		 success: function(serverResult){
 			 
 			 if(serverResult==null){
-				 alert("서버에 오류가 발생하였습니다.");
+				 alertify.error("서버에 오류가 발생하였습니다.");
 			 }else{
 				
 				 $(ths).closest("dl").children("dd").html("<div class='form-group'><label><abbr class='initialism'>댓글수정</abbr>:</label>"
@@ -469,28 +563,37 @@ $(document).ready(function(){
 		 },
 		  error: function(xhr,status){
 				 if(xhr.status==0){
-				      alert('네트워크를 체크해주세요.');
+					 alertify.error('네트워크를 체크해주세요.');
 				 }else if(xhr.status==401){
-				      alert('권한이 없습니다.');
+					 alertify.error('권한이 없습니다.');
 				 }else if(xhr.status==404){
-				      alert('페이지를 찾을수없습니다.');
+					 alertify.error('페이지를 찾을수없습니다.');
 				 }else if(xhr.status==500){
-				      alert('서버에 오류가 발생하였습니다.');
+					 alertify.error('서버에 오류가 발생하였습니다.');
 				 }else if(status=='timeout'){
-				      alert('시간을 초과하였습니다.');
+					 alertify.error('시간을 초과하였습니다.');
 				 }else {
-				      alert('에러가 발생하였습니다');
+					 alertify.error('에러가 발생하였습니다');
 				 }
 			 }
 		 
 		 
 	   });
+	  }
 	 }			
    }); ////// 댓글수정 폼 끝
     
    ////////////////////댓글수정
    $(document).on("click","#commmentModifyBtn",function(){
 	  var data=$(this).data();
+	  
+	  
+	 var content= $(this).closest("div").children("#modifyContent").val();
+	 if(content==""){
+		 alertify.error("내용을 입력해주세요");
+		 return;
+	 }
+	 
 	  
 	    $.ajax({
 			type:'PUT',
@@ -500,13 +603,13 @@ $(document).ready(function(){
 				   'scode': data.scode,
 				   'entryNum' : data.entrynum,
 				   'writer' : data.writer,
-				   'content' : $(this).closest("div").children("#modifyContent").val(),
+				   'content' : content,
 				   'commentSeq' : data.commentseq
 			}),
 			success : function(serverResult){
 				
-				if(serverResult==0){
-					alert("서버에 오류가 발생하였습니다.");
+				if(serverResult==FAIL){
+					alertify.error("서버에 오류가 발생하였습니다.");
 					
 				}else{
 					$.ajax({
@@ -519,13 +622,20 @@ $(document).ready(function(){
 							 $("#commentList").empty();
 							 for(var i=0;i<serverResult.length;i++){
 						         	
-								    $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
-						         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
-						         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-						         			+"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
-						         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-						         			+"'class='far fa-edit'></i></span><dd>"
-						         			+serverResult[i].content+"</dd></dl><hr>");
+										 var str="";
+										 	str+="<dl id='comment'><dt>"+serverResult[i].writer
+										 	  +"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)+" "+formatTime(serverResult[i].registrationDate)
+										 	  
+									      if(serverResult[i].writer=='${id}'){
+									    	 str+="&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+									    	 	 +"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
+								         		 +data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
+								         		 +"'class='far fa-edit'></i></span>";
+										 }
+										 
+										 str+="<dd>"+serverResult[i].content+"</dd></dl><hr>";
+										 
+										 $("#commentList").append(str);
 							      }
 						         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
 						         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
@@ -533,17 +643,19 @@ $(document).ready(function(){
 						   },
 						   error: function(xhr,status){
 								 if(xhr.status==0){
-								      alert('네트워크를 체크해주세요.');
+									 alertify.error('네트워크를 체크해주세요.');
+								 }else if(xhr.status==400){
+									 alertify.error('요청에 오류가 있습니다.');
 								 }else if(xhr.status==401){
-								      alert('권한이 없습니다.');
+									 alertify.error('권한이 없습니다.');
 								 }else if(xhr.status==404){
-								      alert('페이지를 찾을수없습니다.');
+									 alertify.error('페이지를 찾을수없습니다.');
 								 }else if(xhr.status==500){
-								      alert('서버에 오류가 발생하였습니다.');
+									 alertify.error('서버에 오류가 발생하였습니다.');
 								 }else if(status=='timeout'){
-								      alert('시간을 초과하였습니다.');
+									 alertify.error('시간을 초과하였습니다.');
 								 }else {
-								      alert('에러가 발생하였습니다');
+									 alertify.error('에러가 발생하였습니다');
 								 }
 							 }	 
 			        	 
@@ -554,26 +666,37 @@ $(document).ready(function(){
 			},
 			  error: function(xhr,status){
 					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
+						 alertify.error('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
+						 alertify.error('권한이 없습니다.');
 					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
+						 alertify.error('페이지를 찾을수없습니다.');
 					 }else if(xhr.status==500){
-					      alert('서버에 오류가 발생하였습니다.');
+						 alertify.error('서버에 오류가 발생하였습니다.');
 					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
+						 alertify.error('시간을 초과하였습니다.');
 					 }else {
-					      alert('에러가 발생하였습니다');
+						 alertify.error('에러가 발생하였습니다');
 					 }
 				 }
 	      });
     
      }); /////// 댓글 수정끝
 
+     
+     $(window).bind("popstate",function(event){
+    	 var data=event.originalEvent.state;
+    	 history.go(0);
+     });
+     
 ///////////////// 글작성 폼
 
 	$("#boardWrite").on("click",function(){
+		
+		
+	    history.pushState(null,null,contextPath+"/board/external/write");
 			
 		$(".container").empty();
 		$(".container").append("<h1 id='stationname'>"+'${sname}'+"역 게시판</h1><hr/>");
@@ -613,20 +736,21 @@ $(document).on("change","#file",function(){
   		if( $("#file").val() != "" ){
   			var ext = $('#file').val().split('.').pop().toLowerCase();
   			if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
-  				 alert('png,jpg,jpeg 파일만 업로드 할수 있습니다.');
+  				alertify.error('png,jpg,jpeg 파일만 업로드 할수 있습니다.');
   				 return;
   			}
   	       $("#fileCheck").remove();
   			$("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
   		 
   		}else{
-  			alert("파일에 오류가 있습니다. 다시 검색해주세요");
+  			alertify.error("파일에 오류가 있습니다. 다시 첨부해주세요");
   		}
 }); 
 
     // 뒤로가기 버튼
 	$(document).on("click","#backpage",function(){
-		 history.go(0);
+ 		location.assign(contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
+
 	}); 
 
 	
@@ -668,17 +792,19 @@ $(document).on("change","#file",function(){
 			 },
 			  error: function(xhr,status){
 					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
+						 alertify.error('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
+						 alertify.error('권한이 없습니다.');
 					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
+						 alertify.error('페이지를 찾을수없습니다.');
 					 }else if(xhr.status==500){
-					      alert('서버에 오류가 발생하였습니다.');
+						 alertify.error('서버에 오류가 발생하였습니다.');
 					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
+						 alertify.error('시간을 초과하였습니다.');
 					 }else {
-					      alert('에러가 발생하였습니다');
+						 alertify.error('에러가 발생하였습니다');
 					 }
 				 }
 			
@@ -691,6 +817,8 @@ $(document).on("change","#file",function(){
     
    //글수정 불러오기
    $(document).on("click","#boardMod",function(){
+	   
+	    history.pushState(null,null,contextPath+"/board/external/modify");
 	   
 	   var data=$(this).data();
 	   $.ajax({
@@ -728,17 +856,19 @@ $(document).on("change","#file",function(){
 			 },
 			  error: function(xhr,status){
 					 if(xhr.status==0){
-					      alert('네트워크를 체크해주세요.');
+						 alertify.error('네트워크를 체크해주세요.');
+					 }else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 					 }else if(xhr.status==401){
-					      alert('권한이 없습니다.');
+						 alertify.error('권한이 없습니다.');
 					 }else if(xhr.status==404){
-					      alert('페이지를 찾을수없습니다.');
+						 alertify.error('페이지를 찾을수없습니다.');
 					 }else if(xhr.status==500){
-					      alert('서버에 오류가 발생하였습니다.');
+						 alertify.error('서버에 오류가 발생하였습니다.');
 					 }else if(status=='timeout'){
-					      alert('시간을 초과하였습니다.');
+						 alertify.error('시간을 초과하였습니다.');
 					 }else {
-					      alert('에러가 발생하였습니다');
+						 alertify.error('에러가 발생하였습니다');
 					 }
 				 }
 		
@@ -762,10 +892,10 @@ $(document).on("change","#file",function(){
 		
 		
 		if($("#titleInput").val()==""||$("#titleInput").hasClass("is-invalid")==true){
-			alert("제목을 확인해 주세요");
+			alertify.error("제목을 확인해 주세요");
 			
 		}else if($("#summernote").val()==""){
-			alert("내용을 확인해주세요");
+			alertify.error("내용을 확인해주세요");
 			
 		}else{
 			
@@ -780,23 +910,25 @@ $(document).on("change","#file",function(){
 					if(result==SUCCESS){
 						location.assign(contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 					}else{
-						alert("오류가 발생하였습니다.")
+						alertify.error("오류가 발생하였습니다.")
 					}
 					
 				},
 				  error: function(xhr,status){
 						 if(xhr.status==0){
-						      alert('네트워크를 체크해주세요.');
+							 alertify.error('네트워크를 체크해주세요.');
+						 }else if(xhr.status==400){
+							 alertify.error('요청에 오류가 있습니다.');
 						 }else if(xhr.status==401){
-						      alert('권한이 없습니다.');
+							 alertify.error('권한이 없습니다.');
 						 }else if(xhr.status==404){
-						      alert('페이지를 찾을수없습니다.');
+							 alertify.error('페이지를 찾을수없습니다.');
 						 }else if(xhr.status==500){
-						      alert('서버에 오류가 발생하였습니다.');
+							 alertify.error('서버에 오류가 발생하였습니다.');
 						 }else if(status=='timeout'){
-						      alert('시간을 초과하였습니다.');
+							 alertify.error('시간을 초과하였습니다.');
 						 }else {
-						      alert('에러가 발생하였습니다');
+							 alertify.error('에러가 발생하였습니다');
 						 }
 					 }
 			});	
@@ -807,9 +939,7 @@ $(document).on("change","#file",function(){
    
 $(document).on("click","#modifyBtn",function(){
 	   if($("#titleInput").val()==""||$("#titleInput").hasClass("is-invalid")==true){
-		
-		   alert("제목을 확인해주세요"); 
-		
+		   alert("제목을 확인해주세요");
 	   }
 	   else if($("#summernote").val()==""){
 		   alert("내용을 확인해주세요");
@@ -827,23 +957,25 @@ $(document).on("click","#modifyBtn",function(){
 					if (result == SUCCESS) {
 						location.assign(contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 					} else {
-						alert("오류가 발생하였습니다.");
+						alertify.error("오류가 발생하였습니다.");
 					}
 
 				},
 				error : function(xhr,status) {
 					if (xhr.status == 0) {
-					   alert('네트워크를 체크해주세요.');
+						alertify.error('네트워크를 체크해주세요.');
+					}else if(xhr.status==400){
+						 alertify.error('요청에 오류가 있습니다.');
 				    } else if (xhr.status == 401) {
-						alert('권한이 없습니다.');
+				    	alertify.error('권한이 없습니다.');
 			        } else if (xhr.status == 404) {
-					    alert('페이지를 찾을수없습니다.');
+			        	alertify.error('페이지를 찾을수없습니다.');
 					} else if (xhr.status == 500) {
-					    alert('서버에 오류가 발생하였습니다.');
+						alertify.error('서버에 오류가 발생하였습니다.');
 				    } else if (status == 'timeout') {
-					    alert('시간을 초과하였습니다.');
+				    	alertify.error('시간을 초과하였습니다.');
 				    } else {
-					    alert('에러가 발생하였습니다');
+				    	alertify.error('에러가 발생하였습니다');
 					    }
 					}
 			    });
@@ -919,25 +1051,25 @@ $(document).on("click","#modifyBtn",function(){
 				           }
 						
 						}else{
-					    	alert("오류가 발생하였습니다.");
+							alertify.error("오류가 발생하였습니다.");
 					    }
 				
 					},
 				    error: function(xhr,status){
 						 if(xhr.status==0){
-						      alert('네트워크를 체크해주세요.');
+						      alertify.error('네트워크를 체크해주세요.');
 						 }else if(xhr.status==400){
-						      alert('요청에 오류가 있습니다.');
+							 alertify.error('요청에 오류가 있습니다.');
 						 }else if(xhr.status==401){
-						      alert('권한이 없습니다.');
+							 alertify.error('권한이 없습니다.');
 						 }else if(xhr.status==404){
-						      alert('페이지를 찾을수없습니다.');
+							 alertify.error('페이지를 찾을수없습니다.');
 						 }else if(xhr.status==500){
-						      alert('서버에 오류가 발생하였습니다.');
+							 alertify.error('서버에 오류가 발생하였습니다.');
 						 }else if(status=='timeout'){
-						      alert('시간을 초과하였습니다.');
+							 alertify.error('시간을 초과하였습니다.');
 						 }else {
-						      alert('에러가 발생하였습니다');
+							 alertify.error('에러가 발생하였습니다');
 						 }
 					 }
 					
@@ -1038,17 +1170,19 @@ $(document).on("click","#modifyBtn",function(){
 				 },
 				  error: function(xhr,status){
 						 if(xhr.status==0){
-						      alert('네트워크를 체크해주세요.');
+							 alertify.error('네트워크를 체크해주세요.');
 						 }else if(xhr.status==401){
-						      alert('권한이 없습니다.');
+							 alertify.error('요청에 오류가 있습니다.');
+						 }else if(xhr.status==401){
+							 alertify.error('권한이 없습니다.');
 						 }else if(xhr.status==404){
-						      alert('페이지를 찾을수없습니다.');
+							 alertify.error('페이지를 찾을수없습니다.');
 						 }else if(xhr.status==500){
-							 alert('서버에 오류가 발생하였습니다.');
+							 alertify.error('서버에 오류가 발생하였습니다.');
 						 }else if(status=='timeout'){
-						      alert('시간을 초과하였습니다.');
+							 alertify.error('시간을 초과하였습니다.');
 						 }else {
-						      alert('에러가 발생하였습니다');
+							 alertify.error('에러가 발생하였습니다');
 						 }
 					 }
 	        	 
@@ -1057,9 +1191,6 @@ $(document).on("click","#modifyBtn",function(){
 	         }
 		});
   
-		
-		
-		
 });///// ready 끝
 </script>
 
@@ -1072,6 +1203,10 @@ $(document).on("click","#modifyBtn",function(){
 @font-face {
 	font-family: '28D';
 	src: url('../font/28DaysLater.ttf');
+}
+@font-face {
+	font-family: 'NS';
+	src: url('../font/NanumSquareRoundR.ttf');
 }
 #externalContent {
 	overflow: hidden;
@@ -1090,9 +1225,9 @@ $(document).on("click","#modifyBtn",function(){
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h1 style="font-family: '28D'">InnerSubway</h1>
+                <h1 id='sideHeader'>InnerSubway</h1>
             </div>
-
+            
             <ul class="list-unstyled components">
                 <c:if test="${stationList[0].line==10}">
 				  <p>분당선</p>
@@ -1115,10 +1250,9 @@ $(document).on("click","#modifyBtn",function(){
                 
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
                         <i class="fas fa-align-left"></i>
-                        <span>사이드바</span>
+                        <span>목록</span>
                     </button>
-                  <button id="logOutBtn" style="font-family:'BU'" type="button" class="btn btn-danger">로그아웃</button>
-                  
+                  <button id="logOutBtn" type="button" class="btn btn-danger">로그아웃</button>
                 </div>
             </nav>
             
@@ -1138,14 +1272,13 @@ $(document).on("click","#modifyBtn",function(){
 			   </span>
 				
 				
-				<input type="search" class="form-control mr-sm-2" style="display: inline;width:25%;" id="searchBoard" size="20"
-				placeholder="장소이름&작성자">
+				<input type="search" class="form-control mr-sm-2" id="searchBoard" size="20" placeholder="장소이름&작성자">
 				<button class="btn btn-success" data-scode='${scode}' data-page=1 id="searchBoardBtn">검색</button>
 			  </span>
 			 </div>  
 			 
 			   <c:if test="${fn:length(boardList)==0}">
-			   <div style="text-align: center; margin-top: 15%; margin-bottom: 15%"><h1>게시물이 없습니다.<br>등록해주세요~</h1></div>
+			   <div id="noBoard"><h1>게시물이 없습니다.<br>등록해주세요~</h1></div>
 			   </c:if>
 			              <br>
 			 <div id="reflash" class="row text-center">
@@ -1157,40 +1290,40 @@ $(document).on("click","#modifyBtn",function(){
 							<c:if test="${board.writer==id}">
 							<div class="card bg-light rounded-0">
 								<span><i id="boardDel" data-scode='${board.scode}' data-entry='${board.entryNum}'
-								data-writer='${board.writer}' class="far fa-times-circle"></i><i id='recommendIcon' class="far fa-thumbs-up">${board.recommend}</i></span> 
+								data-writer='${board.writer}' class="far fa-times-circle"></i><i style="right:36.5%" id='recommendIcon' class="far fa-thumbs-up">${board.recommend}</i></span> 
 							</div>
 							</c:if>
 							
 						    <c:if test="${board.writer!=id}">
 							<div class="card bg-light rounded-0">
-								<span><i id='recommendIcon' class="far fa-thumbs-up" style="margin-top: 3%;right: 35%">${board.recommend}</i></span> 
+								<span><i id='recommendIcon' class="far fa-thumbs-up">${board.recommend}</i></span> 
 							</div>
 							</c:if>
 							
 							<div class="card-body" id="externalBox">
 								<h4 class="card-title">${board.title}</h4>
 								<p class="card-text" id="externalContent">${board.content}</p>
-								<footer style="font-family: '고딕'" class="blockquote-footer">From
+								<footer class="blockquote-footer">From
 									${board.writer}&nbsp;[${board.registrationDate}]</footer>
 							</div>
 
 							<div class="card-footer border-dark">
-								<button style="margin-left: 10px" id="modalReq" type="button"
+								<button id="modalReq" type="button"
 									data-entrynum='${board.entryNum}' data-scode='${board.scode}'
 									class="btn btn-outline-secondary" data-toggle="modal"
 									data-target=".bd-example-modal-lg">상세보기</button>
 								<c:if test="${board.writer==id}">	
-								<button style="margin-left: 10px" id="boardMod" type="button"
+								<button id="boardMod" type="button"
 									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
 									data-writer='${board.writer}' class="btn btn-outline-danger">수정하기</button>
 							   </c:if>
 							   <c:if test="${board.writer!=id && board.recommendCheck==false}">	
-								<button style="margin-left: 10px" id="recommend" type="button"
+								<button id="recommend" type="button"
 									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
 									data-writer='${board.writer}' class="btn btn-outline-success">추천하기</button>
 							   </c:if>
 							   <c:if test="${board.writer!=id && board.recommendCheck==true}">	
-								<button style="margin-left: 10px" id="recommend" type="button"
+								<button id="recommend" type="button"
 									data-entryNum='${board.entryNum}' data-scode='${board.scode}'
 									data-writer='${board.writer}' class="btn btn-success">추천해제</button>
 							   </c:if>
@@ -1204,8 +1337,7 @@ $(document).on("click","#modifyBtn",function(){
 			<!--페이지 처리-->
 			<hr>
 			<button id="boardWrite" class="btn btn-outline-secondary float-right">글작성</button>
-			<ul id="paging" style="float: center"
-				class="pagination mx-auto justify-content-center">
+			<ul id="paging" class="pagination mx-auto justify-content-center">
 				<c:if test="${param.page>1}">
 					<li class="page-item"><a class="page-link"
 						href="<%=request.getContextPath()%>/board/external?scode=${scode}&sname=${sname}&line=${line}&page=${param.page-1}">이전</a></li>
@@ -1243,12 +1375,11 @@ $(document).on("click","#modifyBtn",function(){
 			<div class="modal-content">
 				<!--        모달창 내부                      -->
 
-				<div class="card bg-light mb-3" style="max-width: auto;">
+				<div class="card bg-light mb-3">
 					<div class="card-header">상세보기</div>
 					<div id="innerImgdiv" class="card-body">
 						<p class="card-text">
-							<img id="innerImg" alt="이미지"
-								src="">
+							<img id="innerImg" alt="이미지" src="">
 							<!-- <img alt="이미지" src="https://www.google.co.kr/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"> -->
 						</p>
 					</div>
@@ -1259,7 +1390,7 @@ $(document).on("click","#modifyBtn",function(){
 					<div class="card-body">
 						<h5 id="innerBoardTitle" class="card-title">title</h5>
 						<p class="card-text" id="innerBoardContent">error</p>
-						<footer style="font-family: '고딕'" id='innerFooter'
+						<footer id='innerFooter'
 							class="blockquote-footer">From 작성자</footer>
 					</div>
 
@@ -1281,8 +1412,7 @@ $(document).on("click","#modifyBtn",function(){
 						<textarea class="form-control" rows="5" id="commentContent"></textarea>
 					</div>
 
-					<div id="innerBoardComment" class="text-right"
-						style="margin-right: 23px"></div>
+					<div id="innerBoardComment" class="text-right"></div>
 					<br>
 				</div>
 

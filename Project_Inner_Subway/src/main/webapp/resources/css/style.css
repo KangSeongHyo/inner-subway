@@ -6,8 +6,8 @@ body {
 }
 
 p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1em;
+    font-family: 'NS';
+    font-size: 15px;
     font-weight: 300;
     line-height: 1.7em;
     color: #999;
@@ -66,7 +66,7 @@ a:focus {
 }
 
 #sidebar .sidebar-header {
-    padding: 15px;
+    padding: 17px;
     background: #000;
     border-bottom: solid 0.02px whitesmoke;
 
@@ -78,6 +78,8 @@ a:focus {
 }
 
 #sidebar ul p {
+	font-family:'BU';
+	font-size : 30px;
     color: #fff;
     padding: 10px;
 }
@@ -315,19 +317,46 @@ font-size: 25px;
 #stationlist{
 font-family: 'BU';
 }
+#sideHeader{
+font-family: '28D';
+}
+#logOutBtn{
+font-family: 'BU';
+}
+
 #stationname{
 font-family: 'BU';
 }
 #fileCheck{
   color: 'green';
 }
-#externalContent{
-font-family: '고딕';
+
+#externalContent {
+	font-family: '고딕';
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 150px;
+	display: inline-block;
 }
 
+#searchBoard{
+	display: inline;
+	width:25%;
+}
+#noBoard{
+	text-align: center; 
+	margin-top: 15%; 
+	margin-bottom: 15%;
+}
+#noSearch{
+	margin-top: 1%; 
+	margin-bottom: 30%;
+}
 #recommendIcon{
  position: relative;
- right: 40%
+ margin-top: 3%;
+ right: 35%
 }
 .page-item.active .page-link{
 	    background-color: #00C853;
@@ -335,4 +364,53 @@ font-family: '고딕';
 }
 #sort{
 	float: left;
+}
+#modalReq{
+	margin-left: 10px;
+}
+#boardMod{
+	margin-left: 10px;
+}
+#recommend{
+	margin-left: 10px;
+}
+#paging{
+	float: center;
+}
+.card bg-light mb-3{
+	max-width: auto;
+}
+#innerBoardComment{
+	margin-right: 23px;
+}
+
+
+#commentDel{
+	cursor: pointer;
+}
+
+#commentModify{
+	cursor: pointer;
+}
+
+dd{
+	font-family: 'NS';
+	font-size: 15px;
+}
+dl > span{
+	font-size:13px;
+	font-family: 'NS';
+}
+dl > dt{
+	font-size:17px;
+}
+#innerBoardContent{
+	font-family: 'NS';
+}
+footer{
+	font-family: '고딕';
+}
+
+#commentContent{
+	font-family: '고딕';
 }
