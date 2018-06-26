@@ -159,6 +159,7 @@ public class BoardRestController {
 		MultipartFile file) throws IllegalStateException, IOException, Exception {
 
 		ResponseEntity<Integer> responseEntity = null;
+		
 		int resultValue = boardService.modifyBoard(requestBoard, file);
 
 		if (resultValue == CheckValue.SUCCESS) {

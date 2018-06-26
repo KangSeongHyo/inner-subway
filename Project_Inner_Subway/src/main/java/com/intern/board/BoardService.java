@@ -103,6 +103,7 @@ public class BoardService implements Board {
 		//////////////file 업로드
 
 		if (file != null) {
+			
 			String realName = file.getOriginalFilename();
 
 			String ext = realName.substring(realName.lastIndexOf("."));// 확장자 추출
@@ -125,6 +126,7 @@ public class BoardService implements Board {
 		} else {
 			
 			requestBoard.setImgPath("NotFound");
+			System.out.println("들어옴");
 		}
 
 		return dao.modifyBoard(requestBoard);

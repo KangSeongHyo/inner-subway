@@ -696,7 +696,7 @@ $(document).ready(function(){
 	$("#boardWrite").on("click",function(){
 		
 		
-	    history.pushState(null,null,contextPath+"/board/external/write");
+	    history.pushState(null,null,contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 			
 		$(".container").empty();
 		$(".container").append("<h1 id='stationname'>"+'${sname}'+"역 게시판</h1><hr/>");
@@ -818,7 +818,7 @@ $(document).on("change","#file",function(){
    //글수정 불러오기
    $(document).on("click","#boardMod",function(){
 	   
-	    history.pushState(null,null,contextPath+"/board/external/modify");
+	    history.pushState(null,null,contextPath+"/board/external?scode="+'${scode}'+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 	   
 	   var data=$(this).data();
 	   $.ajax({
@@ -833,7 +833,7 @@ $(document).on("change","#file",function(){
 						+data.scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"
 						+serverResult.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 10글자이내)</small>"
 						+"</div><div class='form-group'><textarea name='content' id='summernote'>"
-						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' id='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
+						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' id='file' name='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
 						+"<button id='modifyBtn' class='btn btn-outline-secondary float-right'>수정</button>"
 						+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");		    
 					
