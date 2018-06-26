@@ -7,7 +7,8 @@
 ### 소개
 
 -  개발내용 & 구현일정 : [feature list](https://oss.navercorp.com/2018-nbp-internship-team1/seonghyo/wiki/%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EB%B0%9C)
--  주소 : [http://10.106.153.75:9001/isubway/](http://10.106.153.75:9001/isubway/)(수정중)
+-  주소 : [http://10.106.153.75:9001/isubway/](http://10.106.153.75:9001/isubway/)(TestID: test1234 Pw:q1w2e3 게시판:병점역)
+   오류는 수정하고 있습니다
 -  페이지구성 : [스토리보드](https://ovenapp.io/view/WGKZph9yvgMCQEF34XHwcoEBLaOBrA4f/)
 
 ### 주제
