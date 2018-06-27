@@ -1,4 +1,5 @@
 # 지하철역 내부 정보 안내 웹서비스 개발
+![default](https://media.oss.navercorp.com/user/9761/files/25a2681e-7a16-11e8-8a10-8f2810e14802)
 
 ### 목적
 
