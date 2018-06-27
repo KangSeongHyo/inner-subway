@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Insert title here</title>
+<title>Inner Subway</title>
+<meta content="width=device-width">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link
@@ -530,16 +531,15 @@ $(document).ready(function(){
    $(document).on("click","#commentModify",function(){
 		
 	 alertify.confirm("댓글을 수정하시겠습니까?",function (e){ 
-		if(e){
-				  callback(true);
-			 }
-		else{
-				  callback(false);
-			}
+		if(e) {
+			callback(true); }
+		else {
+		   callback(false); }
 		}); 
 
 	   var data=$(this).data();
 	   var ths=this;
+	   
    function callback(value){
 	 
 	if(value==true){
@@ -1271,7 +1271,7 @@ $(document).on("click","#modifyBtn",function(){
 		    <div id="searchForm" class="text-right">
 			  <span>
 			   <span id='sort'>
-			   		<a id='sortBtn' data-scode='${scode}' data-target='latest' data-page=1  href="#" >최신순<i class="fas fa-sort-down"></i></a>&nbsp;&nbsp;
+			   		<a id='sortBtn' data-scode='${scode}' data-target='EntryNum' data-page=1  href="#" >최신순<i class="fas fa-sort-down"></i></a>&nbsp;&nbsp;
 			   		<a id='sortBtn' data-scode='${scode}' data-target='recommend' data-page=1  href="#" >추천순<i class="fas fa-sort-down"></i></a>&nbsp;&nbsp;
 			   		<a id='sortBtn' data-scode='${scode}' data-target='viewCount' data-page=1  href="#" >조회수순<i class="fas fa-sort-down"></i></a>
 			   </span>
@@ -1365,9 +1365,8 @@ $(document).on("click","#modifyBtn",function(){
 			  </ul>
 		   </div>
 		   </div>
-		  </div><!-- pagewapper -->
-	    </div><!-- conetent -->
-    </div><!-- wraaper -->
+		  </div>
+	    </div>
 
 
 

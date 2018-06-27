@@ -3,19 +3,36 @@ package com.intern.dao;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.board.BoardVO;
 import com.intern.station.StationVO;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"file:src/main/resources/mybatis/*.xml",
+	"file:src/main/webapp/WEB-INF/spring/*.xml"})
 @Component
 public class BoardDAO {
 
+	Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	SqlSession session;
+
+	@Test
+	public void test() {
+		log.info(session);
+	}
 
 	public List<BoardVO> getBoardList(StationVO vo, int startBoard) {
 		int limit = 4;
@@ -58,14 +75,17 @@ public class BoardDAO {
 		return session.selectOne("board.getSearchBoardCount", map);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public int boardRecommend(BoardVO vo) {
 		return session.update("recommend.setRecommend", vo);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public int recommendModify(BoardVO vo) {
 		return session.update("recommend.updateRecommend", vo);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public int recommendRegister(BoardVO vo) {
 		return session.insert("recommend.insertRecommend", vo);
 	}

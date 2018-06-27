@@ -47,7 +47,7 @@ public class CommentRestController {
 			log.info("Result : request commentList OK, Retrun commentList");
 
 		} else {
-			throw new Exception("Error occurred : database select");
+			throw new Exception("Error occurred : database select()");
 		}
 
 		return responseEntity;

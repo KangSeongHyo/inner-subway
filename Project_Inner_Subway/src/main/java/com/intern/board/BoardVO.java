@@ -21,9 +21,6 @@ public class BoardVO {
 		super();
 	}
 
-
-
-
 	public BoardVO(String scode, int entryNum, String title, String writer, Date registrationDate, int viewCount,
 		String content, String imgPath, int recommend, String id, boolean recommendCheck, String target) {
 		super();
@@ -41,9 +38,6 @@ public class BoardVO {
 		this.target = target;
 	}
 
-
-
-
 	public String getTarget() {
 		return target;
 	}
@@ -51,9 +45,11 @@ public class BoardVO {
 	public void setTarget(String target) {
 		this.target = target;
 	}
+
 	public boolean isRecommendCheck() {
 		return recommendCheck;
 	}
+
 	public void setRecommendCheck(boolean recommendCheck) {
 		this.recommendCheck = recommendCheck;
 	}

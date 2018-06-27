@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Inner Subway</title>
 <% 	
 String inputYn = request.getParameter("inputYn"); 
 String roadFullAddr = request.getParameter("roadFullAddr"); 

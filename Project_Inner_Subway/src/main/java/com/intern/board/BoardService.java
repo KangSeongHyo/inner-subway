@@ -9,7 +9,10 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.intern.dao.BoardDAO;
 import com.intern.globalexceptionhandler.NoAuthException;
@@ -34,8 +37,7 @@ import com.intern.board.BoardService;
 
 /*@RunWith(SpringJUnit4ClassRunner.class) // 테스트하겠다
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/**.xml")// xml 위치설정 스프링로드*/
-@Component
-@Transactional
+@Service
 public class BoardService implements Board {
 	Logger log = Logger.getLogger(this.getClass());
 
@@ -51,6 +53,7 @@ public class BoardService implements Board {
 
 			if (requstBoard.getWriter().equals(id)) {
 
+				log.info("Processing : board modify, select comment from DB");
 				return dao.getBoardOne(requstBoard);
 
 			} else {
@@ -59,15 +62,17 @@ public class BoardService implements Board {
 			}
 
 		} else {
-
+			log.info("Processing : select board from DB");
 			BoardVO resultBoard = dao.getBoardOne(requstBoard);
 
 			if (resultBoard == null) {
+				log.info("Processing : select board from DB");
 
 				return resultBoard;
 
 			} else {
 
+				log.info("Processing : update viewCount in DB");
 				resultValue = dao.increaseViewcount(requstBoard);
 
 				if (resultValue == CheckValue.SUCCESS) {
@@ -76,7 +81,7 @@ public class BoardService implements Board {
 
 				} else {
 
-					throw new Exception("Error occurred : database select");
+					throw new Exception("Error occurred : database select(BoardService.java:84)");
 				}
 
 			}
@@ -89,7 +94,7 @@ public class BoardService implements Board {
 
 		int boardCountPage = 4;
 		int startBoard = (page - 1) * boardCountPage;
-
+		log.info("Processing : select boardList(+paging) from DB");
 		return dao.getBoardList(requestStation, startBoard);
 	}
 
@@ -103,7 +108,9 @@ public class BoardService implements Board {
 		//////////////file 업로드
 
 		if (file != null) {
-			
+
+			log.info("Processing : file upload ");
+
 			String realName = file.getOriginalFilename();
 
 			String ext = realName.substring(realName.lastIndexOf("."));// 확장자 추출
@@ -123,12 +130,14 @@ public class BoardService implements Board {
 
 			requestBoard.setImgPath(imgPath);
 
-		} else {
-			
-			requestBoard.setImgPath("NotFound");
-			System.out.println("들어옴");
-		}
+			log.info("Processing : file upload Ok");
 
+		} else {
+
+			requestBoard.setImgPath("NotFound");
+			log.info("Processing : img not modify in DB");
+		}
+		log.info("Processing : board modify in DB");
 		return dao.modifyBoard(requestBoard);
 	}
 
@@ -139,11 +148,13 @@ public class BoardService implements Board {
 
 		if (requestBoard.getWriter().equals(id)) {
 
+			log.info("Processing : accordance writer");
+			log.info("Processing : remove board in DB");
 			resultValue = dao.removeBoard(requestBoard);
 
 		} else {
 
-			throw new NoAuthException("Error occurred : Discordance writer");
+			throw new NoAuthException("Error occurred : Discordance writer(BoardService.java:157)");
 		}
 
 		return resultValue;
@@ -154,6 +165,7 @@ public class BoardService implements Board {
 		//////////////file 업로드
 
 		if (file != null) {
+			log.info("Processing : file upload");
 			String realName = file.getOriginalFilename();
 
 			String ext = realName.substring(realName.lastIndexOf("."));
@@ -172,18 +184,27 @@ public class BoardService implements Board {
 			file.transferTo(newfile);
 
 			requestBoard.setImgPath(imgPath);
+			log.info("Processing : file upload Ok");
+
 		} else {
-			throw new FileNotFoundException("Error occurred : invail date[file]");
+			throw new FileNotFoundException("Error occurred : invaild data[file](BoardService.java:190)");
 		}
 
+		log.info("Processing : board register in DB");
 		return dao.boardRegister(requestBoard);
 	}
 
 	@Override
 	public List<BoardVO> removeHtml(List<BoardVO> boardList) {
 
-		for (BoardVO vo : boardList) {
-			vo.setContent(remove(vo.getContent()));
+		if (boardList != null) {
+
+			log.info("Processing : remove html for preview");
+
+			for (BoardVO vo : boardList) {
+				vo.setContent(remove(vo.getContent()));
+			}
+
 		}
 
 		return boardList;
@@ -192,6 +213,8 @@ public class BoardService implements Board {
 	@Override
 	public Map<String, Integer> getPage(int page, StationVO requestStation) {
 		/////////페이징 처리
+		log.info("Processing : pagination");
+
 		int totalBoard = dao.getEntryCount(requestStation);// 전체 게시물개수
 
 		int boardCountPage = 4;//한 페이지에 보여줄 게시물개수
@@ -215,6 +238,7 @@ public class BoardService implements Board {
 		pageMap.put("startPage", startPage);
 		pageMap.put("endPage", endPage);
 		pageMap.put("totalPage", totalPage);
+
 		/////페이징처리 게시물
 		return pageMap;
 	}
@@ -231,6 +255,7 @@ public class BoardService implements Board {
 		map.put("search", search);
 		map.put("id", id);
 
+		log.info("Processing : get search boardList from DB");
 		List<BoardVO> boardList = dao.getSearchBoard(map, startBoard);
 
 		Map<String, Object> searchBoardMap = new HashMap<String, Object>();
@@ -239,6 +264,7 @@ public class BoardService implements Board {
 		if (boardList != null) {
 
 			boardList = removeHtml(boardList);
+			log.info("Processing : remove html");
 
 			int totalBoard = dao.getSearchBoardCount(map);
 
@@ -247,6 +273,7 @@ public class BoardService implements Board {
 
 			} else {
 
+				log.info("Processing : pagination");
 				int totalPage = (totalBoard % boardCountPage == 0) ? (totalBoard / boardCountPage)
 					: (totalBoard / boardCountPage + 1);
 
@@ -275,9 +302,10 @@ public class BoardService implements Board {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public int recommendBoard(BoardVO requestBoard) throws Exception {
 		boolean requestRecommendCheck = requestBoard.isRecommendCheck();
+		log.info("Processing : check for recommend");
 
 		if (requestRecommendCheck == true || requestRecommendCheck == false) {
 
@@ -286,27 +314,30 @@ public class BoardService implements Board {
 
 			if (getRecommendOne == null) {
 				//등록이 안된상태
-
 				requestBoard.setRecommendCheck(true);
-				dao.boardRecommend(requestBoard);
 
+				dao.boardRecommend(requestBoard);
+				log.info("Processing : insert recommendCheck in DB");
 				return dao.recommendRegister(requestBoard);
 
 			} else {
 
 				if (getRecommendOne != requestRecommendCheck) {
 					dao.boardRecommend(requestBoard);
+					log.info("Processing : update recommend count");
+
+					log.info("Processing : update recommendCheck in DB");
 					return dao.recommendModify(requestBoard);
 
 				} else {
 
-					throw new Exception("Error occurred : lnvalid request data(BoardService.java:296)");
+					throw new Exception("Error occurred : lnvalid request data(BoardService.java:334)");
 				}
 
 			}
 
 		} else {
-			throw new Exception("Error occurred : lnvalid request data(BoardService.java:296)");
+			throw new Exception("Error occurred : lnvalid request data(BoardService.java:340)");
 		}
 
 	}
@@ -323,10 +354,11 @@ public class BoardService implements Board {
 
 		if (boardList == null) {
 
-			throw new Exception("Error occurred : database select");
+			throw new Exception("Error occurred : database select(BordService.java:357)");
 
 		} else {
 
+			log.info("Processing : remove html board");
 			boardList = removeHtml(boardList);
 
 			StationVO svo = new StationVO();
@@ -341,7 +373,7 @@ public class BoardService implements Board {
 		return sortBoardMap;
 	}
 
-	////////////html코드삭제
+	//html코드삭제
 	private String remove(String content) {
 		Pattern scripts = Pattern.compile("<(no)?script[^>]*>.*?</(no)?script>", Pattern.DOTALL);
 		Pattern style = Pattern.compile("<style[^>]*>.*</style>", Pattern.DOTALL);

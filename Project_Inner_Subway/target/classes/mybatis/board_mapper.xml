@@ -149,6 +149,7 @@
 					<choose>
 						<when test="target eq 'recommend'"> recommend </when>
 						<when test="target eq 'viewCount'"> viewCount </when>
+						<when test="target eq 'EntryNum'"> EntryNum </when>
 					</choose>
 					<choose>
 						<when test="target != null and target !=''">DESC</when>

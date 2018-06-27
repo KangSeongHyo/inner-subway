@@ -40,12 +40,13 @@ public class GlobalExceptionHandler {
 		log.debug(" ===================================END=======================================");
 
 	}
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void dataIntegrityViolationException(DataIntegrityViolationException e) {
 		log.error(e);
 		log.debug(" ===================================END=======================================");
-		
+
 	}
 
 	@ExceptionHandler(NoAuthException.class)

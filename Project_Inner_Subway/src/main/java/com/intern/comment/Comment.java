@@ -40,7 +40,7 @@ public interface Comment {
 	/**
 	 * 수정
 	 * @param requestComment 요청댓글정보
-	 * @return 1(success),0(error)
+	 * @return SUCCESS,FAIL
 	 */
 	public int modifyComment(CommentVO requestComment);
 

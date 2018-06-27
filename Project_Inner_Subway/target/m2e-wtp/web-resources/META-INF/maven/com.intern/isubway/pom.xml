@@ -82,13 +82,15 @@
 			</exclusions>
 			<scope>runtime</scope>
 		</dependency>
- 
+
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/cglib/cglib -->
+		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
 
 		<!-- Servlet -->
 		<dependency>
@@ -202,6 +204,22 @@
     <scope>test</scope>
 </dependency>
 
+<dependency> 
+	<groupId>org.aspectj</groupId> 
+	<artifactId>aspectjweaver</artifactId> 
+	<version>${org.aspectj-version}</version> 
+</dependency>
+
+<dependency> 
+			<groupId>cglib</groupId> 
+			<artifactId>cglib</artifactId> 
+			<version>3.1</version> 
+			<type>jar</type> 
+			<scope>compile</scope> 
+</dependency>
+
+
+
 <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 <dependency>
     <groupId>org.projectlombok</groupId>
@@ -210,11 +228,19 @@
     <scope>provided</scope>
 </dependency>
 
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-tx</artifactId>
+    <version>5.0.5.RELEASE</version>
+</dependency>
+
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
