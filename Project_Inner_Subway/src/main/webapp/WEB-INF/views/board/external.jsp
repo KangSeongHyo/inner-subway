@@ -288,6 +288,7 @@ $(document).ready(function(){
 				
 			 },
 			 error: function(xhr,status){
+				 
 				 if(xhr.status==0){
 					 alertify.error('네트워크를 체크해주세요.');
 				 }else if(xhr.status==400){
@@ -387,7 +388,7 @@ $(document).ready(function(){
 					
 					
 				}else{
-					alert('서버에 오류가 발생하였습니다');
+					alertify.error('서버에 오류가 발생하였습니다');
 				}
 			},
 			 error: function(xhr,status){
@@ -705,10 +706,10 @@ $(document).ready(function(){
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
 				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label>"
 				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
-				+"<small id='title_req' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 10글자이내)</small>"
+				+"<small id='titleReq' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 10글자이내)</small>"
 				+"</div><div class='form-group'><textarea name='content' id='summernote'></textarea><br>"
 				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg,.jpeg,.png' type='file' name='file' id='file'></label>"
-				+"<small id='title_req' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
+				+"<small id='titleReq' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
 				+"</div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button>"
 				+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
 		
