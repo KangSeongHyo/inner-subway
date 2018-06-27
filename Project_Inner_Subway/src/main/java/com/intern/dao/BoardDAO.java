@@ -1,5 +1,7 @@
 package com.intern.dao;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,15 @@ public class BoardDAO {
 
 	public int getEntryCount(StationVO vo) {
 		return session.selectOne("board.getEntryCount", vo);
+	}
+
+	@Test
+	public void getEntryCountTest() {
+		BoardVO vo = new BoardVO();
+		vo.setScode("SN0101");
+
+		int value = session.selectOne("board.getEntryCount", vo);
+		assertEquals(5, value);
 	}
 
 	public int boardRegister(BoardVO vo) {

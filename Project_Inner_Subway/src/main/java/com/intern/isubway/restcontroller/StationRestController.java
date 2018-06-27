@@ -33,7 +33,7 @@ public class StationRestController {
 	public ResponseEntity<List<StationVO>> getStations(@ModelAttribute StationVO requestStation) throws Exception {
 
 		ResponseEntity<List<StationVO>> responseEntity = null;
-		List<StationVO> resultList = stationService.getStations(requestStation.getLine());
+		List<StationVO> resultList = stationService.getStations(requestStation);
 
 		if (resultList != null) {
 

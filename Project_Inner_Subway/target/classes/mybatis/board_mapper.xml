@@ -114,20 +114,20 @@
 	<select id="getSearchBoardCount" parameterType="java.util.Map"
 		resultType="Integer">
 		SELECT
-		COUNT(*)
+				COUNT(*)
 		FROM
-		(SELECT
-		scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath,recommend
-		FROM
-		station_board
+				(SELECT
+						scode,entryNum,title,writer,registrationDate,viewCount,content,imgPath,recommend
+				FROM
+						station_board
+				WHERE
+						scode=#{scode}
+				ORDER BY
+						entryNum DESC) BOARD
 		WHERE
-		scode=#{scode}
-		ORDER BY
-		entryNum DESC) BOARD
-		WHERE
-		title LIKE CONCAT('%',#{search},'%')
+				title LIKE CONCAT('%',#{search},'%')
 		OR
-		writer LIKE CONCAT('%',#{search},'%')
+				writer LIKE CONCAT('%',#{search},'%')
 	</select>
 
 	<select id="getSortBoardList" parameterType="com.intern.board.BoardVO"
@@ -144,16 +144,24 @@
 				b.scode = r.scode and b.entryNum=r.entryNum
 		WHERE
 				b.scode=#{scode}
-		<if test="target != null and target !=''">
-				ORDER BY	
-					<choose>
-						<when test="target eq 'recommend'"> recommend </when>
-						<when test="target eq 'viewCount'"> viewCount </when>
-						<when test="target eq 'EntryNum'"> EntryNum </when>
-					</choose>
-					<choose>
-						<when test="target != null and target !=''">DESC</when>
-					</choose>
+			<if test="search != null ">
+		AND	
+				title LIKE CONCAT('%',#{search},'%')
+		OR
+				writer LIKE CONCAT('%',#{search},'%')
+			</if>
+				
+	<if test="target != null and target !=''">
+		ORDER BY	
+			<choose>
+				<when test="target eq 'recommend'"> recommend </when>
+				<when test="target eq 'viewCount'"> viewCount </when>
+				<when test="target eq 'EntryNum'"> EntryNum </when>
+			</choose>
+			
+			<choose>
+				<when test="target != null and target !=''">DESC</when>
+			</choose>
 		</if>
 	</select>
 

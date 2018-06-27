@@ -8,12 +8,13 @@ public class StationVO {
 	private int x;
 	private int y;
 	private String id;
+	private int boardCount;
 
 	public StationVO() {
 		super();
 	}
 
-	public StationVO(String scode, String sname, int line, int x, int y, String id) {
+	public StationVO(String scode, String sname, int line, int x, int y, String id, int boardCount) {
 		super();
 		this.scode = scode;
 		this.sname = sname;
@@ -21,21 +22,24 @@ public class StationVO {
 		this.x = x;
 		this.y = y;
 		this.id = id;
+		this.boardCount = boardCount;
 	}
 
+	public int getBoardCount() {
+		return boardCount;
+	}
 
+	public void setBoardCount(int boardCount) {
+		this.boardCount = boardCount;
+	}
 
 	public String getId() {
 		return id;
 	}
 
-
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
-
 
 	public String getScode() {
 		return scode;

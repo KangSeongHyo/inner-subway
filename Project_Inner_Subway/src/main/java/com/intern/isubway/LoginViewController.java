@@ -3,15 +3,15 @@ package com.intern.isubway;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 
 @Controller
 public class LoginViewController {
 
 	Logger log = Logger.getLogger(this.getClass());
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView loginform() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login/form");
@@ -19,7 +19,7 @@ public class LoginViewController {
 		return mv;
 	}
 
-	@RequestMapping("login/join")
+	@RequestMapping(value = "login/join", method = RequestMethod.GET)
 	public ModelAndView join() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login/join");
@@ -27,7 +27,7 @@ public class LoginViewController {
 		return mv;
 	}
 
-	@RequestMapping("login/addrpopup")
+	@RequestMapping(value = "login/addrpopup", method = RequestMethod.GET)
 	public ModelAndView addrpopup() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login/addrpopup");

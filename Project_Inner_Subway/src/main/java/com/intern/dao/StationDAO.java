@@ -14,12 +14,16 @@ public class StationDAO {
 	@Autowired
 	SqlSession session;
 
-	public List<StationVO> getStations(int line) {
-		return session.selectList("station.getStationInfo", line);
+	public List<StationVO> getStations(StationVO vo) {
+		return session.selectList("station.getStationInfo", vo);
 	}
 
-	public String getStationName(StationVO requestStation) {
-		return session.selectOne("station.getStationName", requestStation);
+	public List<StationVO> getStationList(StationVO vo) {
+		return session.selectList("station.getStationList", vo);
+	}
+
+	public String getStationName(StationVO vo) {
+		return session.selectOne("station.getStationName", vo);
 	}
 
 }

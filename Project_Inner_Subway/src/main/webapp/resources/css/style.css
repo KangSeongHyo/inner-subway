@@ -1,10 +1,8 @@
 @CHARSET "UTF-8";
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
-    font-family: 'Poppins', sans-serif;
     background: #fafafa;
 }
-
 p {
     font-family: 'NS';
     font-size: 15px;
@@ -12,7 +10,9 @@ p {
     line-height: 1.7em;
     color: #999;
 }
-
+.note-editing-area{
+	font-family: 'NS';
+}
 a,
 a:hover,
 a:focus {
@@ -78,10 +78,13 @@ a:focus {
 }
 
 #sidebar ul p {
+	margin-top: -10px;
+    margin-bottom: -8px;
 	font-family:'BU';
 	font-size : 30px;
     color: #fff;
     padding: 10px;
+    cursor: pointer;
 }
 
 #sidebar ul li a {
@@ -319,6 +322,7 @@ font-family: 'BU';
 }
 #sideHeader{
 font-family: '28D';
+cursor: pointer;
 }
 #logOutBtn{
 font-family: 'BU';
@@ -419,4 +423,7 @@ input{
 
 small{
 	font-family: 'NS';
+}
+#externalBox > h4{
+	font-size: 1.3rem;
 }

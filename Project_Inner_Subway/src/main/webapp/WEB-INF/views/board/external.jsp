@@ -77,6 +77,7 @@ $(document).ready(function(){
 	var CHECK=1;
 	var RELEASE=0;
 	var line=getUrlParameter("line");
+	var modalObject;
 	
 	$('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
@@ -84,6 +85,7 @@ $(document).ready(function(){
     // 상세보기
 	$(document).on("click","#modalReq",function(){
 	
+		modalObject=$(this).closest("#externalCard").find("#recommendIcon");
 		var data=$(this).data();
 		
          //외부게시판 view
@@ -185,10 +187,11 @@ $(document).ready(function(){
 	//검색
 	$(document).on("click","#searchBoardBtn",function(e){
 		e.preventDefault();
+		
 		var search=$("#searchBoard").val();
 		
 		if(search==""){
-			alert("검색어를 확인해주세요");
+			alertify.error("검색어를 확인해주세요");
 			return;
 		}
 		
@@ -200,6 +203,8 @@ $(document).ready(function(){
         	 url:'<%=request.getContextPath()%>/board/search/'+data.scode+'/'+search+'/'+data.page,
  			 contentType: 'application/json; charset=UTF-8',
 			 success: function(serverResult){
+				 
+				$("#searchBoard").prop("disabled","disabled");
 				 
 				$("#reflash").empty();
 				$("#searchForm > #searchCancel").remove();
@@ -706,7 +711,7 @@ $(document).ready(function(){
 		$(".container").append("<div id='reflash' class='row'><form id='writeForm' method='post' enctype='multipart/form-data' ><input type='hidden' name='scode' value="
 				+'${scode}'+"><input type='hidden' name='writer' value='${id}'><div class='form-group'><label for='title'>제목</label>"
 				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
-				+"<small id='titleReq' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 10글자이내)</small>"
+				+"<small id='titleReq' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 12글자이내)</small>"
 				+"</div><div class='form-group'><textarea name='content' id='summernote'></textarea><br>"
 				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg,.jpeg,.png' type='file' name='file' id='file'></label>"
 				+"<small id='titleReq' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
@@ -742,7 +747,7 @@ $(document).on("change","#file",function(){
   			}
   	       $("#fileCheck").remove();
   			$("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
-  		 
+  		      alertify.success("첨부되었습니다.");
   		}else{
   			alertify.error("파일에 오류가 있습니다. 다시 첨부해주세요");
   		}
@@ -836,13 +841,12 @@ $(document).on("change","#file",function(){
 				$(".container").append("<div id='reflash' class='row'><form id='modifyform' method='post' enctype='multipart/form-data' ><input type='hidden' name='entryNum' value="
 						+data.entrynum+"><input type='hidden' name='scode' value="
 						+data.scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"
-						+serverResult.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 10글자이내)</small>"
+						+serverResult.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 12글자이내)</small>"
 						+"</div><div class='form-group'><textarea name='content' id='summernote'>"
-						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' id='file' name='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
+						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' accept='.jpg,.jpeg,.png' id='file' name='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
 						+"<button id='modifyBtn' class='btn btn-outline-secondary float-right'>수정</button>"
 						+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");		    
 					
-				
 		    $('#summernote').summernote({
 		      placeholder: '종류, 위치 등 자세하게 적어주세요',
 		      minHeight: 300, 
@@ -881,7 +885,7 @@ $(document).on("change","#file",function(){
 	  });
 	     //제목 유효성 검사  
 		$(document).on("keyup","#titleInput",function(){
-			var titleReg = /^[|가-힣|a-z|A-Z|0-9|\s|\*]{1,10}$/;
+			var titleReg = /^[|가-힣|a-z|A-Z|0-9|\s|\*]{1,12}$/;
 			
 			
 			if(!titleReg.test($("#titleInput").val())){
@@ -892,7 +896,7 @@ $(document).on("change","#file",function(){
 			
 		});
 	     
-    //글 작성
+    //글작성
 	$(document).on("click","#boardRegister",function(){
 		
 		
@@ -995,7 +999,7 @@ $(document).on("click","#modifyBtn",function(){
 			
 		});
    
-		//추천하기
+		//추천
 		$(document).on("click","#recommend",function(){
 			
 			var data=$(this).data();
@@ -1091,15 +1095,109 @@ $(document).on("click","#modifyBtn",function(){
 			
 			var data=$(this).data();
 			
-			
-			if(data.target=='latest'){
-		
-		    	location.assign(contextPath+"/board/external?scode="+data.scode+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
-			} else { 
+			if($("#searchBoard").prop("disabled") && $("#searchBoard").val() != ""){
+
+				$.ajax({/// ajax
+		             type:'GET',
+		        	 url:'<%=request.getContextPath()%>/board/sort/'+data.scode+'/'+data.target+'/'+data.page+'/'+$("#searchBoard").val(),
+		 			 contentType: 'application/json; charset=UTF-8',
+					 success: function(serverResult){
+						 
+						$("#reflash").empty();
+						
+						if(serverResult['boardList'].length==0){
+							return;
+						}
+						
+					
+					for(var key in serverResult['boardList']){
+						var str="";
+						
+						 str+="<div class='col-lg-3 col-md-6 mb-4'>"+"<div id='externalCard' class='card border-success'><img id='outImg' class='card-img-top' src="+serverResult['boardList'][key].imgPath+">";
+						 
+						  if(serverResult['boardList'][key].writer=='${id}'){
+							 str+="<div class='card bg-light rounded-0'><span><i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
+							  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i><i id='recommendIcon' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+						  }else{
+							  str+="<div class='card bg-light rounded-0'><span><i id='recommendIcon' style='margin-top: 3%;right: 35%' class='far fa-thumbs-up'>"+serverResult['boardList'][key].recommend+"</i></span></div>";
+						  }
+						  
+						  
+						  str+="<div class='card-body' id='externalBox'><h4 class='card-title'>"+serverResult['boardList'][key].title+"</h4>"
+						       +"<p class='card-text' id='externalContent'>"+serverResult['boardList'][key].content+"</p>"
+						       +"<footer class='blockquote-footer' >From "+serverResult['boardList'][key].writer+" ["+formatDate(serverResult['boardList'][key].registrationDate)+"]</footer></div>"
+						  	   +"<div class='card-footer border-dark'><button style='margin-left: 10px' id='modalReq' type='button' "
+						  	   +"data-entrynum="+serverResult['boardList'][key].entryNum+" data-scode="+serverResult['boardList'][key].scode
+						  	   +" class='btn btn-outline-secondary' data-toggle='modal' data-target='.bd-example-modal-lg' >상세보기</button> ";
+
+						  if(serverResult['boardList'][key].writer=='${id}'){
+						      str+="<button style='margin-left: 10px' id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
+						  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+						  	   +" class='btn btn-outline-danger'>수정하기</button></div></div></div>";
+						  	   
+						  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==false){
+							  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+						  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+						  	   +" class='btn btn-outline-success'>추천하기</button></div></div></div>";	
+						  
+						  }else if(serverResult['boardList'][key].writer!='${id}' && serverResult['boardList'][key].recommendCheck==true){
+							  str+="<button style='margin-left: 10px' id='recommend' data-entryNum="+serverResult['boardList'][key].entryNum
+						  	   +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
+						  	   +" class='btn btn-success'>추천해체</button></div></div></div>";
+						  }
+						  
+							$("#reflash").append(str);
+					    }//end
+					
+			  				$("#paging").empty();
+						
+						if(data.page>1){
+							$("#paging").append("<li class='page-item'><a id='sortBtn' data-scode="
+									+data.scode+" data-page="+(data.page-1)+" data-target="+data.target+" class='page-link' href='#' >이전</a></li>");
+							}
+						
+						for(var i=serverResult['pageMap'].startPage;i<=serverResult['pageMap'].endPage;i++){
+							if(data.page==i){
+								
+								$("#paging").append("<li class='page-item active'><a id='sortBtn' data-scode="
+										+data.scode+" data-page="+i+" data-target="+data.target+" class='page-link' href='#' >"+i+"</a></li>");
+								
+							}else{
+								$("#paging").append("<li class='page-item '><a id='sortBtn' data-scode="
+										+data.scode+" data-page="+i+" data-target="+data.target+" class='page-link' href='#' >"+i+"</a></li>");
+							}
+						}
+						
+						if(serverResult['pageMap'].endPage>data.page){
+							$("#paging").append("<li class='page-item'><a id='sortBtn' data-scode="
+									+data.scode+" data-page="+(data.page+1)+" data-target="+data.target+" class='page-link' href='#' >다음</a></li>");
+						}
+						
+					 },
+					  error: function(xhr,status){
+							 if(xhr.status==0){
+								 alertify.error('네트워크를 체크해주세요.');
+							 }else if(xhr.status==401){
+								 alertify.error('요청에 오류가 있습니다.');
+							 }else if(xhr.status==401){
+								 alertify.error('권한이 없습니다.');
+							 }else if(xhr.status==404){
+								 alertify.error('페이지를 찾을수없습니다.');
+							 }else if(xhr.status==500){
+								 alertify.error('서버에 오류가 발생하였습니다.');
+							 }else if(status=='timeout'){
+								 alertify.error('시간을 초과하였습니다.');
+							 }else {
+								 alertify.error('에러가 발생하였습니다');
+							 }
+						 }
+		            });//ajax
+				
+			}else{
 			
 	          $.ajax({/// ajax
 	             type:'GET',
-	        	 url:'<%=request.getContextPath()%>/board/recommend/'+data.scode+'/'+data.target+'/'+data.page,
+	        	 url:'<%=request.getContextPath()%>/board/sort/'+data.scode+'/'+data.target+'/'+data.page,
 	 			 contentType: 'application/json; charset=UTF-8',
 				 success: function(serverResult){
 					 
@@ -1146,14 +1244,15 @@ $(document).on("click","#modifyBtn",function(){
 					  	   +" class='btn btn-success'>추천해체</button></div></div></div>";
 					  }
 					  
-					$("#reflash").append(str);
-				    }
-					$("#paging").empty();
+						$("#reflash").append(str);
+				    }//end
+				
+		  				$("#paging").empty();
 					
 					if(data.page>1){
 						$("#paging").append("<li class='page-item'><a id='sortBtn' data-scode="
 								+data.scode+" data-page="+(data.page-1)+" data-target="+data.target+" class='page-link' href='#' >이전</a></li>");
-					}
+						}
 					
 					for(var i=serverResult['pageMap'].startPage;i<=serverResult['pageMap'].endPage;i++){
 						if(data.page==i){
@@ -1190,11 +1289,25 @@ $(document).on("click","#modifyBtn",function(){
 							 alertify.error('에러가 발생하였습니다');
 						 }
 					 }
-	        	 
-	            });
-			
-	         }
+	            });//ajax
+			}//else
+	      });
+        
+        //호선 누르면 main으로 가기
+		$(document).on("click","#sidebar ul p",function(){
+			location.assign(contextPath+"/main");
 		});
+		
+        //로고 새로고침
+	     $(document).on("click","#sideHeader",function(){
+		     history.go(0);
+		}); 
+
+/* 	     $("#bsModal").on('hide.bs.modal', function(e){
+	    	 modalObject.text("변경");
+	     	e.stopImmediatePropagation();
+
+	     }); */
   
 });///// ready 끝
 </script>
@@ -1242,7 +1355,7 @@ $(document).on("click","#modifyBtn",function(){
 				</c:if>
 				
                 <c:forEach var="key" items="${stationList}">
-				<li><a id="stationlist" href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&line=${key.line}&page=1">${key.sname}</a></li>
+				<li><a id="stationlist" href="<%=request.getContextPath()%>/board/external?scode=${key.scode}&sname=${key.sname}&line=${key.line}&page=1">${key.sname}&nbsp;&nbsp;<span class="badge badge-light badge-pill">${key.boardCount}</span></a></li>
 			    </c:forEach>
             </ul>
         </nav>
@@ -1278,8 +1391,8 @@ $(document).on("click","#modifyBtn",function(){
 			   </span>
 				
 				
-				<input type="search" class="form-control mr-sm-2" id="searchBoard" size="20" placeholder="장소이름&작성자">
-				<button class="btn btn-success" data-scode='${scode}' data-page=1 id="searchBoardBtn">검색</button>
+				<input type="search" class="form-control mr-sm-2" id="searchBoard"  size="20" placeholder="장소이름&작성자">
+				<button class="btn btn-success" data-scode='${scode}' data-page=1 id="searchBoardBtn" >검색</button>
 			  </span>
 			 </div>  
 			 
@@ -1373,7 +1486,7 @@ $(document).on("click","#modifyBtn",function(){
 
 
 	<!-- 게시판 상세보기 -->
-	<div style="font-family: 'BU'" class="modal fade bd-example-modal-lg"
+	<div id='bsModal' style="font-family: 'BU'" class="modal fade bd-example-modal-lg"
 		tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog modal-lg">

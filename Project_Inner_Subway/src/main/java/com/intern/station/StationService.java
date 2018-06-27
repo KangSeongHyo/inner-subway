@@ -17,10 +17,10 @@ public class StationService implements Station {
 	StationDAO dao;
 
 	@Override
-	public List<StationVO> getStations(int line) {
+	public List<StationVO> getStations(StationVO requestStation) {
 
 		log.info("Processing : select station info from DB");
-		return dao.getStations(line);
+		return dao.getStations(requestStation);
 	}
 
 	@Override
@@ -28,6 +28,12 @@ public class StationService implements Station {
 
 		log.info("Processing : select station name from DB");
 		return dao.getStationName(requestStation);
+	}
+
+	@Override
+	public List<StationVO> getStationList(StationVO requestStation) {
+		log.info("Processing : select station list(+boardCount) from DB");
+		return dao.getStationList(requestStation);
 	}
 
 }

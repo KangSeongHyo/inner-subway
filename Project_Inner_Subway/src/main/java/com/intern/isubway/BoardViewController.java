@@ -58,7 +58,7 @@ public class BoardViewController {
 			boardList = boardService.removeHtml(boardList);
 
 			List<StationVO> stationList = stationService
-				.getStations(requestStation.getLine());
+				.getStationList(requestStation);
 
 			mv.addObject("boardList", boardList);
 			mv.addObject("stationList", stationList);

@@ -4,14 +4,29 @@
 
 <mapper namespace="station">
 
-	 <select id="getStationInfo" parameterType="int" resultType="com.intern.station.StationVO">
+	 <select id="getStationInfo" parameterType="com.intern.station.StationVO" resultType="com.intern.station.StationVO">
 		SELECT 
 				scode,sname,line,x,y
 		FROM 
 				station_main
 		WHERE
-				line=#{line}
+				line=#{line} 
 		ORDER BY 
+				seq
+	</select>
+	
+	<select id="getStationList" parameterType="com.intern.station.StationVO" resultType="com.intern.station.StationVO">
+		SELECT
+				m.scode,m.sname,m.line,m.x,m.y,ifnull(b.boardCount,0) boardCount
+		FROM
+				station_main m
+		LEFT JOIN
+				(select scode,count(*) boardCount from station_board group by scode) b
+		ON
+				m.scode = b.scode
+		where 
+				line=#{line}
+		ORDER BY
 				seq
 	</select>
 	

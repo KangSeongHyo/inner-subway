@@ -25,7 +25,12 @@ public class CommentService implements Comment {
 	@Override
 	public int registerComment(CommentVO requestComment) {
 
+		String content = requestComment.getContent();
+		String replaceContent = content.replaceAll("\n", "<br>");
+		requestComment.setContent(replaceContent);
+
 		log.info("Processing : insert comment in DB");
+
 		return dao.registerComment(requestComment);
 	}
 

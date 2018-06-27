@@ -35,8 +35,6 @@ import com.intern.board.BoardVO;
 import com.intern.check.CheckValue;
 import com.intern.board.BoardService;
 
-/*@RunWith(SpringJUnit4ClassRunner.class) // 테스트하겠다
-@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/**.xml")// xml 위치설정 스프링로드*/
 @Service
 public class BoardService implements Board {
 	Logger log = Logger.getLogger(this.getClass());
@@ -76,7 +74,7 @@ public class BoardService implements Board {
 				resultValue = dao.increaseViewcount(requstBoard);
 
 				if (resultValue == CheckValue.SUCCESS) {
-
+					log.info("Processing : update viewCount Ok");
 					return resultBoard;
 
 				} else {
@@ -100,6 +98,7 @@ public class BoardService implements Board {
 
 	@Override
 	public int getEntryCount(StationVO requestStation) {
+		log.info("Processing : select boardCount from DB");
 		return dao.getEntryCount(requestStation);
 	}
 

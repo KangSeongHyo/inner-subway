@@ -6,12 +6,17 @@ public interface Station {
 
 	/**
 	 * 요청 호선의 지하철역들 정보
-	 *
 	 * @param line 요청 호선
 	 * @return 요청 호선 지하철역 List
 	 */
-	public List<StationVO> getStations(int line);
+	public List<StationVO> getStations(StationVO requestStation);
 
+	/**
+	 * 요청 호선의 지하철역들 정보(+게시물 개수)
+	 * @param line 요청 호선
+	 * @return 요청 호선 지하철역 List
+	 */
+	public List<StationVO> getStationList(StationVO requestStation);
 	/**
 	 * 요청 지하철역 코드로 역 이름 반환
 	 * @param requestStation 요청 지하철역 정보

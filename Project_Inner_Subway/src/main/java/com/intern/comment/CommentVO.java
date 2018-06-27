@@ -5,12 +5,12 @@ import java.sql.Timestamp;
 
 public class CommentVO {
 
-	String scode;
-	int entryNum;
-	int commentSeq;
-	String content;
-	String writer;
-	Timestamp registrationDate;
+	private String scode;
+	private int entryNum;
+	private int commentSeq;
+	private String content;
+	private String writer;
+	private Timestamp registrationDate;
 
 	public CommentVO() {
 		super();

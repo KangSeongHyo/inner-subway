@@ -159,7 +159,7 @@ public class BoardRestController {
 		MultipartFile file) throws IllegalStateException, IOException, Exception {
 
 		ResponseEntity<Integer> responseEntity = null;
-		
+
 		int resultValue = boardService.modifyBoard(requestBoard, file);
 
 		if (resultValue == CheckValue.SUCCESS) {
@@ -241,8 +241,8 @@ public class BoardRestController {
 	 * @return 정렬된 게시물 List
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/recommend/{scode}/{target}/{page}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> recommendSort(@ModelAttribute BoardVO requestBoard,
+	@RequestMapping(value = "/sort/{scode}/{target}/{page}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> sortBoard(@ModelAttribute BoardVO requestBoard,
 		@PathVariable("page") int page, HttpSession session)
 		throws Exception {
 
@@ -260,6 +260,48 @@ public class BoardRestController {
 				responseEntity = new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 				log.info(
 					"Result : board sort[target : " + requestBoard.getTarget() + "] request OK, Retrun boardSortList");
+
+			} else {
+				log.error("Result : board sort request Fail, Retrun Bad_request");
+				throw new Exception("Error occurred : database update(BoardRestController.java:225)");
+			}
+
+		} else {
+			log.info("Result : request Fail, Return Invalid request ");
+			throw new Exception("Error occurred : Invalid request (BoardRestController.java:262)");
+		}
+		return responseEntity;
+
+	}
+
+	/**
+	 * 검색 게시물 정렬
+	 * @param requestBoard target(정렬할 부분)
+	 * @param page
+	 * @param session
+	 * @return 정렬된 게시물 List
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/sort/{scode}/{target}/{page}/{search}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> searchSortBoard(@ModelAttribute BoardVO requestBoard,
+		@PathVariable("page") int page, HttpSession session)
+		throws Exception {
+
+		ResponseEntity<Map<String, Object>> responseEntity = null;
+
+		String id = (String)session.getAttribute("id");
+
+		if (id != null) {
+
+			requestBoard.setId(id);
+
+			Map<String, Object> resultMap = boardService.getSortBoardList(requestBoard, page);
+
+			if (resultMap != null) {
+				responseEntity = new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+				log.info(
+					"Result : board sort[target : " + requestBoard.getTarget() + "search : " + requestBoard.getSearch()
+						+ "] request OK, Retrun boardSortList");
 
 			} else {
 				log.error("Result : board sort request Fail, Retrun Bad_request");

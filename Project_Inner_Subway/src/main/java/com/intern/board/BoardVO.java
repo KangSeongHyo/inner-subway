@@ -16,13 +16,15 @@ public class BoardVO {
 	private String id;
 	private boolean recommendCheck;
 	private String target;
+	private String search;
 
 	public BoardVO() {
 		super();
 	}
 
 	public BoardVO(String scode, int entryNum, String title, String writer, Date registrationDate, int viewCount,
-		String content, String imgPath, int recommend, String id, boolean recommendCheck, String target) {
+		String content, String imgPath, int recommend, String id, boolean recommendCheck, String target,
+		String search) {
 		super();
 		this.scode = scode;
 		this.entryNum = entryNum;
@@ -36,6 +38,15 @@ public class BoardVO {
 		this.id = id;
 		this.recommendCheck = recommendCheck;
 		this.target = target;
+		this.search = search;
+	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
 	}
 
 	public String getTarget() {

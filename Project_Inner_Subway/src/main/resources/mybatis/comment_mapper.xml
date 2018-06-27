@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="comment">
-	<select id="getCommentList" parameterType="com.intern.comment.CommentVO"
+	<select id="getCommentList" parameterType="com.intern.comment.CommentVO" 
 		resultType="com.intern.comment.CommentVO">
 		
 		SELECT

@@ -35,35 +35,33 @@
 
 	<div id="ballMenuContainer">
 		<div id="menuBall1" class="menuBall">
-			<a href="#" class="ball blueball">
+			<a class="ball blueball">
 				<div data-line=1 class="menuText">1호선</div>
 			</a>
 		</div>
 
 		<div id="menuBall2" class="menuBall">
-			<a href="#" class="ball redball">
+			<a class="ball redball">
 				<div data-line=2 class="menuText">2호선</div>
 			</a>
 		</div>
 
 		<div id="menuBall3" class="menuBall">
-			<a href="#" class="ball greenball">
+			<a class="ball greenball">
 				<div data-line=7 class="menuText">7호선</div>
 			</a>
 		</div>
 
 
 		<div id="menuBall4" class="menuBall">
-			<a href="#" class="ball yellowball">
+			<a class="ball yellowball">
 				<div data-line=10 class="menuText">신분당선</div>
 			</a>
 		</div>
 
-
 		<div class="subway-map" data-columns="40" data-rows="20"
 			data-cellSize="40" data-legendId="legend" data-textClass="text"
 			data-gridNumbers="true" data-grid="false" data-lineWidth="28">
-			
 		</div>
 	</div>
 
