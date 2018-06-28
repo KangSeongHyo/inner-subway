@@ -5,6 +5,8 @@
 ```
 지하철 이용자들이 역 내부에 있는 여러 편의시설 정보들을 쉽게 파악하고 알고 있는 정보들을 다른 이용자들과 공유하기 위함 
 ```
+### 구성
+![default](https://media.oss.navercorp.com/user/9761/files/a2db63da-7aca-11e8-86ac-b1de106b02f2)
 
 ### 소개
 
