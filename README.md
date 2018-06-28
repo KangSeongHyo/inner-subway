@@ -2,14 +2,14 @@
 ![default](https://media.oss.navercorp.com/user/9761/files/25a2681e-7a16-11e8-8a10-8f2810e14802)
 
 ### 목적
-
--	사용자들이 서로 정보를 공유하여 자신이 원하는 역 내부 정보와 평가를 얻기 위함
+```
+지하철 이용자들이 원하는 역 내부에 여러 편의시설 정보들을 쉽게 파악하고 또한 알고 있는 정보들을 다른 이용자들을 공유하기 위함
+```
 
 ### 소개
 
 -  개발내용 & 구현일정 : [feature list](https://oss.navercorp.com/2018-nbp-internship-team1/seonghyo/wiki/%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EB%B0%9C)
--  주소 : [http://10.106.153.75:9001/isubway/](http://10.106.153.75:9001/isubway/)(TestID: test1234 Pw:q1w2e3 게시판:병점역)
-   오류는 수정하고 있습니다
+-  주소 : [http://10.106.153.75:9001/isubway/](http://10.106.153.75:9001/isubway/)(TestID: test1234 Pw:q1w2e3 게시판:정자역)
 -  페이지구성 기획 : [스토리보드](https://ovenapp.io/view/WGKZph9yvgMCQEF34XHwcoEBLaOBrA4f/)
 
 ### 주제
