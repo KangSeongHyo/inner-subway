@@ -720,13 +720,14 @@ $(document).on("change","#file",function(){
   			var ext = $('#file').val().split('.').pop().toLowerCase();
   			if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
   				alertify.error('png,jpg,jpeg 파일만 업로드 할수 있습니다.');
+  				$("#file").val()="";
   				 return;
   			}
   	       $("#fileCheck").remove();
   			$("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
   		      alertify.success("첨부되었습니다.");
   		}else{
-  			alertify.error("파일에 오류가 있습니다. 다시 첨부해주세요");
+  			alertify.error("파일을 첨부해주세요");
   		}
 }); 
 

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.multipart.MultipartFile;
 import com.intern.board.BoardVO;
+import com.intern.check.CheckFile;
 import com.intern.check.CheckValue;
 import com.intern.board.BoardService;
 
@@ -41,6 +42,8 @@ public class BoardService implements Board {
 
 	@Autowired
 	BoardDAO dao;
+
+	CheckFile checkFile;
 
 	@Override
 	public BoardVO getBoardOne(BoardVO requstBoard, String id) throws NoAuthException, Exception {
@@ -127,9 +130,13 @@ public class BoardService implements Board {
 
 			file.transferTo(newfile);
 
-			requestBoard.setImgPath(imgPath);
+			if (checkFile.isImageFile(uploadPath)) {
+				requestBoard.setImgPath(imgPath);
+				log.info("Processing : file upload Ok");
 
-			log.info("Processing : file upload Ok");
+			} else {
+				throw new FileNotFoundException("No image file");
+			}
 
 		} else {
 
@@ -181,6 +188,14 @@ public class BoardService implements Board {
 			File newfile = new File(uploadPath);
 
 			file.transferTo(newfile);
+
+			if (checkFile.isImageFile(uploadPath)) {
+				requestBoard.setImgPath(imgPath);
+				log.info("Processing : file upload Ok");
+
+			} else {
+				throw new FileNotFoundException("Error occurred : No img File(BoardService.java:197)");
+			}
 
 			requestBoard.setImgPath(imgPath);
 			log.info("Processing : file upload Ok");
