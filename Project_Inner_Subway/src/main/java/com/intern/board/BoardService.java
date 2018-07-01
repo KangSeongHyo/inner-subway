@@ -185,7 +185,7 @@ public class BoardService implements Board {
 
 			file.transferTo(newfile);
 			
-			checkFile.check(uploadPath);
+			checkFile.isImageFile(uploadPath);
 
 				requestBoard.setImgPath(imgPath);
 				log.info("Processing : file upload Ok");
