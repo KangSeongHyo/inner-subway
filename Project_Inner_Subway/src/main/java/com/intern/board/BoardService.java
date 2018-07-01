@@ -130,9 +130,8 @@ public class BoardService implements Board {
 
 			file.transferTo(newfile);
 
-				requestBoard.setImgPath(imgPath);
-				log.info("Processing : file upload Ok");
-
+			requestBoard.setImgPath(imgPath);
+			log.info("Processing : file upload Ok");
 
 		} else {
 
@@ -184,11 +183,15 @@ public class BoardService implements Board {
 			File newfile = new File(uploadPath);
 
 			file.transferTo(newfile);
-			
-			checkFile.isImageFile(uploadPath);
 
+			if (checkFile.isImageFile(uploadPath)) {
 				requestBoard.setImgPath(imgPath);
 				log.info("Processing : file upload Ok");
+				
+			} else {
+				log.warn("Processing : noimg");
+				throw new FileNotFoundException("Error occurred : invaild data[file](BoardService.java:190)");
+			}
 
 		} else {
 			throw new FileNotFoundException("Error occurred : invaild data[file](BoardService.java:190)");
