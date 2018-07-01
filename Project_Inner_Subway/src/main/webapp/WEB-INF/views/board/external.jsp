@@ -716,7 +716,7 @@ $(document).ready(function(){
 //file 첨부 확인
 $(document).on("change","#file",function(){
 	
-  		if( $("#file").val() != "" ){
+  		if( $("#file").val() != "" && $("#file").val()!=null){
   			var ext = $('#file').val().split('.').pop().toLowerCase();
   			
   			if($.inArray(ext, ['png','jpg','bmp']) == -1) {
