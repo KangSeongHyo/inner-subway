@@ -27,7 +27,6 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.intern.*" /> 
 	
     <beans:bean id="swagger2Config"
 		class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration"></beans:bean>
@@ -37,8 +36,9 @@
 		mapping="swagger-ui.html"></resources>
 
     <default-servlet-handler />
-
+	<context:component-scan base-package="com.intern.*" /> 
 	<tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" />
+	
 	<resources location="classpath:/META-INF/resources/webjars/"
 		mapping="/webjars/**"></resources>
 

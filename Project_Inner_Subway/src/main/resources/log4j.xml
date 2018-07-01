@@ -17,7 +17,7 @@
 	   <param name="MaxBackupIndex" value="50"/>
 	   <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" 
-          value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5p %C{1}.%M(%F:%L) - %m%n" />
+          value="[%d{yyyy-MM-dd HH:mm:ss}] %-5p %C{1}.%M(%F:%L) - %m%n" />
        </layout>
 	</appender>
 	

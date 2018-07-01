@@ -17,7 +17,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.core.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.default.min.css" rel="stylesheet">
+<script type="text/javascript">
+
+</script>
 <script src="../js/join.js"></script>
+  
+ 
 <style type="text/css">
 @font-face {
 	font-family: '28D';

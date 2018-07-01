@@ -148,15 +148,6 @@ $(document).ready(function(){
 					 
 					 $("#commentList").append(str);
 				  }  
-					  /*   $("#commentList").append("<dl id='comment'><dt>"+serverResult[i].writer
-			         			+"&nbsp;</dt><span>"+formatDate(serverResult[i].registrationDate)
-			         			+"&nbsp;<i id='commentDel' data-scode="+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-			         		    +"' class='far fa-trash-alt'></i><i id='commentModify' data-scode="
-			         			+data.scode+" data-entrynum="+data.entrynum+" data-wr='"+serverResult[i].writer+"' data-seq='"+serverResult[i].commentSeq
-			         			+"'class='far fa-edit'></i></span><dd>"
-			         			+serverResult[i].content+"</dd></dl><hr>");
-					  */   
-				    
 				 
 			         	$("#innerBoardComment").html("<button data-scode="+data.scode+" data-entrynum="
 			         			+data.entrynum+" id='innerBoardCommentBtn' class='btn btn-outline-secondary'>등록</button>");
@@ -215,20 +206,6 @@ $(document).ready(function(){
 					return;
 				}
 				
-				 /* $("#reflash").append("<div class='col-lg-3 col-md-6 mb-4'>"
-				  +"<div id='externalCard' class='card'><img id='outImg' class='card-img-top' src="+serverResult['boardList'][key].imgPath+">"
-				  +"<i id='boardDel' data-scode="+serverResult['boardList'][key].scode+" data-entry="+serverResult['boardList'][key].entryNum
-				  +" data-writer="+serverResult['boardList'][key].writer+" class='far fa-times-circle'></i>"
-				  +"<div class='card-body' id='externalBox'><h4 class='card-title'>"+serverResult['boardList'][key].title+"</h4>"
-				  +"<p class='card-text' id='externalContent'>"+serverResult['boardList'][key].content+"</p>"
-				  +"<footer class='blockquote-footer' >From "+serverResult['boardList'][key].writer+"</footer></div>"
-				  +"<div class='card-footer'><button style='margin-left: 10px' id='modalReq' type='button' "
-				  +"data-entrynum="+serverResult['boardList'][key].entryNum+" data-scode="+serverResult['boardList'][key].scode
-				  +" class='btn btn-outline-secondary' data-toggle='modal' data-target='.bd-example-modal-lg' >상세보기</button> "
-				  +"<button style='margin-left: 10px' id='boardMod' data-entryNum="+serverResult['boardList'][key].entryNum
-				  +" data-scode="+serverResult['boardList'][key].scode+" data-writer="+serverResult['boardList'][key].writer
-				  +" class='btn btn-outline-danger'>수정하기</button></div></div></div>" );	
-				*/
 			for(var key in serverResult['boardList']){
 				var str="";
 				
@@ -885,7 +862,7 @@ $(document).on("change","#file",function(){
 	  });
 	     //제목 유효성 검사  
 		$(document).on("keyup","#titleInput",function(){
-			var titleReg = /^[|가-힣|a-z|A-Z|0-9|\s|\*]{1,12}$/;
+			var titleReg = /^[|*,#,@,%,&|가-힣|a-z|A-Z|0-9|\s|\*]{1,12}$/;
 			
 			
 			if(!titleReg.test($("#titleInput").val())){
@@ -1303,11 +1280,7 @@ $(document).on("click","#modifyBtn",function(){
 		     history.go(0);
 		}); 
 
-/* 	     $("#bsModal").on('hide.bs.modal', function(e){
-	    	 modalObject.text("변경");
-	     	e.stopImmediatePropagation();
 
-	     }); */
   
 });///// ready 끝
 </script>

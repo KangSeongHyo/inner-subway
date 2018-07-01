@@ -27,13 +27,12 @@ public class LoginViewController {
 		return mv;
 	}
 
-	@RequestMapping(value = "login/addrpopup", method = RequestMethod.GET)
+	@RequestMapping(value = "login/addrpopup")
 	public ModelAndView addrpopup() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("login/addrpopup");
 		log.info("Result : request Ok, Return addrpopup view page ");
+		mv.setViewName("login/addrpopup");
 		return mv;
-
 	}
 
 }

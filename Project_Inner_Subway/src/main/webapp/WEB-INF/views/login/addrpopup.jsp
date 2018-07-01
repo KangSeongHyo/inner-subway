@@ -11,6 +11,8 @@ String roadFullAddr = request.getParameter("roadFullAddr");
 %>
 </head>
 <script>
+//document.domain = "abc.go.kr";
+
 function init(){
 	var url = location.href;
 	var confmKey ="U01TX0FVVEgyMDE4MDUyNDIxMzYzMDEwNzg5OTk=";//승인키
@@ -25,7 +27,7 @@ function init(){
 	}else{
 		/** API 서비스 제공항목 확대 (2017.02) **/
 		opener.addressCallBack("<%=roadFullAddr%>");
-		window.close();
+	window.close(); 
 	}
 }
 </script>

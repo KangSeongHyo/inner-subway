@@ -5,7 +5,7 @@ function goPopup() {
 function addressCallBack(roadFullAddr) {
 	$("#address").val(roadFullAddr);
 }
-
+//document.domain = "abc.go.kr";
 $(document).ready(function(){
 	var FAIL=0;
 	var pwCheck=false;
@@ -105,7 +105,7 @@ $(document).ready(function(){
 	    //공백체크
 	    for(var i=0;i<arr.length;i++){
 	    	   if(arr[i]==""){
-	    		 alert("입력을 확인해주세요");
+	    		 alertify.error("입력을 확인해주세요");
 	    		 return; 
 	    	     }
 	         }
@@ -113,7 +113,7 @@ $(document).ready(function(){
 	    
 	     //패턴&비밀번호 확인체크
 	     if(pwPtn==false||idPtn==false||pwCheck==false||namePtn==false){
-	    	 alert("양식을 확인해주세요.");
+	    	 alertify.error("양식을 확인해주세요.");
 	    	 return;
 	     }
 	    
