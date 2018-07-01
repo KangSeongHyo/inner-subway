@@ -130,13 +130,9 @@ public class BoardService implements Board {
 
 			file.transferTo(newfile);
 
-			if (checkFile.isImageFile(uploadPath)) {
 				requestBoard.setImgPath(imgPath);
 				log.info("Processing : file upload Ok");
 
-			} else {
-				throw new FileNotFoundException("No image file");
-			}
 
 		} else {
 
@@ -188,17 +184,11 @@ public class BoardService implements Board {
 			File newfile = new File(uploadPath);
 
 			file.transferTo(newfile);
+			
+			checkFile.check(uploadPath);
 
-			if (checkFile.isImageFile(uploadPath)) {
 				requestBoard.setImgPath(imgPath);
 				log.info("Processing : file upload Ok");
-
-			} else {
-				throw new FileNotFoundException("Error occurred : No img File(BoardService.java:197)");
-			}
-
-			requestBoard.setImgPath(imgPath);
-			log.info("Processing : file upload Ok");
 
 		} else {
 			throw new FileNotFoundException("Error occurred : invaild data[file](BoardService.java:190)");
