@@ -69,6 +69,8 @@ public class CommentRestController {
 
 		if (resultObject != null) {
 
+			resultObject.setContent(resultObject.getContent().replaceAll("<br>", "\n"));
+
 			responseEntity = new ResponseEntity<CommentVO>(resultObject, HttpStatus.OK);
 			log.info("Result : request comment OK, Retrun commentInfo");
 
