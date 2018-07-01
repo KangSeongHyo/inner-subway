@@ -42,7 +42,7 @@ public class BoardService implements Board {
 
 	@Autowired
 	BoardDAO dao;
-
+	@Autowired
 	CheckFile checkFile;
 
 	@Override

@@ -8,13 +8,16 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.springframework.stereotype.Component;
 import org.xml.sax.ContentHandler;
 
+
+@Component
 public class CheckFile {
 
 	public void check(String path) throws IOException {
 		FileInputStream is = null;
-		
+		System.out.println("들어오니 체크");
 		try {
 			File f = new File(path);
 			is = new FileInputStream(f);
