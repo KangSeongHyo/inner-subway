@@ -1,5 +1,6 @@
 package com.intern.globalexceptionhandler;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
@@ -67,6 +68,13 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(IOException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void iOException(IOException e) {
+		log.error(e);
+		log.debug(" ===================================END=======================================");
+	}
+
+	@ExceptionHandler(FileNotFoundException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public void fileNotFoundException(IOException e) {
 		log.error(e);
 		log.debug(" ===================================END=======================================");
 	}

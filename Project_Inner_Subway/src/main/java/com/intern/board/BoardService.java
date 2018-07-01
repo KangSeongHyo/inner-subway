@@ -130,8 +130,15 @@ public class BoardService implements Board {
 
 			file.transferTo(newfile);
 
-			requestBoard.setImgPath(imgPath);
-			log.info("Processing : file upload Ok");
+			if (checkFile.isImageFile(uploadPath)) {
+				requestBoard.setImgPath(imgPath);
+				log.info("Processing : file upload Ok");
+
+			} else {
+
+				log.warn("Processing : Not img file");
+				throw new FileNotFoundException("Error occurred : invaild data[file]");
+			}
 
 		} else {
 
@@ -187,10 +194,10 @@ public class BoardService implements Board {
 			if (checkFile.isImageFile(uploadPath)) {
 				requestBoard.setImgPath(imgPath);
 				log.info("Processing : file upload Ok");
-				
+
 			} else {
-				log.warn("Processing : noimg");
-				throw new FileNotFoundException("Error occurred : invaild data[file](BoardService.java:190)");
+				log.warn("Processing : Not img file");
+				throw new FileNotFoundException("Error occurred : invaild data[file]");
 			}
 
 		} else {
@@ -253,6 +260,11 @@ public class BoardService implements Board {
 	@Override
 	public Map<String, Object> getSearchBoard(StationVO requestStation, String search, String id, int page)
 		throws Exception {
+
+		if (search == null) {
+
+			throw new Exception("Error occurred : No search value");
+		}
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		int boardCountPage = 4;
