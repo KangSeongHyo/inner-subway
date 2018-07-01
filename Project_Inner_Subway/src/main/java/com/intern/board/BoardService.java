@@ -82,7 +82,7 @@ public class BoardService implements Board {
 
 				} else {
 
-					throw new Exception("Error occurred : database select(BoardService.java:84)");
+					throw new Exception("Error occurred : database select");
 				}
 
 			}
@@ -107,7 +107,6 @@ public class BoardService implements Board {
 
 	@Override
 	public int modifyBoard(BoardVO requestBoard, MultipartFile file) throws IllegalStateException, IOException {
-		//////////////file 업로드
 
 		if (file != null) {
 
@@ -122,7 +121,6 @@ public class BoardService implements Board {
 			String uniqueName = uuid + ext; //유니크한 이름 생성 
 
 			String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-			//String uploadPath = "C:/new/" + uniqueName;
 
 			String imgPath = "/storage/" + uniqueName;
 
@@ -170,7 +168,6 @@ public class BoardService implements Board {
 
 	@Override
 	public int boardRegister(BoardVO requestBoard, MultipartFile file) throws IllegalStateException, IOException {
-		//////////////file 업로드
 
 		if (file != null) {
 			log.info("Processing : file upload");
@@ -183,7 +180,6 @@ public class BoardService implements Board {
 			String uniqueName = uuid + ext;
 
 			String uploadPath = "/home1/irteam/apps/apache-tomcat-8.5.23/webapps/storage/" + uniqueName;
-			//String uploadPath = "C:/new/" + uniqueName;
 
 			String imgPath = "/storage/" + uniqueName;
 
@@ -226,24 +222,20 @@ public class BoardService implements Board {
 
 	@Override
 	public Map<String, Integer> getPage(int page, StationVO requestStation) {
-		/////////페이징 처리
 		log.info("Processing : pagination");
 
-		int totalBoard = dao.getEntryCount(requestStation);// 전체 게시물개수
+		int totalBoard = dao.getEntryCount(requestStation);
 
-		int boardCountPage = 4;//한 페이지에 보여줄 게시물개수
+		int boardCountPage = 4;
 
 		int totalPage = (totalBoard % boardCountPage == 0) ? (totalBoard / boardCountPage)
-			: (totalBoard / boardCountPage + 1); //전체페이지수 
+			: (totalBoard / boardCountPage + 1); 
 
 		int pageCountList = 3; //한번에 보여줄 페이지목록의 수
-		// 현재 페이지 기준으로 시작페이지 끝페이지 
 		int startPage = ((page - 1) / pageCountList) * pageCountList + 1;
-		// -1 하는것은 나누기때문에  +1 1페이지 기준 // * 묶음으로 나오므로 startPage를 구해야하기때문에
 
 		int endPage = startPage + pageCountList - 1;
 
-		// 마지막 페이지 처리 
 		if (endPage > totalPage) {
 			endPage = totalPage;
 		}
@@ -253,7 +245,6 @@ public class BoardService implements Board {
 		pageMap.put("endPage", endPage);
 		pageMap.put("totalPage", totalPage);
 
-		/////페이징처리 게시물
 		return pageMap;
 	}
 
@@ -296,9 +287,8 @@ public class BoardService implements Board {
 				int totalPage = (totalBoard % boardCountPage == 0) ? (totalBoard / boardCountPage)
 					: (totalBoard / boardCountPage + 1);
 
-				int pageCountList = 3; //한번에 보여줄 페이지목록의 수
+				int pageCountList = 3;
 				int startPage = ((page - 1) / pageCountList) * pageCountList + 1;
-				// -1 하는것은 나누기때문에  +1 1페이지 기준 // * 묶음으로 나오므로 startPage를 구해야하기때문에
 
 				int endPage = startPage + pageCountList - 1;
 
@@ -329,10 +319,8 @@ public class BoardService implements Board {
 		if (requestRecommendCheck == true || requestRecommendCheck == false) {
 
 			Boolean getRecommendOne = dao.getRecommendOne(requestBoard);
-			//추천한적 있는지 없는지
 
 			if (getRecommendOne == null) {
-				//등록이 안된상태
 				requestBoard.setRecommendCheck(true);
 
 				dao.boardRecommend(requestBoard);
@@ -350,13 +338,13 @@ public class BoardService implements Board {
 
 				} else {
 
-					throw new Exception("Error occurred : lnvalid request data(BoardService.java:334)");
+					throw new Exception("Error occurred : lnvalid request data");
 				}
 
 			}
 
 		} else {
-			throw new Exception("Error occurred : lnvalid request data(BoardService.java:340)");
+			throw new Exception("Error occurred : lnvalid request data");
 		}
 
 	}
@@ -373,7 +361,7 @@ public class BoardService implements Board {
 
 		if (boardList == null) {
 
-			throw new Exception("Error occurred : database select(BordService.java:357)");
+			throw new Exception("Error occurred : database select");
 
 		} else {
 

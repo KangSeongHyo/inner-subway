@@ -690,7 +690,7 @@ $(document).ready(function(){
 				+"<input size=200 type='text' class='form-control' id='titleInput' name='title'>"
 				+"<small id='titleReq' class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 12글자이내)</small>"
 				+"</div><div class='form-group'><textarea name='content' id='summernote'></textarea><br>"
-				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg,.jpeg,.png' type='file' name='file' id='file'></label>"
+				+"<label class='btn btn-success btn-file'>사진 첨부 <input accept='.jpg,.bmp,.png' type='file' name='file' id='file'></label>"
 				+"<small id='titleReq' class='form-text text-muted'>사진은 필수입니다.</small></div></form>"
 				+"</div><button id='boardRegister' class='btn btn-outline-secondary float-right'>등록</button>"
 				+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");	
@@ -718,11 +718,13 @@ $(document).on("change","#file",function(){
 	
   		if( $("#file").val() != "" ){
   			var ext = $('#file').val().split('.').pop().toLowerCase();
-  			if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
-  				alertify.error('png,jpg,jpeg 파일만 업로드 할수 있습니다.');
+  			
+  			if($.inArray(ext, ['png','jpg','bmp']) == -1) {
+  				alertify.error('png,jpg,bmp 파일만 업로드 할수 있습니다.');
   				$("#file").val()="";
   				 return;
   			}
+  			
   	       $("#fileCheck").remove();
   			$("#file").closest("label").after("<span id='fileCheck' style='color:green' >&nbsp;&nbsp;첨부 되었습니다.</span>");
   		      alertify.success("첨부되었습니다.");
@@ -769,7 +771,7 @@ $(document).on("change","#file",function(){
 				    	location.assign(contextPath+"/board/external?scode="+data.scode+"&sname="+'${sname}'+"&line="+'${line}'+"&page=1");
 			      	
 				    } else {
-				    	alert('오류가 발생하였습니다');
+				    	alertify.error('오류가 발생하였습니다');
 			      		
 			      	}
 			      		
@@ -821,7 +823,7 @@ $(document).on("change","#file",function(){
 						+data.scode+"><div class='form-group'><label for='title'>제목</label><input size=200 type='text' class='form-control' id='titleInput' name='title' value='"
 						+serverResult.title+"'><small class='form-text text-muted'>장소명을 적어주세요(띄어쓰기 포함 12글자이내)</small>"
 						+"</div><div class='form-group'><textarea name='content' id='summernote'>"
-						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' accept='.jpg,.jpeg,.png' id='file' name='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
+						+serverResult.content+"</textarea><br><label class='btn btn-success btn-file'>사진 첨부 <input type='file' accept='.jpg,.bmp,.png' id='file' name='file'></label><small class='form-text text-muted'>기존 사진 사용시 변경할 필요가 없습니다.</small></div></form></div>"
 						+"<button id='modifyBtn' class='btn btn-outline-secondary float-right'>수정</button>"
 						+"<button id='backpage' style='margin-right: 5px' class='btn btn-outline-danger float-right'>뒤로가기</button>");		    
 					
@@ -926,10 +928,10 @@ $(document).on("change","#file",function(){
    
 $(document).on("click","#modifyBtn",function(){
 	   if($("#titleInput").val()==""||$("#titleInput").hasClass("is-invalid")==true){
-		   alert("제목을 확인해주세요");
+		   alertify.error("제목을 확인해주세요");
 	   }
 	   else if($("#summernote").val()==""){
-		   alert("내용을 확인해주세요");
+		   alertify.error("내용을 확인해주세요");
 	   }
        else {
     	   

@@ -45,7 +45,7 @@ public class CommentService implements Comment {
 
 			resultValue = dao.removeComment(requestComment);
 		} else {
-			throw new NoAuthException("Error occurred : Discordance writer(CommentService.java:43)");
+			throw new NoAuthException("Error occurred : Discordance writer");
 		}
 
 		return resultValue;
@@ -63,7 +63,7 @@ public class CommentService implements Comment {
 
 		} else {
 
-			throw new NoAuthException("Error occurred : Discordance writer(CommentService.java:61)");
+			throw new NoAuthException("Error occurred : Discordance writer");
 
 		}
 

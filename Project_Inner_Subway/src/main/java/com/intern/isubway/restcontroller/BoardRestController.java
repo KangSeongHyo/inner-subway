@@ -226,7 +226,7 @@ public class BoardRestController {
 		} else {
 
 			log.error("Result : board recommend request Fail, Retrun Bad_request");
-			throw new Exception("Error occurred : database update(BoardRestController.java:225)");
+			throw new Exception("Error occurred : database update");
 
 		}
 
@@ -305,12 +305,12 @@ public class BoardRestController {
 
 			} else {
 				log.error("Result : board sort request Fail, Retrun Bad_request");
-				throw new Exception("Error occurred : database update(BoardRestController.java:225)");
+				throw new Exception("Error occurred : database update");
 			}
 
 		} else {
 			log.info("Result : request Fail, Return Invalid request ");
-			throw new Exception("Error occurred : Invalid request (BoardRestController.java:262)");
+			throw new Exception("Error occurred : Invalid request");
 		}
 		return responseEntity;
 
