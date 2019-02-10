@@ -1,16 +1,15 @@
 # 지하철역 내부 정보 안내 웹서비스 개발
-![default](https://media.oss.navercorp.com/user/9761/files/25a2681e-7a16-11e8-8a10-8f2810e14802)
+![default](https://github.com/KangSeongHyo/innerSubway/blob/master/제목.JPG)
 
 ### 목적
+
 ```
 지하철 이용자들이 역 내부에 있는 여러 편의시설 정보들을 쉽게 파악하고 알고 있는 정보들을 다른 이용자들과 공유하기 위함 
 ```
 ### 구성
-![default](https://media.oss.navercorp.com/user/9761/files/a2db63da-7aca-11e8-86ac-b1de106b02f2)
+![default](https://github.com/KangSeongHyo/innerSubway/blob/master/화면.png)
 
 ### 소개
-
--  개발내용 & 구현일정 : [feature list](https://oss.navercorp.com/2018-nbp-internship-team1/seonghyo/wiki/%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EB%B0%9C)
 
 -  페이지구성 기획 : [스토리보드](https://ovenapp.io/view/WGKZph9yvgMCQEF34XHwcoEBLaOBrA4f/)
 
